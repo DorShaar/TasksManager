@@ -11,5 +11,7 @@ namespace Database.Contracts
           void Insert(T entity);
           void Update(T entity);
           void Remove(T entity);
+          void RemoveById(string id);
+          void RemoveByName(string name);
      }
 }

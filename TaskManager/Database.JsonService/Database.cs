@@ -12,15 +12,18 @@ namespace Database.JsonService
      public class Database<T> : IRepository<T> where T: ITaskGroup
      {
           private readonly ILogger mLogger;
+          private readonly string mDatabasePath;
           private List<T> mEntities;
 
           public Database(string databasePath, ILogger logger)
           {
+               mDatabasePath = databasePath;
                mLogger = logger;
 
                if(!File.Exists(databasePath))
                {
                     mLogger.LogError($"No database found in path {databasePath}");
+                    mEntities = new List<T>();
                     return;
                }
 
@@ -52,15 +55,22 @@ namespace Database.JsonService
                return mEntities.AsEnumerable();
           }
 
-          public void Insert(T entity)
+          public void Insert(T newEntity)
           {
-               if (mEntities.Contains(entity))
+               if (mEntities.Contains(newEntity) ||
+                  (mEntities.Find(entity => entity.ID == newEntity.ID) != null))
                {
-                    mLogger.LogError($"Group ID: {entity.ID} is already found in database");
+                    mLogger.LogError($"Group ID: {newEntity.ID} is already found in database");
                     return;
                }
 
-               mEntities.Add(entity);
+               if (mEntities.Find(entity => entity.GroupName == newEntity.GroupName) != null)
+               {
+                    mLogger.LogError($"Group ID: {newEntity.GroupName} is already found in database");
+                    return;
+               }
+
+               mEntities.Add(newEntity);
           }
 
           public void Remove(T entity)
@@ -72,6 +82,30 @@ namespace Database.JsonService
                }
 
                mEntities.Remove(entity);
+          }
+
+          public void RemoveById(string id)
+          {
+               T entityToRemove = mEntities.Find(entity => entity.ID == id);
+               if (entityToRemove == null)
+               {
+                    mLogger.LogError($"Group ID: {id} was not found in database");
+                    return;
+               }
+
+               Remove(entityToRemove);
+          }
+
+          public void RemoveByName(string name)
+          {
+               T entityToRemove = mEntities.Find(entity => entity.GroupName == name);
+               if (entityToRemove == null)
+               {
+                    mLogger.LogError($"Group Name: {name} was not found in database");
+                    return;
+               }
+
+               Remove(entityToRemove);
           }
 
           /// <summary>
@@ -91,16 +125,16 @@ namespace Database.JsonService
                entityToUpdate = newEntity;
           }
 
-          private void SaveToFile(string databasePath)
+          private void SaveToFile()
           {
                try
                {
                     string jsonText = JsonConvert.SerializeObject(mEntities, Formatting.Indented);
-                    File.WriteAllText(databasePath, jsonText);
+                    File.WriteAllText(mDatabasePath, jsonText);
                }
                catch (Exception ex)
                {
-                    mLogger.LogError($"Unable to serialize database in {databasePath}", ex);
+                    mLogger.LogError($"Unable to serialize database in {mDatabasePath}", ex);
                }
           }
 

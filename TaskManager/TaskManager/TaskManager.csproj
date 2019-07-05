@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Database.Contracts\Database.Contracts.csproj" />
+    <ProjectReference Include="..\TaskData\TaskData.csproj" />
+  </ItemGroup>
+
 </Project>
