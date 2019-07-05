@@ -35,12 +35,22 @@ namespace TaskData.Tests
           }
 
           [TestMethod]
+          public void CloseTask_ClosedTask_NoChange()
+          {
+               Task task = new Task(DummyDescription);
+               task.CloseTask();
+               DateTime closeTime = task.TimeClosed;
+               task.CloseTask();
+               Assert.AreEqual(task.TimeClosed, closeTime);
+          }
+
+          [TestMethod]
           public void ReOpenTask_TimeLastOpenIsNow()
           {
                Task task = new Task(DummyDescription);
                task.CloseTask();
                Thread.Sleep(SleepTimeInMs);
-               task.ReOpen();
+               task.ReOpenTask();
                Assert.IsTrue(IsTimesAlmostTheSame(task.TimeLastOpened, DateTime.Now));
           }
 
@@ -50,7 +60,7 @@ namespace TaskData.Tests
                Task task = new Task(DummyDescription);
                DateTime createdTime = task.TimeCreated;
                task.CloseTask();
-               task.ReOpen();
+               task.ReOpenTask();
                Assert.AreEqual(task.TimeCreated, createdTime);
           }
 
@@ -59,8 +69,17 @@ namespace TaskData.Tests
           {
                Task task = new Task(DummyDescription);
                task.CloseTask();
-               task.ReOpen();
+               task.ReOpenTask();
                Assert.IsFalse(task.IsFinished);
+          }
+
+          [TestMethod]
+          public void ReOpeneTask_OpenedTask_NoChange()
+          {
+               Task task = new Task(DummyDescription);
+               DateTime createdTime = task.TimeLastOpened;
+               task.ReOpenTask();
+               Assert.AreEqual(task.TimeLastOpened, createdTime);
           }
 
           private bool IsTimesAlmostTheSame(DateTime time1, DateTime time2)
