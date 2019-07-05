@@ -125,6 +125,16 @@ namespace Database.JsonService
                entityToUpdate = newEntity;
           }
 
+          public void AddOrUpdate(T addOrUpdateEntity)
+          {
+               T entityToUpdate = mEntities.Find(entity => entity.ID == addOrUpdateEntity.ID);
+
+               if (entityToUpdate != null)
+                    entityToUpdate = addOrUpdateEntity;
+               else
+                    Insert(addOrUpdateEntity);
+          }
+
           private void SaveToFile()
           {
                try

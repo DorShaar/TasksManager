@@ -1,65 +1,49 @@
-using Database.Contracts;
+using FakeItEasy;
+using Logger.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
+using TaskData;
+using TaskData.Contracts;
 
 namespace TaskManager.Integration.Tests
 {
      [TestClass]
      public class TaskManagerTests
      {
-          private readonly IRepository mDatabase;
-          private readonly TaskManager taskManager = new TaskManager();
+          private static readonly string DatabasePath = "dummyTasks.db";
+          private static readonly ILogger mLogger = A.Dummy<ILogger>();
+          private readonly TaskManager mTaskManager = new TaskManager(DatabasePath, mLogger);
 
           [TestMethod]
-          public void TestMethod1()
+          public void Ctor_TasksManagerHasFreeTasksGroup()
           {
+               Assert.IsNotNull(mTaskManager.GetAllTasks(TaskManager.FreeTaskGroupName));
           }
 
-          private void InitializeFreeTasksGroup()
+          [TestMethod]
+          public void CreateNewTask_AddNewTaskToGroup_Success()
           {
-               mFreeTasksGroup = mDatabase.GetByName(FreeTaskGroupName);
-
-               if (mFreeTasksGroup == null)
-                    mFreeTasksGroup = new TaskGroup(FreeTaskGroupName);
+               ITaskGroup taskGroup = new TaskGroup("A");
+               mTaskManager.CreateNewTask(taskGroup, "New Task Group");
+               Assert.AreEqual(mTaskManager.GetAllTasksGroups().Count(), 2);
           }
 
-          /// <summary>
-          /// Create new task into <param name="tasksGroup"/>.
-          /// </summary>
-          public void CreateNewTask(ITaskGroup tasksGroup, string description)
+          [TestMethod]
+          public void CreateNewTask_AddNewTaskToFreeGroup_Success()
           {
-               tasksGroup.CreateTask(description);
-               mDatabase.Update(tasksGroup);
+               mTaskManager.CreateNewTask("New Task Group");
+               Assert.AreEqual(mTaskManager.GetAllTasksGroups().Count(), 1);
           }
 
-          /// <summary>
-          /// Create new task into <see cref="mFreeTasksGroup"/>.
-          /// </summary>
-          public void CreateNewTask(string description)
+          [TestMethod]
+          public void RemoveTask_ExistingGroup_Success()
           {
-               mFreeTasksGroup.CreateTask(description);
-               mDatabase.Update(mFreeTasksGroup);
-          }
+               string taskGroupName = "New Task Group";
+               mTaskManager.CreateNewTaskGroup(taskGroupName);
+               Assert.AreEqual(mTaskManager.GetAllTasks(taskGroupName).Count(), 0);
 
-          public IEnumerable<ITask> GetAllTasks()
-          {
-               IEnumerable<ITask> allTasks = new List<ITask>();
-
-               foreach (ITaskGroup taskGroup in GetAllTasksGroups())
-               {
-                    allTasks.Concat(taskGroup.GetAllTasks());
-               }
-
-               return allTasks;
-          }
-
-          public IEnumerable<ITask> GetAllTasks(ITaskGroup taskGroup)
-          {
-               return taskGroup.GetAllTasks();
-          }
-
-          private IEnumerable<ITaskGroup> GetAllTasksGroups()
-          {
-               return mDatabase.GetAll();
+               mTaskManager.RemoveTaskGroupByName(taskGroupName);
+               Assert.IsNull(mTaskManager.GetAllTasks(taskGroupName));
           }
      }
 }

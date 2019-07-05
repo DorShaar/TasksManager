@@ -10,6 +10,7 @@ namespace Database.Contracts
           T GetByName(string id);
           void Insert(T entity);
           void Update(T entity);
+          void AddOrUpdate(T entity);
           void Remove(T entity);
           void RemoveById(string id);
           void RemoveByName(string name);

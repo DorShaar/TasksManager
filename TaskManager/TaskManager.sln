@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskData", "TaskData\TaskData.csproj", "{2FFAFCF7-D368-406B-8E7A-7101FFC5EF67}"
 EndProject
@@ -11,25 +11,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{BE25B8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logger", "Logger\Logger.csproj", "{209286D7-45DE-4A0B-80D7-3C6EF3B6775C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskData.Contracts", "TaskData.Contracts\TaskData.Contracts.csproj", "{AE4004BD-6E99-4C05-8006-2C34459407DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskData.Contracts", "TaskData.Contracts\TaskData.Contracts.csproj", "{AE4004BD-6E99-4C05-8006-2C34459407DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger.Contracts", "Logger.Contracts\Logger.Contracts.csproj", "{92987A8C-6004-4056-AE52-9326158D6181}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logger.Contracts", "Logger.Contracts\Logger.Contracts.csproj", "{92987A8C-6004-4056-AE52-9326158D6181}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository", "Repository", "{12C7F13F-CED5-4CBA-80ED-EF73D2194FB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database.Contracts", "Database.Contracts\Database.Contracts.csproj", "{07C1CAB0-815D-456D-8C4F-3D1066D7F6D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database.Contracts", "Database.Contracts\Database.Contracts.csproj", "{07C1CAB0-815D-456D-8C4F-3D1066D7F6D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database.JsonService", "Database.JsonService\Database.JsonService.csproj", "{969F2D6A-EC83-42F9-9D12-194B14E0AEED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database.JsonService", "Database.JsonService\Database.JsonService.csproj", "{969F2D6A-EC83-42F9-9D12-194B14E0AEED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskData.Tests", "TaskData.Tests\TaskData.Tests.csproj", "{7BCB298B-33A1-4639-9724-167D8704C39D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskData.Tests", "TaskData.Tests\TaskData.Tests.csproj", "{7BCB298B-33A1-4639-9724-167D8704C39D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{9E65E04A-AF8D-4ACA-B05A-3995B70955D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager", "TaskManager\TaskManager.csproj", "{5609EE53-350B-41E9-8361-B7399D15695F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManager", "TaskManager\TaskManager.csproj", "{5609EE53-350B-41E9-8361-B7399D15695F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database.JsonService.Tests", "Database.JsonService.Tests\Database.JsonService.Tests.csproj", "{AD086026-4824-4DDD-941B-BDFF56ED2AB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database.JsonService.Tests", "Database.JsonService.Tests\Database.JsonService.Tests.csproj", "{AD086026-4824-4DDD-941B-BDFF56ED2AB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Tests", "TaskManager.Tests\TaskManager.Tests.csproj", "{3B804AB0-0733-4B44-B8D2-71601244771E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManager.Integration.Tests", "TaskManager.Tests\TaskManager.Integration.Tests.csproj", "{3B804AB0-0733-4B44-B8D2-71601244771E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

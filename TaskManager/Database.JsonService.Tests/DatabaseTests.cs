@@ -10,7 +10,7 @@ namespace Database.JsonService.Tests
      [TestClass]
      public class DatabaseTests
      {
-          private const string DatabasePath = "tasks.db";
+          private const string DatabasePath = "dummyTasks.db";
           private readonly ILogger mLogger = A.Dummy<ILogger>();
 
           [TestMethod]
@@ -59,6 +59,32 @@ namespace Database.JsonService.Tests
                database.Update(taskGroup);
                ITaskGroup updatedTaskGroup = database.GetByName("A");
                Assert.AreEqual(updatedTaskGroup.GetAllTasks().Count(), 2);
+          }
+
+          [TestMethod]
+          public void AddOrUpdate_ExistingEntity_EntityUpdated()
+          {
+               Database<ITaskGroup> database = CreateTestsDatabase();
+               ITaskGroup taskGroup = database.GetByName("A");
+               Assert.AreEqual(taskGroup.GetAllTasks().Count(), 0);
+
+               taskGroup.AddTask(new Task("todo A1"));
+               taskGroup.AddTask(new Task("todo A2"));
+               database.AddOrUpdate(taskGroup);
+               ITaskGroup updatedTaskGroup = database.GetByName("A");
+               Assert.AreEqual(updatedTaskGroup.GetAllTasks().Count(), 2);
+          }
+
+          [TestMethod]
+          public void AddOrUpdate_NewEntity_EntityAdded()
+          {
+               Database<ITaskGroup> database = CreateTestsDatabase();
+
+               string newTaskGroupName = "X";
+               database.Insert(new TaskGroup(newTaskGroupName));
+               ITaskGroup taskGroup = database.GetByName(newTaskGroupName);
+               database.AddOrUpdate(taskGroup);
+               Assert.AreEqual(database.GetAll().Count(), 4);
           }
 
           [TestMethod]
