@@ -3,14 +3,15 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TaskData.Contracts;
 
 namespace Database.JsonService
 {
-     public class Database : IRepository<ITaskGroup>
+     public class Database<T> : IRepository<T> where T: ITaskGroup
      {
           private readonly ILogger mLogger;
-          //private List<ITaskGroup> 
+          private List<T> mEntities;
 
           public Database(string databasePath, ILogger logger)
           {
@@ -25,11 +26,66 @@ namespace Database.JsonService
                LoadFromFile(databasePath);
           }
 
-          private void LoadFromFile(string databasePath)
+          /// <summary>
+          /// Get entity by id. In case not found, returns default of <see cref="T"/>
+          /// </summary>
+          /// <param name="id"></param>
+          /// <returns></returns>
+          public T Get(string id)
+          {
+               return mEntities.Find(entity => entity.ID == id);
+          }
+
+          public IEnumerable<T> GetAll()
+          {
+               return mEntities.AsEnumerable();
+          }
+
+          public void Insert(T entity)
+          {
+               if (mEntities.Contains(entity))
+               {
+                    mLogger.LogError($"Group ID: {entity.ID} is already found in database");
+                    return;
+               }
+
+               mEntities.Add(entity);
+          }
+
+          public void Remove(T entity)
+          {
+               if (!mEntities.Contains(entity))
+               {
+                    mLogger.LogError($"Group ID: {entity.ID} Group name: {entity.GroupName} - No such entity was found in database");
+                    return;
+               }
+
+               mEntities.Remove(entity);
+          }
+
+          /// <summary>
+          /// <param name="newEntity"/> will replace an existing identity with the same id in <see cref="mEntities"/>
+          /// </summary>
+          /// <param name="newEntity"></param>
+          public void Update(T newEntity)
+          {
+               T entityToUpdate = mEntities.Find(entity => entity.ID == newEntity.ID);
+
+               if(entityToUpdate == null)
+               {
+                    mLogger.LogError($"Group ID: {newEntity.ID} Group name: {newEntity.GroupName} - No such entity was found in database");
+                    return;
+               }
+
+               entityToUpdate = newEntity;
+          }
+
+          private void SaveToFile(string databasePath)
           {
                try
                {
-                    //mDatabase = JsonConvert.DeserializeObject<>(File.ReadAllText(databasePath));
+                    string jsonText = JsonConvert.SerializeObject(mEntities, Formatting.Indented);
+                    File.WriteAllText(databasePath, jsonText);
                }
                catch (Exception ex)
                {
@@ -37,39 +93,16 @@ namespace Database.JsonService
                }
           }
 
-          public void Delete(ITaskGroup entity)
+          private void LoadFromFile(string databasePath)
           {
-               throw new System.NotImplementedException();
-          }
-
-          public ITaskGroup Get(long id)
-          {
-               throw new System.NotImplementedException();
-          }
-
-          public IEnumerable<ITaskGroup> GetAll()
-          {
-               throw new System.NotImplementedException();
-          }
-
-          public void Insert(ITaskGroup entity)
-          {
-               throw new System.NotImplementedException();
-          }
-
-          public void Remove(ITaskGroup entity)
-          {
-               throw new System.NotImplementedException();
-          }
-
-          public void SaveChanges()
-          {
-               throw new System.NotImplementedException();
-          }
-
-          public void Update(ITaskGroup entity)
-          {
-               throw new System.NotImplementedException();
+               try
+               {
+                    mEntities = JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(databasePath));
+               }
+               catch (Exception ex)
+               {
+                    mLogger.LogError($"Unable to deserialize database in {databasePath}", ex);
+               }
           }
      }
 }

@@ -2,6 +2,7 @@
 {
      public interface ITaskGroup
      {
+          string ID { get; }
           string GroupName { get; set; }
           ITask GetTask(string id);
           void AddTask(ITask task);

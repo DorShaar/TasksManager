@@ -8,14 +8,20 @@ namespace TaskData
 {
      public class TaskGroup : ITaskGroup
      {
-          private readonly ILogger mLogger;
+          private static ILogger mLogger;
           internal readonly Dictionary<string, ITask> mTasksChildren = new Dictionary<string, ITask>();
 
+          public string ID { get; } = IDCounter.GetNextID();
           public string GroupName { get; set ; }
 
           public int Size => mTasksChildren.Count;
 
-          public TaskGroup(ILogger logger)
+          public TaskGroup(string groupName)
+          {
+               GroupName = groupName;
+          }
+
+          public static void SetLogger(ILogger logger)
           {
                mLogger = logger;
           }
@@ -23,7 +29,7 @@ namespace TaskData
           public ITask GetTask(string id)
           {
                if (!mTasksChildren.TryGetValue(id, out ITask task))
-                    mLogger.Log($"Task id {id} was not found in group {GroupName}");
+                    mLogger?.Log($"Task id {id} was not found in group {GroupName}");
 
                return task;
           }
@@ -32,24 +38,24 @@ namespace TaskData
           {
                if(mTasksChildren.ContainsKey(task.ID))
                {
-                    mLogger.Log($"Task id {task.ID} is already found in group {GroupName}");
+                    mLogger?.Log($"Task id {task.ID} is already found in group {GroupName}");
                     return;
                }
 
                mTasksChildren.Add(task.ID, task);
-               mLogger.Log($"Task id {task.ID} added to group {GroupName}");
+               mLogger?.Log($"Task id {task.ID} added to group {GroupName}");
           }
 
           public void RemoveTask(string id)
           {
                if (!mTasksChildren.ContainsKey(id))
                {
-                    mLogger.Log($"Task id {id} was not found in group {GroupName}");
+                    mLogger?.Log($"Task id {id} was not found in group {GroupName}");
                     return;
                }
 
                mTasksChildren.Remove(id);
-               mLogger.Log($"Task id {id} removed from group {GroupName}");
+               mLogger?.Log($"Task id {id} removed from group {GroupName}");
           }
 
           public void RemoveTask(params string[] ids)
@@ -64,12 +70,12 @@ namespace TaskData
           {
                if (!mTasksChildren.ContainsKey(task.ID))
                {
-                    mLogger.LogError($"Task id {task.ID} is not in group {GroupName}. Update failed");
+                    mLogger?.LogError($"Task id {task.ID} is not in group {GroupName}. Update failed");
                     return;
                }
 
                mTasksChildren[task.ID] = task;
-               mLogger.LogError($"Task id {task.ID} updated in group {GroupName}. Update failed");
+               mLogger?.LogError($"Task id {task.ID} updated in group {GroupName}. Update failed");
           }
      }
 }
