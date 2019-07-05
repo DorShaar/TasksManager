@@ -1,7 +1,7 @@
-﻿using Logger;
+﻿using Logger.Contracts;
 using System.Collections.Generic;
-using TaskData.Interfaces;
 using System.Runtime.CompilerServices;
+using TaskData.Contracts;
 
 [assembly: InternalsVisibleTo("Statistics")]
 namespace TaskData
@@ -12,6 +12,8 @@ namespace TaskData
           internal readonly Dictionary<string, ITask> mTasksChildren = new Dictionary<string, ITask>();
 
           public string Name { get; set ; }
+
+          public int Size => mTasksChildren.Count;
 
           public TaskGroup(ILogger logger)
           {

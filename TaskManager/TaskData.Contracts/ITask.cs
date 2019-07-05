@@ -1,4 +1,4 @@
-﻿namespace TaskData.Interfaces
+﻿namespace TaskData.Contracts
 {
      public interface ITask
      {

@@ -1,5 +1,5 @@
 ﻿using System;
-using TaskData.Interfaces;
+using TaskData.Contracts;
 
 namespace TaskData
 {

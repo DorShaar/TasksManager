@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Logger\Logger.csproj" />
+    <ProjectReference Include="..\TaskData.Contracts\TaskData.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

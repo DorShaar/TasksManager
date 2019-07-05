@@ -1,4 +1,4 @@
-﻿namespace TaskData.Interfaces
+﻿namespace TaskData.Contracts
 {
      public interface ITaskGroup
      {
@@ -7,5 +7,7 @@
           void AddTask(ITask task);
           void RemoveTask(string id);
           void UpdateTask(ITask task);
+
+          int Size { get; }
      }
 }
