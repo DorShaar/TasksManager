@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Database.Contracts\Database.Contracts.csproj" />
+    <ProjectReference Include="..\Logger.Contracts\Logger.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

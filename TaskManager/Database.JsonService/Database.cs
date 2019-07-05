@@ -10,7 +10,7 @@ namespace Database.JsonService
      public class Database : IRepository<ITaskGroup>
      {
           private readonly ILogger mLogger;
-          private List<ITaskGroup> 
+          //private List<ITaskGroup> 
 
           public Database(string databasePath, ILogger logger)
           {
@@ -29,7 +29,7 @@ namespace Database.JsonService
           {
                try
                {
-                    mDatabase = JsonConvert.DeserializeObject<>(File.ReadAllText(databasePath));
+                    //mDatabase = JsonConvert.DeserializeObject<>(File.ReadAllText(databasePath));
                }
                catch (Exception ex)
                {
