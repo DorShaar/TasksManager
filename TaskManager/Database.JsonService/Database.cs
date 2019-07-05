@@ -10,6 +10,7 @@ namespace Database.JsonService
      public class Database : IRepository<ITaskGroup>
      {
           private readonly ILogger mLogger;
+          private List<ITaskGroup> 
 
           public Database(string databasePath, ILogger logger)
           {

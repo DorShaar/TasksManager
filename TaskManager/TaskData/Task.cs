@@ -6,7 +6,6 @@ namespace TaskData
      public class Task : ITask
      {
           public string ID { get; } = IDCounter.GetNextID();
-          public ITaskGroup TaskFamily { get; set; } = null;
           public string Description { get; set; } = string.Empty;
           public bool IsFinished { get; private set; } = false;
 
@@ -14,14 +13,9 @@ namespace TaskData
           public DateTime TimeLastOpened { get; private set; } = DateTime.Now;
           public DateTime TimeClosed { get; private set; }
 
-          public Task(ITaskGroup taskFamily, string description)
+          public Task(string description)
           {
-               TaskFamily = taskFamily;
                Description = description;
-          }
-
-          public Task(string description) : this(null, description)
-          {
           }
 
           public void CloseTask()
