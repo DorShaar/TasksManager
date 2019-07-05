@@ -19,6 +19,7 @@ namespace TaskData
           public Task(string description)
           {
                Description = description;
+               mLogger?.Log($"New task id {ID} created with description: {Description}");
           }
 
           public static void SetLogger(ILogger logger)

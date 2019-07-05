@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using TaskData.Contracts;
 
-namespace Database.JsonService
+namespace Database.Contracts
 {
      public interface IRepository<T> where T : ITaskGroup
      {
           IEnumerable<T> GetAll();
-          T Get(string id);
+          T GetById(string id);
+          T GetByName(string id);
           void Insert(T entity);
           void Update(T entity);
           void Remove(T entity);

@@ -1,5 +1,6 @@
 ﻿using Logger.Contracts;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using TaskData.Contracts;
 
@@ -24,6 +25,17 @@ namespace TaskData
           public static void SetLogger(ILogger logger)
           {
                mLogger = logger;
+          }
+
+          public void CreateTask(string description)
+          {
+               Task createdTask = new Task(description);
+               AddTask(createdTask);
+          }
+
+          public IEnumerable<ITask> GetAllTasks()
+          {
+               return mTasksChildren.Values.AsEnumerable();
           }
 
           public ITask GetTask(string id)

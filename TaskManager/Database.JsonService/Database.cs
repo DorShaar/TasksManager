@@ -1,4 +1,5 @@
-﻿using Logger.Contracts;
+﻿using Database.Contracts;
+using Logger.Contracts;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -31,9 +32,19 @@ namespace Database.JsonService
           /// </summary>
           /// <param name="id"></param>
           /// <returns></returns>
-          public T Get(string id)
+          public T GetById(string id)
           {
                return mEntities.Find(entity => entity.ID == id);
+          }
+
+          /// <summary>
+          /// Get entity by name. In case not found, returns default of <see cref="T"/>
+          /// </summary>
+          /// <param name="id"></param>
+          /// <returns></returns>
+          public T GetByName(string name)
+          {
+               return mEntities.Find(entity => entity.GroupName == name);
           }
 
           public IEnumerable<T> GetAll()
