@@ -1,5 +1,5 @@
 ﻿using CommandLine;
-using Logger;
+using Composition;
 using Logger.Contracts;
 using System;
 using System.Collections.Generic;
@@ -10,11 +10,13 @@ namespace ConsoleUI
 {
      public class Program
      {
-          private static readonly ILogger mLogger = new ConsoleLogger();
+          private static ILogger mLogger;
 
           public static void Main(string[] args)
           {
-               ITaskManager taskManager = new TaskManager.TaskManager("NotedNTasks.db", mLogger);
+               TaskManagerServiceProvider serviceProvider = new TaskManagerServiceProvider();
+               mLogger = serviceProvider.GetLoggerService();
+               ITaskManager taskManager = serviceProvider.GetTaskManagerService();
 
                var parser = new Parser(config => config.HelpWriter = Console.Out);
                if (args.Length == 0)

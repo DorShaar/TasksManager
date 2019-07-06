@@ -9,7 +9,7 @@ namespace TaskData
 {
      public class TaskGroup : ITaskGroup
      {
-          private static ILogger mLogger;
+          private readonly ILogger mLogger;
           internal readonly Dictionary<string, ITask> mTasksChildren = new Dictionary<string, ITask>();
 
           public string ID { get; } = IDCounter.GetNextID();
@@ -17,19 +17,21 @@ namespace TaskData
 
           public int Size => mTasksChildren.Count;
 
-          public TaskGroup(string groupName)
-          {
-               GroupName = groupName;
-          }
-
-          public static void SetLogger(ILogger logger)
+          public TaskGroup(ILogger logger)
           {
                mLogger = logger;
           }
 
+          public TaskGroup(string groupName, ILogger logger)
+          {
+               mLogger = logger;
+               GroupName = groupName;
+               mLogger?.Log($"New group id {ID} created with name: {GroupName}");
+          }
+
           public void CreateTask(string description)
           {
-               Task createdTask = new Task(description);
+               Task createdTask = new Task(description, mLogger);
                AddTask(createdTask);
           }
 

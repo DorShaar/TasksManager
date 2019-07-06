@@ -1,11 +1,12 @@
-﻿using Database.Contracts;
+﻿using Database.Configuration;
+using Database.Contracts;
 using Database.JsonService;
 using Logger;
 using Logger.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using TaskData;
 using TaskData.Contracts;
-using TaskManager;
 using TaskManager.Contracts;
 
 namespace Composition
@@ -26,8 +27,9 @@ namespace Composition
                // Register logger.
                serviceCollection.AddSingleton<ILogger, ConsoleLogger>();
 
-               // Register database.
-               serviceCollection.AddSingleton<IRepository<ITaskGroup>, Database<ITaskGroup>>();
+               RegisterTaskDataEntities(serviceCollection);
+
+               RegisterDatabaseEntities(serviceCollection);
 
                // Register TaskManager service.
                serviceCollection.AddSingleton<ITaskManager, TaskManager.TaskManager>();
@@ -35,9 +37,26 @@ namespace Composition
                return serviceCollection.BuildServiceProvider();
           }
 
+          private void RegisterTaskDataEntities(ServiceCollection serviceCollection)
+          {
+               serviceCollection.AddSingleton<ITask, Task>();
+               serviceCollection.AddSingleton<ITaskGroup, TaskGroup>();
+          }
+
+          private void RegisterDatabaseEntities(ServiceCollection serviceCollection)
+          {
+               serviceCollection.AddSingleton<IRepository<ITaskGroup>, Database<ITaskGroup>>();
+               serviceCollection.AddSingleton<IConfiguration, Configuration>();
+          }
+
           public ITaskManager GetTaskManagerService()
           {
                return mServiceProvider.GetService<ITaskManager>();
+          }
+
+          public ILogger GetLoggerService()
+          {
+               return mServiceProvider.GetService<ILogger>();
           }
      }
 }

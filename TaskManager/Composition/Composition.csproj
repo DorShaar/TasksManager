@@ -9,8 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Database.JsonService\Database.JsonService.csproj" />
-    <ProjectReference Include="..\Logger\Logger.csproj" />
+    <ProjectReference Include="..\Database.Configuration\Database.Configuration.csproj" />
     <ProjectReference Include="..\TaskManager\TaskManager.csproj" />
   </ItemGroup>
 

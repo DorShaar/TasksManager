@@ -12,22 +12,21 @@ namespace Database.JsonService
      public class Database<T> : IRepository<T> where T: ITaskGroup
      {
           private readonly ILogger mLogger;
-          private readonly string mDatabasePath;
-          private List<T> mEntities;
+          private readonly IConfiguration mConfiguration;
+          private List<T> mEntities = new List<T>();
 
-          public Database(string databasePath, ILogger logger)
+          public Database(IConfiguration configuration, ILogger logger)
           {
-               mDatabasePath = databasePath;
                mLogger = logger;
+               mConfiguration = configuration;
 
-               if(!File.Exists(databasePath))
+               if (!File.Exists(mConfiguration.DatabasePath))
                {
-                    mLogger.LogError($"No database found in path {databasePath}");
-                    mEntities = new List<T>();
+                    mLogger.LogError($"No database found in path {mConfiguration.DatabasePath}");
                     return;
                }
 
-               LoadFromFile(databasePath);
+               LoadFromFile(mConfiguration.DatabasePath);
           }
 
           /// <summary>
@@ -137,19 +136,31 @@ namespace Database.JsonService
 
           private void SaveToFile()
           {
+               if(string.IsNullOrEmpty(mConfiguration.DatabasePath))
+               {
+                    mLogger.LogError("No database path was given");
+                    return;
+               }
+
                try
                {
                     string jsonText = JsonConvert.SerializeObject(mEntities, Formatting.Indented);
-                    File.WriteAllText(mDatabasePath, jsonText);
+                    File.WriteAllText(mConfiguration.DatabasePath, jsonText);
                }
                catch (Exception ex)
                {
-                    mLogger.LogError($"Unable to serialize database in {mDatabasePath}", ex);
+                    mLogger.LogError($"Unable to serialize database in {mConfiguration.DatabasePath}", ex);
                }
           }
 
           private void LoadFromFile(string databasePath)
           {
+               if (string.IsNullOrEmpty(mConfiguration.DatabasePath))
+               {
+                    mLogger.LogError("No database path was given");
+                    return;
+               }
+
                try
                {
                     mEntities = JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(databasePath));

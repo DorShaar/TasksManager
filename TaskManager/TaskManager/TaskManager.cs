@@ -26,18 +26,13 @@ namespace TaskManager
                InitializeFreeTasksGroup();
           }
 
-          public TaskManager(string databasePath, ILogger logger) :
-                        this(new Database<ITaskGroup>(databasePath, logger), logger)
-          {
-          }
-
           private void InitializeFreeTasksGroup()
           {
                mFreeTasksGroup = mDatabase.GetByName(FreeTaskGroupName);
 
                if (mFreeTasksGroup == null)
                {
-                    mFreeTasksGroup = new TaskGroup(FreeTaskGroupName);
+                    mFreeTasksGroup = new TaskGroup(FreeTaskGroupName, mLogger);
                     mDatabase.Insert(mFreeTasksGroup);
                }
           }
@@ -47,7 +42,7 @@ namespace TaskManager
           /// </summary>
           public void CreateNewTaskGroup(string groupName)
           {
-               mDatabase.Insert(new TaskGroup(groupName));
+               mDatabase.Insert(new TaskGroup(groupName, mLogger));
           }
 
           public void RemoveTaskGroup(ITaskGroup taskGroup)

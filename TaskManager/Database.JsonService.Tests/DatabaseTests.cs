@@ -1,3 +1,4 @@
+using Database.Contracts;
 using FakeItEasy;
 using Logger.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,8 +11,8 @@ namespace Database.JsonService.Tests
      [TestClass]
      public class DatabaseTests
      {
-          private const string DatabasePath = "dummyTasks.db";
           private readonly ILogger mLogger = A.Dummy<ILogger>();
+          private readonly IConfiguration mConfiguration = A.Dummy<IConfiguration>();
 
           [TestMethod]
           public void GetAll_Returns3Entities()
@@ -42,7 +43,7 @@ namespace Database.JsonService.Tests
           {
                Database<ITaskGroup> database = CreateTestsDatabase();
                int sizeBefore = database.GetAll().Count();
-               database.Insert(new TaskGroup("A"));
+               database.Insert(new TaskGroup("A", mLogger));
                int sizeAfter = database.GetAll().Count();
                Assert.AreEqual(sizeBefore, sizeAfter);
           }
@@ -54,8 +55,8 @@ namespace Database.JsonService.Tests
                ITaskGroup taskGroup = database.GetByName("A");
                Assert.AreEqual(taskGroup.GetAllTasks().Count(), 0);
 
-               taskGroup.AddTask(new Task("todo A1"));
-               taskGroup.AddTask(new Task("todo A2"));
+               taskGroup.AddTask(new Task("todo A1", mLogger));
+               taskGroup.AddTask(new Task("todo A2", mLogger));
                database.Update(taskGroup);
                ITaskGroup updatedTaskGroup = database.GetByName("A");
                Assert.AreEqual(updatedTaskGroup.GetAllTasks().Count(), 2);
@@ -68,8 +69,8 @@ namespace Database.JsonService.Tests
                ITaskGroup taskGroup = database.GetByName("A");
                Assert.AreEqual(taskGroup.GetAllTasks().Count(), 0);
 
-               taskGroup.AddTask(new Task("todo A1"));
-               taskGroup.AddTask(new Task("todo A2"));
+               taskGroup.AddTask(new Task("todo A1", mLogger));
+               taskGroup.AddTask(new Task("todo A2", mLogger));
                database.AddOrUpdate(taskGroup);
                ITaskGroup updatedTaskGroup = database.GetByName("A");
                Assert.AreEqual(updatedTaskGroup.GetAllTasks().Count(), 2);
@@ -81,7 +82,7 @@ namespace Database.JsonService.Tests
                Database<ITaskGroup> database = CreateTestsDatabase();
 
                string newTaskGroupName = "X";
-               database.Insert(new TaskGroup(newTaskGroupName));
+               database.Insert(new TaskGroup(newTaskGroupName, mLogger));
                ITaskGroup taskGroup = database.GetByName(newTaskGroupName);
                database.AddOrUpdate(taskGroup);
                Assert.AreEqual(database.GetAll().Count(), 4);
@@ -114,10 +115,10 @@ namespace Database.JsonService.Tests
 
           private Database<ITaskGroup> CreateTestsDatabase()
           {
-               Database<ITaskGroup> database = new Database<ITaskGroup>(DatabasePath, mLogger);
-               database.Insert(new TaskGroup("A"));
-               database.Insert(new TaskGroup("B"));
-               database.Insert(new TaskGroup("C"));
+               Database<ITaskGroup> database = new Database<ITaskGroup>(mConfiguration, mLogger);
+               database.Insert(new TaskGroup("A", mLogger));
+               database.Insert(new TaskGroup("B", mLogger));
+               database.Insert(new TaskGroup("C", mLogger));
 
                return database;
           }

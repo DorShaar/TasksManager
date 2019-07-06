@@ -6,7 +6,7 @@ namespace TaskData
 {
      public class Task : ITask
      {
-          private static ILogger mLogger;
+          private readonly ILogger mLogger;
 
           public string ID { get; } = IDCounter.GetNextID();
           public string Description { get; set; } = string.Empty;
@@ -16,15 +16,11 @@ namespace TaskData
           public DateTime TimeLastOpened { get; private set; } = DateTime.Now;
           public DateTime TimeClosed { get; private set; }
 
-          public Task(string description)
-          {
-               Description = description;
-               mLogger?.Log($"New task id {ID} created with description: {Description}");
-          }
-
-          public static void SetLogger(ILogger logger)
+          public Task(string description, ILogger logger)
           {
                mLogger = logger;
+               Description = description;
+               mLogger?.Log($"New task id {ID} created with description: {Description}");
           }
 
           public void CloseTask()
