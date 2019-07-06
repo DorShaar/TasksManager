@@ -11,8 +11,9 @@
 
           public static string GetNextID()
           {
+               string stringID = mLastID.ToString();
                mLastID++;
-               return mLastID.ToString();
+               return stringID;
           }
      }
 }

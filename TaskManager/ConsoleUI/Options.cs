@@ -22,16 +22,21 @@ namespace ConsoleUI
                public string TaskGroupId { get; set; }
           }
 
-          [Verb("groups", HelpText = "Removes tasks group")]
+          [Verb("groups", HelpText = "Get all groups")]
           public class GatAllTaskGroupOptions
           {
-
+               [Option('d', "detail", HelpText = "Print more information about each group")]
+               public bool IsDetailed{ get; set; }
           }
 
           // Tasks.
 
+          [Verb("create-task", HelpText = "Create task")]
           public class CreateNewTaskOptions
           {
+               [Value(0)]
+               public string Description { get; set; }
+
                [Option('n', "name", HelpText = "Remove task by name")]
                public string TaskGroupName { get; set; }
 
@@ -39,6 +44,7 @@ namespace ConsoleUI
                public string TaskGroupId { get; set; }
           }
 
+          [Verb("tasks", HelpText = "Get all task")]
           public class GetAllTasksOptions
           {
                [Option('n', "name", HelpText = "Get all tasks by name")]
@@ -46,6 +52,9 @@ namespace ConsoleUI
 
                [Option('i', "id", HelpText = "Get all tasks by id")]
                public string TaskGroupId { get; set; }
+
+               [Option('d', "detail", HelpText = "Print more information about each task")]
+               public bool IsDetailed { get; set; }
           }
      }
 }

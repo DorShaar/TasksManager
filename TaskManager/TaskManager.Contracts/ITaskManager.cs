@@ -12,12 +12,12 @@ namespace TaskManager.Contracts
           IEnumerable<ITaskGroup> GetAllTasksGroups();
 
           void CreateNewTask(ITaskGroup tasksGroup, string description);
-          void CreateNewTaskByName(string tasksGroupName, string description);
-          void CreateNewTaskById(string tasksGroupId, string description);
+          void CreateNewTaskByGroupName(string tasksGroupName, string description);
+          void CreateNewTaskByGroupId(string tasksGroupId, string description);
           void CreateNewTask(string description);
           IEnumerable<ITask> GetAllTasks();
           IEnumerable<ITask> GetAllTasks(ITaskGroup taskGroup);
-          IEnumerable<ITask> GetAllTasksByName(string taskGroupName);
-          IEnumerable<ITask> GetAllTasksById(string taskGroupId);
+          IEnumerable<ITask> GetAllTasksByGroupName(string taskGroupName);
+          IEnumerable<ITask> GetAllTasksByGroupId(string taskGroupId);
      }
 }

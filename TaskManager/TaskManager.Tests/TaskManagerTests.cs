@@ -17,7 +17,7 @@ namespace TaskManager.Integration.Tests
           [TestMethod]
           public void Ctor_TasksManagerHasFreeTasksGroup()
           {
-               Assert.IsNotNull(mTaskManager.GetAllTasks(TaskManager.FreeTaskGroupName));
+               Assert.IsNotNull(mTaskManager.GetAllTasksByGroupName(TaskManager.FreeTaskGroupName));
           }
 
           [TestMethod]
@@ -40,10 +40,10 @@ namespace TaskManager.Integration.Tests
           {
                string taskGroupName = "New Task Group";
                mTaskManager.CreateNewTaskGroup(taskGroupName);
-               Assert.AreEqual(mTaskManager.GetAllTasks(taskGroupName).Count(), 0);
+               Assert.AreEqual(mTaskManager.GetAllTasksByGroupName(taskGroupName).Count(), 0);
 
                mTaskManager.RemoveTaskGroupByName(taskGroupName);
-               Assert.IsNull(mTaskManager.GetAllTasks(taskGroupName));
+               Assert.IsNull(mTaskManager.GetAllTasksByGroupName(taskGroupName));
           }
      }
 }
