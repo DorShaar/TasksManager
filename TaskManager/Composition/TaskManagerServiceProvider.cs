@@ -5,6 +5,8 @@ using Logger.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using TaskData.Contracts;
+using TaskManager;
+using TaskManager.Contracts;
 
 namespace Composition
 {
@@ -27,12 +29,15 @@ namespace Composition
                // Register database.
                serviceCollection.AddSingleton<IRepository<ITaskGroup>, Database<ITaskGroup>>();
 
+               // Register TaskManager service.
+               serviceCollection.AddSingleton<ITaskManager, TaskManager.TaskManager>();
+
                return serviceCollection.BuildServiceProvider();
           }
 
-          public object GetService(Type serviceType)
+          public ITaskManager GetTaskManagerService()
           {
-               return mServiceProvider.GetService(serviceType);
+               return mServiceProvider.GetService<ITaskManager>();
           }
      }
 }

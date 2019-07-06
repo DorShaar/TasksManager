@@ -6,8 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Composition\Composition.csproj" />
-    <ProjectReference Include="..\TaskManager.Contracts\TaskManager.Contracts.csproj" />
+    <PackageReference Include="CommandLineParser" Version="2.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Logger\Logger.csproj" />
+    <ProjectReference Include="..\TaskManager\TaskManager.csproj" />
   </ItemGroup>
 
 </Project>

@@ -73,6 +73,11 @@ namespace TaskManager
                RemoveTaskGroup(taskGroup);
           }
 
+          public IEnumerable<ITaskGroup> GetAllTasksGroups()
+          {
+               return mDatabase.GetAll();
+          }
+
           /// <summary>
           /// Create new task into <param name="tasksGroup"/>.
           /// </summary>
@@ -80,6 +85,18 @@ namespace TaskManager
           {
                tasksGroup.CreateTask(description);
                mDatabase.AddOrUpdate(tasksGroup);
+          }
+
+          public void CreateNewTaskByName(string tasksGroupName, string description)
+          {
+               ITaskGroup taskGroup = mDatabase.GetByName(tasksGroupName);
+               CreateNewTask(taskGroup, description);
+          }
+
+          public void CreateNewTaskById(string tasksGroupId, string description)
+          {
+               ITaskGroup taskGroup = mDatabase.GetById(tasksGroupId);
+               CreateNewTask(taskGroup, description);
           }
 
           /// <summary>
@@ -108,15 +125,16 @@ namespace TaskManager
                return taskGroup?.GetAllTasks();
           }
 
-          public IEnumerable<ITask> GetAllTasks(string taskGroupName)
+          public IEnumerable<ITask> GetAllTasksByName(string taskGroupName)
           {
                return GetAllTasks(
                     GetAllTasksGroups().FirstOrDefault(group => group.GroupName == taskGroupName));
           }
 
-          public IEnumerable<ITaskGroup> GetAllTasksGroups()
+          public IEnumerable<ITask> GetAllTasksById(string taskGroupId)
           {
-               return mDatabase.GetAll();
+               return GetAllTasks(
+                    GetAllTasksGroups().FirstOrDefault(group => group.ID == taskGroupId));
           }
      }
 }

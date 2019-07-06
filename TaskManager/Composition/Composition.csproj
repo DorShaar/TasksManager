@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Database.JsonService\Database.JsonService.csproj" />
     <ProjectReference Include="..\Logger\Logger.csproj" />
+    <ProjectReference Include="..\TaskManager\TaskManager.csproj" />
   </ItemGroup>
 
 </Project>
