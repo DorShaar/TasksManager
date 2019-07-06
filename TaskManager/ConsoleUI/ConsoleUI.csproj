@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Composition\Composition.csproj" />
+    <ProjectReference Include="..\TaskManager.Contracts\TaskManager.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

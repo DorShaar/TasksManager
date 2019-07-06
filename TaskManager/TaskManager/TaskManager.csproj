@@ -1,13 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Database.Contracts\Database.Contracts.csproj" />
     <ProjectReference Include="..\Database.JsonService\Database.JsonService.csproj" />
     <ProjectReference Include="..\TaskData\TaskData.csproj" />
+    <ProjectReference Include="..\TaskManager.Contracts\TaskManager.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

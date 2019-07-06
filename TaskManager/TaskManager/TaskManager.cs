@@ -6,11 +6,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using TaskData;
 using TaskData.Contracts;
+using TaskManager.Contracts;
 
 [assembly: InternalsVisibleTo("TaskManager.Integration.Tests")]
 namespace TaskManager
 {
-     public class TaskManager
+     public class TaskManager : ITaskManager
      {
           private readonly ILogger mLogger;
           private ITaskGroup mFreeTasksGroup;
