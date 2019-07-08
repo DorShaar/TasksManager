@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Composition\Composition.csproj" />
-    <ProjectReference Include="..\TaskManager\TaskManager.csproj" />
   </ItemGroup>
 
 </Project>
