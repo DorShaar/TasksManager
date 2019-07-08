@@ -1,11 +1,12 @@
 using Database.Contracts;
-using Database.JsonService;
+using Database;
 using FakeItEasy;
 using Logger.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using TaskData;
 using TaskData.Contracts;
+using ObjectSerializer.Contracts;
 
 namespace TaskManager.Integration.Tests
 {
@@ -14,7 +15,8 @@ namespace TaskManager.Integration.Tests
      {
           private static readonly ILogger mLogger = A.Dummy<ILogger>();
           private static readonly IConfiguration mConfiguration = A.Dummy<IConfiguration>();
-          private static readonly IRepository<ITaskGroup> mDatabase = new Database<ITaskGroup>(mConfiguration, mLogger);
+          private static readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
+          private static readonly IRepository<ITaskGroup> mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
           private readonly TaskManager mTaskManager = new TaskManager(mDatabase, mLogger);
 
           [TestMethod]
@@ -35,7 +37,7 @@ namespace TaskManager.Integration.Tests
           public void CreateNewTask_AddNewTaskToFreeGroup_Success()
           {
                mTaskManager.CreateNewTask("New Task Group");
-               Assert.AreEqual(mTaskManager.GetAllTasksGroups().Count(), 1);
+               Assert.AreEqual(1, mTaskManager.GetAllTasksGroups().Count());
           }
 
           [TestMethod]

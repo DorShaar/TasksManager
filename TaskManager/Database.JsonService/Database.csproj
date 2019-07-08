@@ -5,12 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Database.Contracts\Database.Contracts.csproj" />
     <ProjectReference Include="..\Logger.Contracts\Logger.Contracts.csproj" />
+    <ProjectReference Include="..\ObjectSerializer.Contracts\ObjectSerializer.Contracts.csproj" />
+    <ProjectReference Include="..\TaskData\TaskData.csproj" />
   </ItemGroup>
 
 </Project>

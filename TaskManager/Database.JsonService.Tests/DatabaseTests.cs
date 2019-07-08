@@ -2,17 +2,19 @@ using Database.Contracts;
 using FakeItEasy;
 using Logger.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ObjectSerializer.Contracts;
 using System.Linq;
 using TaskData;
 using TaskData.Contracts;
 
-namespace Database.JsonService.Tests
+namespace Database.Tests
 {
      [TestClass]
      public class DatabaseTests
      {
           private readonly ILogger mLogger = A.Dummy<ILogger>();
           private readonly IConfiguration mConfiguration = A.Dummy<IConfiguration>();
+          private readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
 
           [TestMethod]
           public void GetAll_Returns3Entities()
@@ -115,7 +117,7 @@ namespace Database.JsonService.Tests
 
           private Database<ITaskGroup> CreateTestsDatabase()
           {
-               Database<ITaskGroup> database = new Database<ITaskGroup>(mConfiguration, mLogger);
+               Database<ITaskGroup> database = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
                database.Insert(new TaskGroup("A", mLogger));
                database.Insert(new TaskGroup("B", mLogger));
                database.Insert(new TaskGroup("C", mLogger));

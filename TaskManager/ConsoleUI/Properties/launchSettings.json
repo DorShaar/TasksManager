@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleUI": {
       "commandName": "Project",
-      "commandLineArgs": "create-task abcd"
+      "commandLineArgs": "create-task \"very new task\""
     }
   }
 }

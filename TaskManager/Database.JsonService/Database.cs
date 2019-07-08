@@ -1,24 +1,26 @@
 ﻿using Database.Contracts;
 using Logger.Contracts;
-using Newtonsoft.Json;
+using ObjectSerializer.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TaskData.Contracts;
 
-namespace Database.JsonService
+namespace Database
 {
      public class Database<T> : IRepository<T> where T: ITaskGroup
      {
           private readonly ILogger mLogger;
           private readonly IConfiguration mConfiguration;
+          private readonly IObjectSerializer mSerializer;
           private List<T> mEntities = new List<T>();
 
-          public Database(IConfiguration configuration, ILogger logger)
+          public Database(IConfiguration configuration, IObjectSerializer serializer, ILogger logger)
           {
                mLogger = logger;
                mConfiguration = configuration;
+               mSerializer = serializer;
 
                if (!File.Exists(mConfiguration.DatabasePath))
                {
@@ -26,7 +28,7 @@ namespace Database.JsonService
                     return;
                }
 
-               LoadFromFile(mConfiguration.DatabasePath);
+               LoadFromFile();
           }
 
           /// <summary>
@@ -122,6 +124,7 @@ namespace Database.JsonService
                }
 
                entityToUpdate = newEntity;
+               SaveToFile();
           }
 
           public void AddOrUpdate(T addOrUpdateEntity)
@@ -144,8 +147,7 @@ namespace Database.JsonService
 
                try
                {
-                    string jsonText = JsonConvert.SerializeObject(mEntities, Formatting.Indented);
-                    File.WriteAllText(mConfiguration.DatabasePath, jsonText);
+                    mSerializer.Serialize(mEntities, mConfiguration.DatabasePath);
                }
                catch (Exception ex)
                {
@@ -153,7 +155,7 @@ namespace Database.JsonService
                }
           }
 
-          private void LoadFromFile(string databasePath)
+          private void LoadFromFile()
           {
                if (string.IsNullOrEmpty(mConfiguration.DatabasePath))
                {
@@ -163,11 +165,11 @@ namespace Database.JsonService
 
                try
                {
-                    mEntities = JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(databasePath));
+                    mEntities = mSerializer.Deserialize<List<T>>(mConfiguration.DatabasePath);
                }
                catch (Exception ex)
                {
-                    mLogger.LogError($"Unable to deserialize database in {databasePath}", ex);
+                    mLogger.LogError($"Unable to deserialize database in {mConfiguration.DatabasePath}", ex);
                }
           }
      }

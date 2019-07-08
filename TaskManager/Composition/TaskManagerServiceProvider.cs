@@ -1,6 +1,6 @@
 ﻿using Database.Configuration;
 using Database.Contracts;
-using Database.JsonService;
+using Database;
 using Logger;
 using Logger.Contracts;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +8,8 @@ using System;
 using TaskData;
 using TaskData.Contracts;
 using TaskManager.Contracts;
+using ObjectSerializer.Contracts;
+using Database.JsonService;
 
 namespace Composition
 {
@@ -26,6 +28,9 @@ namespace Composition
 
                // Register logger.
                serviceCollection.AddSingleton<ILogger, ConsoleLogger>();
+
+               // Register object serializer.
+               serviceCollection.AddSingleton<IObjectSerializer, JsonSerializerWrapper>();
 
                RegisterTaskDataEntities(serviceCollection);
 

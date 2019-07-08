@@ -1,4 +1,5 @@
 ﻿using Logger.Contracts;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -9,24 +10,36 @@ namespace TaskData
 {
      public class TaskGroup : ITaskGroup
      {
+          [JsonProperty]
           private readonly ILogger mLogger;
+          [JsonProperty]
           internal readonly Dictionary<string, ITask> mTasksChildren = new Dictionary<string, ITask>();
 
-          public string ID { get; } = IDCounter.GetNextID();
+          public string ID { get; }
           public string GroupName { get; set ; }
 
+          [JsonIgnore]
           public int Size => mTasksChildren.Count;
 
-          public TaskGroup(ILogger logger)
-          {
-               mLogger = logger;
-          }
-
+          
           public TaskGroup(string groupName, ILogger logger)
           {
                mLogger = logger;
                GroupName = groupName;
+               ID = IDCounter.GetNextID();
+
                mLogger?.Log($"New group id {ID} created with name: {GroupName}");
+          }
+
+          [JsonConstructor]
+          internal TaskGroup(ILogger logger, Dictionary<string, ITask> taskChildren, string id, string groupName)
+          {
+               mLogger = logger;
+               mTasksChildren = taskChildren;
+               ID = id;
+               GroupName = groupName;
+
+               mLogger?.Log($"Group id {ID} restored with name: {GroupName}");
           }
 
           public void CreateTask(string description)

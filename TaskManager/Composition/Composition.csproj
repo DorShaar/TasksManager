@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Database.Configuration\Database.Configuration.csproj" />
+    <ProjectReference Include="..\ObjectSerializer.JsonService\ObjectSerializer.JsonService.csproj" />
     <ProjectReference Include="..\TaskManager\TaskManager.csproj" />
   </ItemGroup>
 

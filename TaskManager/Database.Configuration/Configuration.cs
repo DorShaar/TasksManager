@@ -1,5 +1,9 @@
 ﻿using Database.Contracts;
+using System.IO;
+using System.Runtime.CompilerServices;
+using YamlDotNet.RepresentationModel;
 
+[assembly: InternalsVisibleTo("Database.Configuration.Tests")]
 namespace Database.Configuration
 {
      /// <summary>
@@ -8,6 +12,47 @@ namespace Database.Configuration
      /// </summary>
      public class Configuration : IConfiguration
      {
-          public string DatabasePath { get; set; }
+          internal string ConfigurationYamlFilePath = @"config\DatabaseConfig.yaml";
+
+          public string DatabasePath
+          {
+               get => GetDatabasePath();
+               private set { }
+          }
+
+          private string GetDatabasePath()
+          {
+               using (StreamReader reader = new StreamReader(ConfigurationYamlFilePath))
+               {
+                    YamlStream yamlStream = new YamlStream();
+                    yamlStream.Load(reader);
+                    return GetDatabasePathNode(yamlStream).Value;
+               }
+          }
+
+          public void SetDatabasePath(string newDatabasePath)
+          {
+               YamlScalarNode pathNode;
+               YamlStream yamlStream = new YamlStream();
+
+               using (StreamReader reader = new StreamReader(ConfigurationYamlFilePath))
+               {
+                    yamlStream.Load(reader);
+                    pathNode = GetDatabasePathNode(yamlStream);
+               }
+
+               pathNode.Value = newDatabasePath;
+               using (TextWriter writer = File.CreateText(ConfigurationYamlFilePath))
+               {
+                    yamlStream.Save(writer, assignAnchors: false);
+               }
+          }
+
+          private YamlScalarNode GetDatabasePathNode(YamlStream yamlStream)
+          {
+               YamlMappingNode rootNode = (YamlMappingNode)yamlStream.Documents[0].RootNode;
+               var pathKeyValueNode = rootNode.Children[new YamlScalarNode("database")];
+               return (YamlScalarNode)(pathKeyValueNode as YamlMappingNode).Children[new YamlScalarNode("path")];
+          }
      }
 }

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ObjectSerializer.Contracts\ObjectSerializer.Contracts.csproj" />
+    <ProjectReference Include="..\TaskData\TaskData.csproj" />
+  </ItemGroup>
+
+</Project>
