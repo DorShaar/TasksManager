@@ -2,7 +2,7 @@
 
 namespace ConsoleUI
 {
-     internal class Options
+     internal class TaskOptions
      {
           // Tasks Group.
           [Verb("create-group", HelpText = "Create tasks group")]

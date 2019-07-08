@@ -14,5 +14,7 @@ namespace Database.Contracts
           void Remove(T entity);
           void RemoveById(string id);
           void RemoveByName(string name);
+
+          void SetDatabasePath(string newDatabasePath);
      }
 }

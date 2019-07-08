@@ -172,5 +172,10 @@ namespace Database
                     mLogger.LogError($"Unable to deserialize database in {mConfiguration.DatabasePath}", ex);
                }
           }
+
+          public void SetDatabasePath(string newDatabasePath)
+          {
+               mConfiguration.SetDatabasePath(newDatabasePath);
+          }
      }
 }

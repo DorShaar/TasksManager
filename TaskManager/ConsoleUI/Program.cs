@@ -21,7 +21,7 @@ namespace ConsoleUI
                var parser = new Parser(config => config.HelpWriter = Console.Out);
                if (args.Length == 0)
                {
-                    parser.ParseArguments<Options>(new[] { "--help" });
+                    parser.ParseArguments<TaskOptions>(new[] { "--help" });
                     return;
                }
 
@@ -29,17 +29,21 @@ namespace ConsoleUI
 
                exitCode = parser
                          .ParseArguments<
-                              Options.CreateNewTaskGroupOptions,
-                              Options.CreateNewTaskOptions,
-                              Options.GatAllTaskGroupOptions,
-                              Options.GetAllTasksOptions,
-                              Options.RemoveTaskGroupOptions>(args)
+                              TaskOptions.CreateNewTaskGroupOptions,
+                              TaskOptions.CreateNewTaskOptions,
+                              TaskOptions.GatAllTaskGroupOptions,
+                              TaskOptions.GetAllTasksOptions,
+                              TaskOptions.RemoveTaskGroupOptions,
+                              
+                              ConfigOptions.SetDatabasePathOptions>(args)
                          .MapResult(
-                         (Options.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
-                         (Options.CreateNewTaskOptions options) => CreateNewTask(taskManager, options),
-                         (Options.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
-                         (Options.GetAllTasksOptions options) => GetAllTasks(taskManager, options),
-                         (Options.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
+                         (TaskOptions.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
+                         (TaskOptions.CreateNewTaskOptions options) => CreateNewTask(taskManager, options),
+                         (TaskOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
+                         (TaskOptions.GetAllTasksOptions options) => GetAllTasks(taskManager, options),
+                         (TaskOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
+
+                         (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
                          (parserErrors) => 1
                );
 
@@ -47,7 +51,7 @@ namespace ConsoleUI
                     Console.WriteLine($"Finished executing with exit code: {exitCode}");
           }
 
-          private static int CreateNewTaskGroup(ITaskManager taskManager, Options.CreateNewTaskGroupOptions options)
+          private static int CreateNewTaskGroup(ITaskManager taskManager, TaskOptions.CreateNewTaskGroupOptions options)
           {
                if (string.IsNullOrEmpty(options.TaskGroupName))
                {
@@ -62,7 +66,7 @@ namespace ConsoleUI
                return 0;
           }
 
-          private static int CreateNewTask(ITaskManager taskManager, Options.CreateNewTaskOptions options)
+          private static int CreateNewTask(ITaskManager taskManager, TaskOptions.CreateNewTaskOptions options)
           {
                if (!string.IsNullOrEmpty(options.TaskGroupId))
                     taskManager.CreateNewTaskByGroupId(options.TaskGroupId, options.Description);
@@ -74,7 +78,7 @@ namespace ConsoleUI
                return 0;
           }
 
-          private static int GatAllTaskGroup(ITaskManager taskManager, Options.GatAllTaskGroupOptions options)
+          private static int GatAllTaskGroup(ITaskManager taskManager, TaskOptions.GatAllTaskGroupOptions options)
           {
                IEnumerable<ITaskGroup> groups = taskManager.GetAllTasksGroups();
                foreach(ITaskGroup group in groups)
@@ -89,7 +93,7 @@ namespace ConsoleUI
                return 0;
           }
 
-          private static int GetAllTasks(ITaskManager taskManager, Options.GetAllTasksOptions options)
+          private static int GetAllTasks(ITaskManager taskManager, TaskOptions.GetAllTasksOptions options)
           {
                IEnumerable<ITask> tasks;
 
@@ -117,7 +121,7 @@ namespace ConsoleUI
                return isFinished ? "Done" : "Open";
           }
 
-          private static int RemoveTaskGroup(ITaskManager taskManager, Options.RemoveTaskGroupOptions options)
+          private static int RemoveTaskGroup(ITaskManager taskManager, TaskOptions.RemoveTaskGroupOptions options)
           {
                if (!string.IsNullOrEmpty(options.TaskGroupId))
                     taskManager.RemoveTaskGroupById(options.TaskGroupId);
@@ -129,6 +133,12 @@ namespace ConsoleUI
                     return 1;
                }
 
+               return 0;
+          }
+
+          private static int SetDatabasePath(ITaskManager taskManager, ConfigOptions.SetDatabasePathOptions options)
+          {
+               taskManager.ChangeDatabasePath(options.NewDatabasePath);
                return 0;
           }
      }

@@ -19,5 +19,7 @@ namespace TaskManager.Contracts
           IEnumerable<ITask> GetAllTasks(ITaskGroup taskGroup);
           IEnumerable<ITask> GetAllTasksByGroupName(string taskGroupName);
           IEnumerable<ITask> GetAllTasksByGroupId(string taskGroupId);
+
+          void ChangeDatabasePath(string newDatabasePath);
      }
 }

@@ -130,5 +130,10 @@ namespace TaskManager
                return GetAllTasks(
                     GetAllTasksGroups().FirstOrDefault(group => group.ID == taskGroupId));
           }
+
+          public void ChangeDatabasePath(string newDatabasePath)
+          {
+               mDatabase.SetDatabasePath(newDatabasePath);
+          }
      }
 }
