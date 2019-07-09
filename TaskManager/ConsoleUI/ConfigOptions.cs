@@ -5,7 +5,7 @@ namespace ConsoleUI
      internal class ConfigOptions
      {
           // Tasks Group.
-          [Verb("use-db", HelpText = "Set database file path")]
+          [Verb("set-db", HelpText = "Set database file path")]
           public class SetDatabasePathOptions
           {
                [Value(0)]

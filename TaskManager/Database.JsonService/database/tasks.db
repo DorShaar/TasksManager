@@ -1,0 +1,18 @@
+[
+  {
+    "mLogger": {},
+    "mTasksChildren": {
+      "1001": {
+        "mLogger": {},
+        "ID": "1001",
+        "Description": "very new task",
+        "IsFinished": false,
+        "TimeCreated": "2019-07-09T20:33:02.7640027+03:00",
+        "TimeLastOpened": "2019-07-09T20:33:02.7665796+03:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      }
+    },
+    "ID": "1000",
+    "GroupName": "Free"
+  }
+]

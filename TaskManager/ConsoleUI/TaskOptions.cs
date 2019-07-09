@@ -12,7 +12,7 @@ namespace ConsoleUI
                public string TaskGroupName{ get; set; }
           }
 
-          [Verb("Remove-group", HelpText = "Removes tasks group")]
+          [Verb("remove-group", HelpText = "Removes tasks group")]
           public class RemoveTaskGroupOptions
           {
                [Option('n', "name", HelpText = "Remove task group by name")]
@@ -22,7 +22,7 @@ namespace ConsoleUI
                public string TaskGroupId { get; set; }
           }
 
-          [Verb("groups", HelpText = "Get all groups")]
+          [Verb("get-groups", HelpText = "Get all groups")]
           public class GatAllTaskGroupOptions
           {
                [Option('d', "detail", HelpText = "Print more information about each group")]
@@ -44,13 +44,13 @@ namespace ConsoleUI
                public string TaskGroupId { get; set; }
           }
 
-          [Verb("tasks", HelpText = "Get all task")]
+          [Verb("get-tasks", HelpText = "Get all task")]
           public class GetAllTasksOptions
           {
-               [Option('n', "name", HelpText = "Get all tasks by name")]
+               [Option('n', "name", HelpText = "Get all tasks by group name")]
                public string TaskGroupName { get; set; }
 
-               [Option('i', "id", HelpText = "Get all tasks by id")]
+               [Option('i', "id", HelpText = "Get all tasks by group id")]
                public string TaskGroupId { get; set; }
 
                [Option('d', "detail", HelpText = "Print more information about each task")]

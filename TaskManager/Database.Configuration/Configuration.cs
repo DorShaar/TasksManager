@@ -1,5 +1,6 @@
 ﻿using Database.Contracts;
 using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using YamlDotNet.RepresentationModel;
 
@@ -12,7 +13,8 @@ namespace Database.Configuration
      /// </summary>
      public class Configuration : IConfiguration
      {
-          internal string ConfigurationYamlFilePath = @"config\DatabaseConfig.yaml";
+          internal string ConfigurationYamlFilePath = 
+               Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "config", "DatabaseConfig.yaml");
 
           public string DatabasePath
           {
