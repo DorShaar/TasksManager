@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Domain\TaskData\TaskData.csproj" />
     <ProjectReference Include="..\Database.JsonService\Database.csproj" />
-    <ProjectReference Include="..\TaskData\TaskData.csproj" />
   </ItemGroup>
 
   <ItemGroup>

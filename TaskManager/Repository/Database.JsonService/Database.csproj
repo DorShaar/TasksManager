@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\IDProducer\IDProducer.csproj" />
+    <ProjectReference Include="..\..\Domain\Logger.Contracts\Logger.Contracts.csproj" />
+    <ProjectReference Include="..\..\Domain\ObjectSerializer.Contracts\ObjectSerializer.Contracts.csproj" />
+    <ProjectReference Include="..\Database.Contracts\Database.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

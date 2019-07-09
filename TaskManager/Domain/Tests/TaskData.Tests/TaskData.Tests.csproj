@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TaskData\TaskData.csproj" />
+    <ProjectReference Include="..\..\TaskData\TaskData.csproj" />
   </ItemGroup>
 
 </Project>
