@@ -9,10 +9,13 @@ using TaskData.Contracts;
 
 namespace Database
 {
-     public class Database<T> : IRepository<T> where T: ITaskGroup
+     public class Database<T> : IRepository<T> where T : ITaskGroup
      {
           private const string DatabaseName = "tasks.db";
           private const string NextIdHolderName = "id_producer.db";
+
+          private readonly string DatabaseFile;
+          private readonly string NextIdPath;
 
           private readonly ILogger mLogger;
           private readonly IConfiguration mConfiguration;
@@ -32,7 +35,47 @@ namespace Database
                     return;
                }
 
-               LoadFromFile();
+               DatabaseFile = Path.Combine(mConfiguration.DatabaseDirectoryPath, DatabaseName);
+               NextIdPath = Path.Combine(mConfiguration.DatabaseDirectoryPath, NextIdHolderName);
+               LoadInformation();
+          }
+
+          private void LoadInformation()
+          {
+               try
+               {
+                    LoadDatabase();
+                    LoadNextIdToProduce();
+               }
+               catch (Exception ex)
+               {
+                    mEntities = new List<T>();
+                    mLogger.LogError($"Unable to deserialize whole information", ex);
+               }
+          }
+
+          private void LoadDatabase()
+          {
+               if (!File.Exists(DatabaseFile))
+               {
+                    mLogger.LogError($"Database file {DatabaseFile} does not exists");
+                    throw new FileNotFoundException("Database does not exists", DatabaseFile);
+               }
+
+               mLogger.LogInformation($"Going to load database from {DatabaseFile}");
+               mEntities = mSerializer.Deserialize<List<T>>(DatabaseFile);
+          }
+
+          private void LoadNextIdToProduce()
+          {
+               if (!File.Exists(NextIdPath))
+               {
+                    mLogger.LogError($"Database file {NextIdPath} does not exists");
+                    throw new FileNotFoundException("Database does not exists", NextIdPath);
+               }
+
+               mLogger.LogInformation("Going to load next id");
+               IDProducer.IDProducer.SetNextID(mSerializer.Deserialize<int>(Path.Combine(mConfiguration.DatabaseDirectoryPath, NextIdHolderName)));
           }
 
           /// <summary>
@@ -121,7 +164,7 @@ namespace Database
           {
                T entityToUpdate = mEntities.Find(entity => entity.ID == newEntity.ID);
 
-               if(entityToUpdate == null)
+               if (entityToUpdate == null)
                {
                     mLogger.LogError($"Group ID: {newEntity.ID} Group name: {newEntity.GroupName} - No such entity was found in database");
                     return;
@@ -143,43 +186,26 @@ namespace Database
 
           private void SaveToFile()
           {
-               if(string.IsNullOrEmpty(mConfiguration.DatabaseDirectoryPath))
+               if (string.IsNullOrEmpty(DatabaseFile))
                {
                     mLogger.LogError("No database path was given");
                     return;
                }
 
+               if (string.IsNullOrEmpty(NextIdPath))
+               {
+                    mLogger.LogError("No next id path was given");
+                    return;
+               }
+
                try
                {
-                    mSerializer.Serialize(mEntities, mConfiguration.DatabaseDirectoryPath);
+                    mSerializer.Serialize(mEntities, DatabaseFile);
+                    mSerializer.Serialize(IDProducer.IDProducer.PeekForNextId(), NextIdPath);
                }
                catch (Exception ex)
                {
                     mLogger.LogError($"Unable to serialize database in {mConfiguration.DatabaseDirectoryPath}", ex);
-               }
-          }
-
-          private void LoadFromFile()
-          {
-               if (string.IsNullOrEmpty(mConfiguration.DatabaseDirectoryPath))
-               {
-                    mLogger.LogError("No database path was given");
-                    return;
-               }
-
-
-               mLogger.Log($"Loading information from {mConfiguration.DatabaseDirectoryPath}");
-               try
-               {
-                    mLogger.Log("Going to load database");
-                    mEntities = mSerializer.Deserialize<List<T>>(Path.Combine(mConfiguration.DatabaseDirectoryPath, DatabaseName));
-
-                    mLogger.Log("Going to load next id");
-                    IDProducer.IDProducer.SetNextID(mSerializer.Deserialize<int>(Path.Combine(mConfiguration.DatabaseDirectoryPath, NextIdHolderName)));
-               }
-               catch (Exception ex)
-               {
-                    mLogger.LogError($"Unable to deserialize database in {mConfiguration.DatabaseDirectoryPath}", ex);
                }
           }
 

@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleUI": {
       "commandName": "Project",
-      "commandLineArgs": "create-task \"add move of task functionality\""
+      "commandLineArgs": "create-task \"create console printer\""
     }
   }
 }

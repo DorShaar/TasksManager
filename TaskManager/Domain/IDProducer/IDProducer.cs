@@ -15,5 +15,14 @@
                mLastID++;
                return stringID;
           }
+
+          /// <summary>
+          /// Does not increment <see cref="mLastID"/>
+          /// </summary>
+          /// <returns></returns>
+          public static string PeekForNextId()
+          {
+               return mLastID.ToString();
+          }
      }
 }

@@ -1,14 +1,29 @@
 [
   {
-    "mLogger": {},
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
     "mTasksChildren": {
       "1001": {
-        "mLogger": {},
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
         "ID": "1001",
-        "Description": "todo",
+        "Description": "add move of task functionality",
         "IsFinished": false,
-        "TimeCreated": "2019-07-09T22:26:10.4226755+03:00",
-        "TimeLastOpened": "2019-07-09T22:26:10.4245464+03:00",
+        "TimeCreated": "2019-07-10T00:46:18.7136704+03:00",
+        "TimeLastOpened": "2019-07-10T00:46:18.7151758+03:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1002": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "ID": "1002",
+        "Description": "create console printer",
+        "IsFinished": false,
+        "TimeCreated": "2019-07-10T00:52:47.00586+03:00",
+        "TimeLastOpened": "2019-07-10T00:52:47.0058641+03:00",
         "TimeClosed": "0001-01-01T00:00:00"
       }
     },

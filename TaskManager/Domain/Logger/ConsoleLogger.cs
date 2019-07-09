@@ -5,31 +5,35 @@ namespace Logger
 {
      public class ConsoleLogger : ILogger
      {
-          private const string Separetor = "############################################";
+          public bool ShouldLogInformation { get; set; } = false;
 
           public void Log(string message)
           {
                Console.WriteLine(message);
           }
 
+          public void LogInformation(string message)
+          {
+               if(ShouldLogInformation)
+                    Console.WriteLine(message);
+          }
+
           public void LogError(string message)
           {
-               Log(Separetor);
                Console.ForegroundColor = ConsoleColor.Red;
                Log(message);
                Console.ResetColor();
-               Log(Separetor);
           }
 
           public void LogError(string message, Exception ex)
           {
-               Log(Separetor);
+               //Log(Separetor);
                Console.ForegroundColor = ConsoleColor.Red;
                Log(message);
                Log($"Exception Message: {ex.Message}");
-               Log($"Exception Message: {ex.Message}");
+               Log($"Exception Message: {ex.StackTrace}");
                Console.ResetColor();
-               Log(Separetor);
+               //Log(Separetor);
           }
      }
 }
