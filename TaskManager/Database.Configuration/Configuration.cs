@@ -14,12 +14,11 @@ namespace Database.Configuration
      public class Configuration : IConfiguration
      {
           internal string ConfigurationYamlFilePath = 
-               Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "config", "DatabaseConfig.yaml");
+               Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "config", "Config.yaml");
 
-          public string DatabasePath
+          public string DatabaseDirectoryPath
           {
                get => GetDatabasePath();
-               private set { }
           }
 
           private string GetDatabasePath()
@@ -32,7 +31,7 @@ namespace Database.Configuration
                }
           }
 
-          public void SetDatabasePath(string newDatabasePath)
+          public void SetDatabaseDirectoryPath(string newDatabasePath)
           {
                YamlScalarNode pathNode;
                YamlStream yamlStream = new YamlStream();
@@ -54,7 +53,7 @@ namespace Database.Configuration
           {
                YamlMappingNode rootNode = (YamlMappingNode)yamlStream.Documents[0].RootNode;
                var pathKeyValueNode = rootNode.Children[new YamlScalarNode("database")];
-               return (YamlScalarNode)(pathKeyValueNode as YamlMappingNode).Children[new YamlScalarNode("path")];
+               return (YamlScalarNode)(pathKeyValueNode as YamlMappingNode).Children[new YamlScalarNode("directory_path")];
           }
      }
 }

@@ -26,7 +26,7 @@ namespace TaskData
           {
                mLogger = logger;
                GroupName = groupName;
-               ID = IDCounter.GetNextID();
+               ID = IDProducer.IDProducer.ProduceID();
 
                mLogger?.Log($"New group id {ID} created with name: {GroupName}");
           }

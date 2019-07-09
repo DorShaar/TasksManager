@@ -1,15 +1,15 @@
-﻿namespace TaskData
+﻿namespace IDProducer
 {
-     public class IDCounter
+     public class IDProducer
      {
           private static int mLastID = 1000;
 
-          public IDCounter(int lastID)
+          public static void SetNextID(int lastID)
           {
                mLastID = lastID;
           }
 
-          public static string GetNextID()
+          public static string ProduceID()
           {
                string stringID = mLastID.ToString();
                mLastID++;

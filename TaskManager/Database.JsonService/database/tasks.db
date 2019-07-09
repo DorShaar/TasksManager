@@ -5,10 +5,10 @@
       "1001": {
         "mLogger": {},
         "ID": "1001",
-        "Description": "very new task",
+        "Description": "todo",
         "IsFinished": false,
-        "TimeCreated": "2019-07-09T20:33:02.7640027+03:00",
-        "TimeLastOpened": "2019-07-09T20:33:02.7665796+03:00",
+        "TimeCreated": "2019-07-09T22:26:10.4226755+03:00",
+        "TimeLastOpened": "2019-07-09T22:26:10.4245464+03:00",
         "TimeClosed": "0001-01-01T00:00:00"
       }
     },

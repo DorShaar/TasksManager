@@ -108,7 +108,7 @@ namespace TaskManager
 
                foreach (ITaskGroup taskGroup in GetAllTasksGroups())
                {
-                    allTasks.Concat(taskGroup.GetAllTasks());
+                    allTasks = allTasks.Concat(taskGroup.GetAllTasks());
                }
 
                return allTasks;

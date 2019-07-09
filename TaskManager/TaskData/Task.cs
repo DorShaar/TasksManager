@@ -1,4 +1,5 @@
-﻿using Logger.Contracts;
+﻿using IDProducer;
+using Logger.Contracts;
 using Newtonsoft.Json;
 using System;
 using TaskData.Contracts;
@@ -21,7 +22,7 @@ namespace TaskData
           public Task(string description, ILogger logger)
           {
                mLogger = logger;
-               ID = IDCounter.GetNextID();
+               ID = IDProducer.IDProducer.ProduceID();
                Description = description;
                mLogger?.Log($"New task id {ID} created with description: {Description}");
           }

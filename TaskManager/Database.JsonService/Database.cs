@@ -11,9 +11,13 @@ namespace Database
 {
      public class Database<T> : IRepository<T> where T: ITaskGroup
      {
+          private const string DatabaseName = "tasks.db";
+          private const string NextIdHolderName = "id_producer.db";
+
           private readonly ILogger mLogger;
           private readonly IConfiguration mConfiguration;
           private readonly IObjectSerializer mSerializer;
+
           private List<T> mEntities = new List<T>();
 
           public Database(IConfiguration configuration, IObjectSerializer serializer, ILogger logger)
@@ -22,9 +26,9 @@ namespace Database
                mConfiguration = configuration;
                mSerializer = serializer;
 
-               if (!File.Exists(mConfiguration.DatabasePath))
+               if (!Directory.Exists(mConfiguration.DatabaseDirectoryPath))
                {
-                    mLogger.LogError($"No database found in path {mConfiguration.DatabasePath}");
+                    mLogger.LogError($"No database directory found in path {mConfiguration.DatabaseDirectoryPath}");
                     return;
                }
 
@@ -139,7 +143,7 @@ namespace Database
 
           private void SaveToFile()
           {
-               if(string.IsNullOrEmpty(mConfiguration.DatabasePath))
+               if(string.IsNullOrEmpty(mConfiguration.DatabaseDirectoryPath))
                {
                     mLogger.LogError("No database path was given");
                     return;
@@ -147,35 +151,41 @@ namespace Database
 
                try
                {
-                    mSerializer.Serialize(mEntities, mConfiguration.DatabasePath);
+                    mSerializer.Serialize(mEntities, mConfiguration.DatabaseDirectoryPath);
                }
                catch (Exception ex)
                {
-                    mLogger.LogError($"Unable to serialize database in {mConfiguration.DatabasePath}", ex);
+                    mLogger.LogError($"Unable to serialize database in {mConfiguration.DatabaseDirectoryPath}", ex);
                }
           }
 
           private void LoadFromFile()
           {
-               if (string.IsNullOrEmpty(mConfiguration.DatabasePath))
+               if (string.IsNullOrEmpty(mConfiguration.DatabaseDirectoryPath))
                {
                     mLogger.LogError("No database path was given");
                     return;
                }
 
+
+               mLogger.Log($"Loading information from {mConfiguration.DatabaseDirectoryPath}");
                try
                {
-                    mEntities = mSerializer.Deserialize<List<T>>(mConfiguration.DatabasePath);
+                    mLogger.Log("Going to load database");
+                    mEntities = mSerializer.Deserialize<List<T>>(Path.Combine(mConfiguration.DatabaseDirectoryPath, DatabaseName));
+
+                    mLogger.Log("Going to load next id");
+                    IDProducer.IDProducer.SetNextID(mSerializer.Deserialize<int>(Path.Combine(mConfiguration.DatabaseDirectoryPath, NextIdHolderName)));
                }
                catch (Exception ex)
                {
-                    mLogger.LogError($"Unable to deserialize database in {mConfiguration.DatabasePath}", ex);
+                    mLogger.LogError($"Unable to deserialize database in {mConfiguration.DatabaseDirectoryPath}", ex);
                }
           }
 
-          public void SetDatabasePath(string newDatabasePath)
+          public void SetDatabasePath(string newDatabasePathDirectory)
           {
-               mConfiguration.SetDatabasePath(newDatabasePath);
+               mConfiguration.SetDatabaseDirectoryPath(newDatabasePathDirectory);
           }
      }
 }

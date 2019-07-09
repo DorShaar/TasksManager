@@ -2,7 +2,7 @@
 {
      public interface IConfiguration
      {
-          string DatabasePath { get; }
-          void SetDatabasePath(string newDatabasePath);
+          string DatabaseDirectoryPath { get; }
+          void SetDatabaseDirectoryPath(string newDatabaseDirectoryPath);
      }
 }

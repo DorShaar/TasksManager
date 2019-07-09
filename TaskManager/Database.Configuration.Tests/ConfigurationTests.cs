@@ -14,7 +14,7 @@ namespace Database.Configuration.Tests
                {
                     ConfigurationYamlFilePath = TestDatabasePath
                };
-               Assert.AreEqual(configuration.DatabasePath, "this_path_should_be_updated");
+               Assert.AreEqual("this_path_should_be_updated", configuration.DatabaseDirectoryPath);
           }
 
           [TestMethod]
@@ -27,8 +27,8 @@ namespace Database.Configuration.Tests
 
                string newDatabasePathString = "new_database_path";
                
-               configuration.SetDatabasePath(newDatabasePathString);
-               Assert.AreEqual(configuration.DatabasePath, newDatabasePathString);
+               configuration.SetDatabaseDirectoryPath(newDatabasePathString);
+               Assert.AreEqual(configuration.DatabaseDirectoryPath, newDatabasePathString);
           }
      }
 }
