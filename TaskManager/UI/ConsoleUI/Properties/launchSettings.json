@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleUI": {
       "commandName": "Project",
-      "commandLineArgs": "remove-task 1004"
+      "commandLineArgs": "close-task 1008"
     }
   }
 }

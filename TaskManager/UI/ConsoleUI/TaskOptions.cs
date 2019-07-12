@@ -9,7 +9,7 @@ namespace ConsoleUI
           public class CreateNewTaskGroupOptions
           {
                [Value(0)]
-               public string TaskGroupName{ get; set; }
+               public string TaskGroupName { get; set; }
           }
 
           [Verb("remove-group", HelpText = "Removes tasks group")]
@@ -26,7 +26,7 @@ namespace ConsoleUI
           public class GatAllTaskGroupOptions
           {
                [Option('d', "detail", HelpText = "Print more information about each group")]
-               public bool IsDetailed{ get; set; }
+               public bool IsDetailed { get; set; }
           }
 
           // Tasks.
@@ -54,7 +54,7 @@ namespace ConsoleUI
                public string TaskGroupId { get; set; }
 
                [Option('a', "all", HelpText = "Print all tasks")]
-               public bool ShouldPrintAll{ get; set; }
+               public bool ShouldPrintAll { get; set; }
 
                [Option('d', "detail", HelpText = "Print more information about each task")]
                public bool IsDetailed { get; set; }
@@ -74,9 +74,16 @@ namespace ConsoleUI
                public string TaskId { get; set; }
           }
 
+          [Verb("reopen-task", HelpText = "Reopen a closed task")]
+          public class ReOpenTaskOptions
+          {
+               [Value(0, HelpText = "Task id to open again")]
+               public string TaskId { get; set; }
+          }
+
           [Verb("move-task", HelpText = "Moves a task to a given group")]
           public class MoveTaskOptions
-          { 
+          {
                [Value(0, HelpText = "Task id to move")]
                public string TaskId { get; set; }
 

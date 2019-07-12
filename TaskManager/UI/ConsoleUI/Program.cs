@@ -39,7 +39,7 @@ namespace ConsoleUI
                               TaskOptions.RemoveTaskGroupOptions,
                               TaskOptions.RemoveTaskOptions,
                               TaskOptions.MoveTaskOptions,
-                              TaskOptions.CloseTasksOptions,
+                              TaskOptions.ReOpenTaskOptions,
 
                               ConfigOptions.SetDatabasePathOptions>(args)
                          .MapResult(
@@ -51,7 +51,7 @@ namespace ConsoleUI
                          (TaskOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
                          (TaskOptions.RemoveTaskOptions options) => RemoveTaskOptions(taskManager, options),
                          (TaskOptions.MoveTaskOptions options) => MoveTask(taskManager, options),
-                         (TaskOptions.CloseTasksOptions options) => ReOpenTask(taskManager, options),
+                         (TaskOptions.ReOpenTaskOptions options) => ReOpenTask(taskManager, options),
 
                          (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
                          (parserErrors) => 1
@@ -126,7 +126,7 @@ namespace ConsoleUI
                return 0;
           }
 
-          private static int ReOpenTask(ITaskManager taskManager, TaskOptions.CloseTasksOptions options)
+          private static int ReOpenTask(ITaskManager taskManager, TaskOptions.ReOpenTaskOptions options)
           {
                if (string.IsNullOrEmpty(options.TaskId))
                {
