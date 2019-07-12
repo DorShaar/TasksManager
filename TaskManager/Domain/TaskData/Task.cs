@@ -1,5 +1,4 @@
-﻿using IDProducer;
-using Logger.Contracts;
+﻿using Logger.Contracts;
 using Newtonsoft.Json;
 using System;
 using TaskData.Contracts;

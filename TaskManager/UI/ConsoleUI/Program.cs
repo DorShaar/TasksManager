@@ -11,6 +11,7 @@ namespace ConsoleUI
      public class Program
      {
           private static ILogger mLogger;
+          private static readonly ConsolePrinter mConsolePrinter = new ConsolePrinter();
 
           public static void Main(string[] args)
           {
@@ -80,16 +81,7 @@ namespace ConsoleUI
 
           private static int GatAllTaskGroup(ITaskManager taskManager, TaskOptions.GatAllTaskGroupOptions options)
           {
-               IEnumerable<ITaskGroup> groups = taskManager.GetAllTasksGroups();
-               foreach(ITaskGroup group in groups)
-               {
-                    string info = $"ID: {group.ID}          Name: {group.GroupName}";
-                    if (options.IsDetailed)
-                         info += $"       Size: {group.Size}";
-
-                    mLogger.Log(info);
-               }
-
+               mConsolePrinter.PrintTasksGroup(taskManager.GetAllTasksGroups(), options);
                return 0;
           }
 
@@ -104,21 +96,8 @@ namespace ConsoleUI
                else
                     tasks = taskManager.GetAllTasks();
 
-               foreach (ITask task in tasks)
-               {
-                    string info = $"ID: {task.ID}          Description: {task.Description}";
-                    if (options.IsDetailed)
-                         info += $"       Status: {GetStringStatus(task.IsFinished)}";
-
-                    mLogger.Log(info);
-               }
-
+               mConsolePrinter.PrintTasks(tasks, options);
                return 0;
-          }
-
-          private static string GetStringStatus(bool isFinished)
-          {
-               return isFinished ? "Done" : "Open";
           }
 
           private static int RemoveTaskGroup(ITaskManager taskManager, TaskOptions.RemoveTaskGroupOptions options)
