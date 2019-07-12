@@ -141,10 +141,13 @@ namespace TaskManager
                          if (task.ID == taskId)
                          {
                               group.RemoveTask(taskId);
-                              break;
+                              mDatabase.Update(group);
+                              return;
                          }
                     }
                }
+
+               mLogger.LogError($"Task id {taskId} was not found");
           }
 
           public void RemoveTask(string[] taskIds)

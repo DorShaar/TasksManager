@@ -37,10 +37,10 @@ namespace ConsoleUI
                [Value(0)]
                public string Description { get; set; }
 
-               [Option('n', "name", HelpText = "Remove task by name")]
+               [Option('n', "name", HelpText = "Add created task to tasks group by name")]
                public string TaskGroupName { get; set; }
 
-               [Option('i', "id", HelpText = "Remove task by id")]
+               [Option('i', "id", HelpText = "Add created task to tasks group by id")]
                public string TaskGroupId { get; set; }
           }
 

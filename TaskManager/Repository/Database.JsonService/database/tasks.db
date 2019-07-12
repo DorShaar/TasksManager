@@ -3,7 +3,19 @@
     "mLogger": {
       "ShouldLogInformation": false
     },
-    "mTasksChildren": {},
+    "mTasksChildren": {
+      "1004": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "ID": "1004",
+        "Description": "blabla",
+        "IsFinished": false,
+        "TimeCreated": "2019-07-12T14:01:47.3326712+03:00",
+        "TimeLastOpened": "2019-07-12T14:01:47.332675+03:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      }
+    },
     "ID": "1000",
     "GroupName": "Free"
   },
