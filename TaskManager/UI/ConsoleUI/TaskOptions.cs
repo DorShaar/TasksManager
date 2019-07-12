@@ -47,11 +47,14 @@ namespace ConsoleUI
           [Verb("get-tasks", HelpText = "Get all task")]
           public class GetAllTasksOptions
           {
-               [Option('n', "name", HelpText = "Get all tasks by group name")]
+               [Option('n', "name", HelpText = "Get tasks by group name")]
                public string TaskGroupName { get; set; }
 
-               [Option('i', "id", HelpText = "Get all tasks by group id")]
+               [Option('i', "id", HelpText = "Get tasks by group id")]
                public string TaskGroupId { get; set; }
+
+               [Option('a', "all", HelpText = "Print all tasks")]
+               public bool ShouldPrintAll{ get; set; }
 
                [Option('d', "detail", HelpText = "Print more information about each task")]
                public bool IsDetailed { get; set; }

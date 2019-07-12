@@ -16,14 +16,53 @@ namespace TaskManager.Integration.Tests
           private static readonly ILogger mLogger = A.Dummy<ILogger>();
           private static readonly IConfiguration mConfiguration = A.Dummy<IConfiguration>();
           private static readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
-          private static readonly IRepository<ITaskGroup> mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
           private static readonly ITaskGroupBuilder mTaskGroupBuilder = new TaskGroupBuilder();
-          private readonly TaskManager mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mLogger);
+          private static IRepository<ITaskGroup> mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
+          private static TaskManager mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mLogger);
+
+          [TestInitialize]
+          public void Startup()
+          {
+               mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
+               mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mLogger);
+          }
+
+          [TestMethod]
+          public void GetAllTasksByGroup_3Tasks_3TasksReturned()
+          {
+               ITaskGroup taskGroup = mTaskGroupBuilder.Create("A", mLogger);
+               ITask task1 = mTaskManager.CreateNewTask(taskGroup, "1");
+               ITask task2 = mTaskManager.CreateNewTask(taskGroup, "2");
+               ITask task3 = mTaskManager.CreateNewTask(taskGroup, "3");
+
+               Assert.AreEqual(mTaskManager.GetAllTasks((ITaskGroup group) => group.ID == taskGroup.ID).Count(), 3);
+          }
+
+          [TestMethod]
+          public void GetAllTasksByTask_ClosedTasks_3TasksReturned()
+          {
+               ITaskGroup taskGroupA = mTaskGroupBuilder.Create("A", mLogger);
+               ITask task1 = mTaskManager.CreateNewTask(taskGroupA, "A1");
+               ITask task2 = mTaskManager.CreateNewTask(taskGroupA, "A2");
+               mTaskManager.CloseTask(task1.ID);
+
+               ITaskGroup taskGroupB = mTaskGroupBuilder.Create("B", mLogger);
+               ITask task3 = mTaskManager.CreateNewTask(taskGroupB, "B1");
+               ITask task4 = mTaskManager.CreateNewTask(taskGroupB, "B2");
+               mTaskManager.CloseTask(task4.ID);
+
+               ITaskGroup taskGroupC = mTaskGroupBuilder.Create("C", mLogger);
+               ITask task5 = mTaskManager.CreateNewTask(taskGroupC, "C1");
+               mTaskManager.CloseTask(task5.ID);
+
+               Assert.AreEqual(mTaskManager.GetAllTasks(group => group.IsFinished == true).Count(), 3);
+               Assert.AreEqual(mTaskManager.GetAllTasks(task => task.IsFinished == true).Count(), 3);
+          }
 
           [TestMethod]
           public void Ctor_TasksManagerHasFreeTasksGroup()
           {
-               Assert.IsNotNull(mTaskManager.GetAllTasksByGroupName(TaskManager.FreeTaskGroupName));
+               Assert.IsNotNull(mTaskManager.GetAllTasks(taskGrop => taskGrop.GroupName == TaskManager.FreeTaskGroupName));
           }
 
           [TestMethod]
@@ -46,10 +85,10 @@ namespace TaskManager.Integration.Tests
           {
                string taskGroupName = "New Task Group";
                mTaskManager.CreateNewTaskGroup(taskGroupName);
-               Assert.AreEqual(mTaskManager.GetAllTasksByGroupName(taskGroupName).Count(), 0);
+               Assert.AreEqual(mTaskManager.GetAllTasks(taskGroup => taskGroup.GroupName == taskGroupName).Count(), 0);
 
                mTaskManager.RemoveTaskGroupByName(taskGroupName);
-               Assert.IsNull(mTaskManager.GetAllTasksByGroupName(taskGroupName));
+               Assert.IsNull(mTaskManager.GetAllTasks(taskGroup => taskGroup.GroupName == taskGroupName));
           }
      }
 }

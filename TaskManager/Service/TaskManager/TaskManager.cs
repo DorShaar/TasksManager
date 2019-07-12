@@ -1,5 +1,6 @@
 ﻿using Database.Contracts;
 using Logger.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -45,17 +46,6 @@ namespace TaskManager
                mDatabase.Insert(mTaskGroupBuilder.Create(groupName, mLogger));
           }
 
-          public void RemoveTaskGroup(ITaskGroup taskGroup)
-          {
-               if (taskGroup == mFreeTasksGroup)
-               {
-                    mLogger.LogError($"Cannot delete {FreeTaskGroupName} from database");
-                    return;
-               }
-
-               mDatabase.Remove(taskGroup);
-          }
-
           public void RemoveTaskGroupByName(string name)
           {
                ITaskGroup taskGroup = mDatabase.GetByName(name);
@@ -68,6 +58,17 @@ namespace TaskManager
                RemoveTaskGroup(taskGroup);
           }
 
+          private void RemoveTaskGroup(ITaskGroup taskGroup)
+          {
+               if (taskGroup == mFreeTasksGroup)
+               {
+                    mLogger.LogError($"Cannot delete {FreeTaskGroupName} from database");
+                    return;
+               }
+
+               mDatabase.Remove(taskGroup);
+          }
+
           public IEnumerable<ITaskGroup> GetAllTasksGroups()
           {
                return mDatabase.GetAll();
@@ -76,10 +77,11 @@ namespace TaskManager
           /// <summary>
           /// Create new task into <param name="tasksGroup"/>.
           /// </summary>
-          public void CreateNewTask(ITaskGroup tasksGroup, string description)
+          public ITask CreateNewTask(ITaskGroup tasksGroup, string description)
           {
-               tasksGroup.CreateTask(description);
+               ITask task = tasksGroup.CreateTask(description);
                mDatabase.AddOrUpdate(tasksGroup);
+               return task;
           }
 
           public void CreateNewTaskByGroupName(string tasksGroupName, string description)
@@ -115,21 +117,28 @@ namespace TaskManager
                return allTasks;
           }
 
-          public IEnumerable<ITask> GetAllTasks(ITaskGroup taskGroup)
+          public IEnumerable<ITask> GetAllTasks(Func<ITask, bool> action)
           {
-               return taskGroup?.GetAllTasks();
+               foreach(ITask task in GetAllTasks())
+               {
+                    if(action(task))
+                    {
+                         yield return task;
+                    }
+               }
           }
 
-          public IEnumerable<ITask> GetAllTasksByGroupName(string taskGroupName)
+          public IEnumerable<ITask> GetAllTasks(Func<ITaskGroup, bool> action)
           {
-               return GetAllTasks(
-                    GetAllTasksGroups().FirstOrDefault(group => group.GroupName == taskGroupName));
-          }
+               foreach (ITaskGroup taskGroup in GetAllTasksGroups())
+               {
+                    if (action(taskGroup))
+                    {
+                         return taskGroup.GetAllTasks();
+                    }
+               }
 
-          public IEnumerable<ITask> GetAllTasksByGroupId(string taskGroupId)
-          {
-               return GetAllTasks(
-                    GetAllTasksGroups().FirstOrDefault(group => group.ID == taskGroupId));
+               return null;
           }
 
           public void CloseTask(string taskId)
@@ -170,9 +179,9 @@ namespace TaskManager
 
           public void RemoveTask(string taskId)
           {
-               foreach(ITaskGroup group in mDatabase.GetAll())
+               foreach (ITaskGroup group in mDatabase.GetAll())
                {
-                    foreach(ITask task in group.GetAllTasks())
+                    foreach (ITask task in group.GetAllTasks())
                     {
                          if (task.ID == taskId)
                          {
@@ -188,7 +197,7 @@ namespace TaskManager
 
           public void RemoveTask(string[] taskIds)
           {
-               foreach(string taskId in taskIds)
+               foreach (string taskId in taskIds)
                {
                     RemoveTask(taskId);
                }
@@ -197,7 +206,7 @@ namespace TaskManager
           public void MoveTaskToGroupName(string taskId, string taskGroupName)
           {
                ITaskGroup taskGroup = mDatabase.GetByName(taskGroupName);
-               if(taskGroup == null)
+               if (taskGroup == null)
                {
                     mLogger.LogError($"group name {taskGroupName} was not found");
                     return;

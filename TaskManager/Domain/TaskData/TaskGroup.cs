@@ -41,10 +41,11 @@ namespace TaskData
                mLogger?.Log($"Group id {ID} restored with name: {GroupName}");
           }
 
-          public void CreateTask(string description)
+          public ITask CreateTask(string description)
           {
                Task createdTask = new Task(description, mLogger);
                AddTask(createdTask);
+               return createdTask;
           }
 
           public IEnumerable<ITask> GetAllTasks()

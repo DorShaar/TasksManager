@@ -1,30 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TaskData.Contracts;
 
 namespace TaskManager.Contracts
 {
      public interface ITaskManager
      {
+          // TasksGroups.
           void CreateNewTaskGroup(string groupName);
-          void RemoveTaskGroup(ITaskGroup taskGroup);
           void RemoveTaskGroupByName(string name);
           void RemoveTaskGroupById(string id);
           IEnumerable<ITaskGroup> GetAllTasksGroups();
 
-          void CreateNewTask(ITaskGroup tasksGroup, string description);
+          // Tasks.
+          ITask CreateNewTask(ITaskGroup tasksGroup, string description);
           void CreateNewTaskByGroupName(string tasksGroupName, string description);
           void CreateNewTaskByGroupId(string tasksGroupId, string description);
           void CreateNewTask(string description);
           IEnumerable<ITask> GetAllTasks();
-          IEnumerable<ITask> GetAllTasks(ITaskGroup taskGroup);
-          IEnumerable<ITask> GetAllTasksByGroupName(string taskGroupName);
-          IEnumerable<ITask> GetAllTasksByGroupId(string taskGroupId);
+          IEnumerable<ITask> GetAllTasks(Func<ITaskGroup, bool> action);
+          IEnumerable<ITask> GetAllTasks(Func<ITask, bool> action);
           void CloseTask(string taskId);
           void ReOpenTask(string taskId);
           void RemoveTask(string taskId);
           void MoveTaskToGroupName(string taskId, string taskGroupName);
           void MoveTaskToGroupId(string taskId, string taskGroupId);
 
+          // Database.
           void ChangeDatabasePath(string newDatabasePath);
      }
 }

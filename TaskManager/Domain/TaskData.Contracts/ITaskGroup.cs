@@ -10,7 +10,7 @@ namespace TaskData.Contracts
 
           IEnumerable<ITask> GetAllTasks();
           ITask GetTask(string id);
-          void CreateTask(string description);
+          ITask CreateTask(string description);
           void AddTask(ITask task);
           void RemoveTask(string id);
           void RemoveTask(params string[] ids);

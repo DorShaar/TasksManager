@@ -3,6 +3,7 @@ using Composition;
 using Logger.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaskData.Contracts;
 using TaskManager.Contracts;
 
@@ -38,6 +39,7 @@ namespace ConsoleUI
                               TaskOptions.RemoveTaskGroupOptions,
                               TaskOptions.RemoveTaskOptions,
                               TaskOptions.MoveTaskOptions,
+                              TaskOptions.CloseTasksOptions,
 
                               ConfigOptions.SetDatabasePathOptions>(args)
                          .MapResult(
@@ -49,6 +51,7 @@ namespace ConsoleUI
                          (TaskOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
                          (TaskOptions.RemoveTaskOptions options) => RemoveTaskOptions(taskManager, options),
                          (TaskOptions.MoveTaskOptions options) => MoveTask(taskManager, options),
+                         (TaskOptions.CloseTasksOptions options) => ReOpenTask(taskManager, options),
 
                          (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
                          (parserErrors) => 1
@@ -88,18 +91,26 @@ namespace ConsoleUI
                return 0;
           }
 
+          /// <summary>
+          /// Get all un-closed tasks.
+          /// In case user chose print all option, all tasks will be printed.
+          /// </summary>
           private static int GetAllTasks(ITaskManager taskManager, TaskOptions.GetAllTasksOptions options)
           {
-               IEnumerable<ITask> tasks;
+               IEnumerable<ITask> allTasks;
 
                if (!string.IsNullOrEmpty(options.TaskGroupId))
-                    tasks = taskManager.GetAllTasksByGroupId(options.TaskGroupId);
+                    allTasks = taskManager.GetAllTasks((ITaskGroup task) => task.ID == options.TaskGroupId);
                else if (!string.IsNullOrEmpty(options.TaskGroupName))
-                    tasks = taskManager.GetAllTasksByGroupName(options.TaskGroupName);
+                    allTasks = taskManager.GetAllTasks((ITaskGroup task) => task.GroupName == options.TaskGroupName);
                else
-                    tasks = taskManager.GetAllTasks();
+                    allTasks = taskManager.GetAllTasks();
 
-               mConsolePrinter.PrintTasks(tasks, options);
+               IEnumerable<ITask> tasksToPrint = allTasks;
+               if (!options.ShouldPrintAll)
+                    tasksToPrint = allTasks.Where(task => task.IsFinished != false) ;
+
+               mConsolePrinter.PrintTasks(tasksToPrint, options);
                return 0;
           }
 
