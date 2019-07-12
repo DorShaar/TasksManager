@@ -108,7 +108,7 @@ namespace ConsoleUI
 
                IEnumerable<ITask> tasksToPrint = allTasks;
                if (!options.ShouldPrintAll)
-                    tasksToPrint = allTasks.Where(task => task.IsFinished != false) ;
+                    tasksToPrint = allTasks.Where(task => task.IsFinished == false) ;
 
                mConsolePrinter.PrintTasks(tasksToPrint, options);
                return 0;
