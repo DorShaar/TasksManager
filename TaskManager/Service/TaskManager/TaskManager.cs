@@ -15,13 +15,15 @@ namespace TaskManager
           private readonly ILogger mLogger;
           private ITaskGroup mFreeTasksGroup;
           private readonly IRepository<ITaskGroup> mDatabase;
+          private readonly ITaskGroupBuilder mTaskGroupBuilder;
 
           internal static readonly string FreeTaskGroupName = "Free";
 
-          public TaskManager(IRepository<ITaskGroup> database, ILogger logger)
+          public TaskManager(IRepository<ITaskGroup> database, ITaskGroupBuilder taskGroupBuilder, ILogger logger)
           {
                mLogger = logger;
                mDatabase = database;
+               mTaskGroupBuilder = taskGroupBuilder;
                InitializeFreeTasksGroup();
           }
 
@@ -31,7 +33,7 @@ namespace TaskManager
 
                if (mFreeTasksGroup == null)
                {
-                    mFreeTasksGroup = new TaskGroup(FreeTaskGroupName, mLogger);
+                    mFreeTasksGroup = mTaskGroupBuilder.Create(FreeTaskGroupName, mLogger);
                     mDatabase.Insert(mFreeTasksGroup);
                }
           }
@@ -41,7 +43,7 @@ namespace TaskManager
           /// </summary>
           public void CreateNewTaskGroup(string groupName)
           {
-               mDatabase.Insert(new TaskGroup(groupName, mLogger));
+               mDatabase.Insert(mTaskGroupBuilder.Create(groupName, mLogger));
           }
 
           public void RemoveTaskGroup(ITaskGroup taskGroup)

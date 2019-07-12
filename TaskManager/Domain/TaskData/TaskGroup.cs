@@ -20,9 +20,8 @@ namespace TaskData
 
           [JsonIgnore]
           public int Size => mTasksChildren.Count;
-
           
-          public TaskGroup(string groupName, ILogger logger)
+          internal TaskGroup(string groupName, ILogger logger)
           {
                mLogger = logger;
                GroupName = groupName;

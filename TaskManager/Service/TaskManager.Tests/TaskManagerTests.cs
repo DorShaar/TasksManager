@@ -17,7 +17,8 @@ namespace TaskManager.Integration.Tests
           private static readonly IConfiguration mConfiguration = A.Dummy<IConfiguration>();
           private static readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
           private static readonly IRepository<ITaskGroup> mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
-          private readonly TaskManager mTaskManager = new TaskManager(mDatabase, mLogger);
+          private static readonly ITaskGroupBuilder mTaskGroupBuilder = new TaskGroupBuilder();
+          private readonly TaskManager mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mLogger);
 
           [TestMethod]
           public void Ctor_TasksManagerHasFreeTasksGroup()
@@ -28,7 +29,7 @@ namespace TaskManager.Integration.Tests
           [TestMethod]
           public void CreateNewTask_AddNewTaskToGroup_Success()
           {
-               ITaskGroup taskGroup = new TaskGroup("A", mLogger);
+               ITaskGroup taskGroup = mTaskGroupBuilder.Create("A", mLogger);
                mTaskManager.CreateNewTask(taskGroup, "New Task Group");
                Assert.AreEqual(mTaskManager.GetAllTasksGroups().Count(), 2);
           }

@@ -46,6 +46,7 @@ namespace Composition
           {
                serviceCollection.AddSingleton<ITask, Task>();
                serviceCollection.AddSingleton<ITaskGroup, TaskGroup>();
+               serviceCollection.AddSingleton<ITaskGroupBuilder, TaskGroupBuilder>();
           }
 
           private void RegisterDatabaseEntities(ServiceCollection serviceCollection)

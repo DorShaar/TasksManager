@@ -15,6 +15,7 @@ namespace Database.Tests
           private readonly ILogger mLogger = A.Dummy<ILogger>();
           private readonly IConfiguration mConfiguration = A.Dummy<IConfiguration>();
           private readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
+          private readonly ITaskGroupBuilder mTaskGroupBuilder = new TaskGroupBuilder();
 
           [TestMethod]
           public void GetAll_Returns3Entities()
@@ -45,7 +46,7 @@ namespace Database.Tests
           {
                Database<ITaskGroup> database = CreateTestsDatabase();
                int sizeBefore = database.GetAll().Count();
-               database.Insert(new TaskGroup("A", mLogger));
+               database.Insert(mTaskGroupBuilder.Create("A", mLogger));
                int sizeAfter = database.GetAll().Count();
                Assert.AreEqual(sizeBefore, sizeAfter);
           }
@@ -84,7 +85,7 @@ namespace Database.Tests
                Database<ITaskGroup> database = CreateTestsDatabase();
 
                string newTaskGroupName = "X";
-               database.Insert(new TaskGroup(newTaskGroupName, mLogger));
+               database.Insert(mTaskGroupBuilder.Create(newTaskGroupName, mLogger));
                ITaskGroup taskGroup = database.GetByName(newTaskGroupName);
                database.AddOrUpdate(taskGroup);
                Assert.AreEqual(database.GetAll().Count(), 4);
@@ -118,9 +119,9 @@ namespace Database.Tests
           private Database<ITaskGroup> CreateTestsDatabase()
           {
                Database<ITaskGroup> database = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
-               database.Insert(new TaskGroup("A", mLogger));
-               database.Insert(new TaskGroup("B", mLogger));
-               database.Insert(new TaskGroup("C", mLogger));
+               database.Insert(mTaskGroupBuilder.Create("A", mLogger));
+               database.Insert(mTaskGroupBuilder.Create("B", mLogger));
+               database.Insert(mTaskGroupBuilder.Create("C", mLogger));
 
                return database;
           }

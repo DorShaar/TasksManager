@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\ObjectSerializer.JsonService\ObjectSerializer.JsonService.csproj" />
     <ProjectReference Include="..\..\Repository\Database.Configuration\Database.Configuration.csproj" />
+    <ProjectReference Include="..\..\Repository\Database.JsonService\Database.csproj" />
     <ProjectReference Include="..\..\Service\TaskManager\TaskManager.csproj" />
   </ItemGroup>
 
