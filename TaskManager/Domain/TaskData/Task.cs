@@ -51,6 +51,7 @@ namespace TaskData
 
                IsFinished = true;
                TimeClosed = DateTime.Now;
+               mLogger?.Log($"Task {ID} closed at {TimeClosed}");
           }
 
           public void ReOpenTask()
@@ -63,6 +64,7 @@ namespace TaskData
 
                IsFinished = false;
                TimeLastOpened = DateTime.Now;
+               mLogger?.Log($"Task {ID} re-opened at {TimeLastOpened}");
           }
      }
 }

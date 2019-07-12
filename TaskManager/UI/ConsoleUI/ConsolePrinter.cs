@@ -30,7 +30,7 @@ namespace ConsoleUI
                if (shouldPrintExtraDetails)
                     return StringFormatHelper(new string[] { "ID", "GROUP NAME", "SIZE" }, new int[] { -5, -15, -10 });
                else
-                    return StringFormatHelper(new string[] { "ID", "GROUP NAME" }, new int[] { -5, 15 });
+                    return StringFormatHelper(new string[] { "ID", "GROUP NAME" }, new int[] { -5, -15 });
           }
 
           public void PrintTasks(IEnumerable<ITask> tasks, TaskOptions.GetAllTasksOptions options)

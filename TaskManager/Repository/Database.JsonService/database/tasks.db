@@ -3,19 +3,7 @@
     "mLogger": {
       "ShouldLogInformation": false
     },
-    "mTasksChildren": {
-      "1004": {
-        "mLogger": {
-          "ShouldLogInformation": false
-        },
-        "ID": "1004",
-        "Description": "blabla",
-        "IsFinished": false,
-        "TimeCreated": "2019-07-12T14:01:47.3326712+03:00",
-        "TimeLastOpened": "2019-07-12T14:01:47.332675+03:00",
-        "TimeClosed": "0001-01-01T00:00:00"
-      }
-    },
+    "mTasksChildren": {},
     "ID": "1000",
     "GroupName": "Free"
   },
@@ -30,10 +18,10 @@
         },
         "ID": "1002",
         "Description": "create console printer",
-        "IsFinished": false,
+        "IsFinished": true,
         "TimeCreated": "2019-07-10T00:52:47.00586+03:00",
         "TimeLastOpened": "2019-07-10T00:52:47.0058641+03:00",
-        "TimeClosed": "0001-01-01T00:00:00"
+        "TimeClosed": "2019-07-12T14:32:16.861503+03:00"
       },
       "1001": {
         "mLogger": {
@@ -41,10 +29,10 @@
         },
         "ID": "1001",
         "Description": "add move of task functionality",
-        "IsFinished": false,
+        "IsFinished": true,
         "TimeCreated": "2019-07-10T00:46:18.7136704+03:00",
         "TimeLastOpened": "2019-07-10T00:46:18.7151758+03:00",
-        "TimeClosed": "0001-01-01T00:00:00"
+        "TimeClosed": "2019-07-12T14:32:51.3690055+03:00"
       }
     },
     "ID": "1003",

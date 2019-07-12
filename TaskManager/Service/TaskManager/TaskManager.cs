@@ -132,6 +132,42 @@ namespace TaskManager
                     GetAllTasksGroups().FirstOrDefault(group => group.ID == taskGroupId));
           }
 
+          public void CloseTask(string taskId)
+          {
+               foreach (ITaskGroup group in mDatabase.GetAll())
+               {
+                    foreach (ITask task in group.GetAllTasks())
+                    {
+                         if (task.ID == taskId)
+                         {
+                              task.CloseTask();
+                              mDatabase.Update(group);
+                              return;
+                         }
+                    }
+               }
+
+               mLogger.LogError($"Task id {taskId} was not found");
+          }
+
+          public void ReOpenTask(string taskId)
+          {
+               foreach (ITaskGroup group in mDatabase.GetAll())
+               {
+                    foreach (ITask task in group.GetAllTasks())
+                    {
+                         if (task.ID == taskId)
+                         {
+                              task.CloseTask();
+                              mDatabase.Update(group);
+                              return;
+                         }
+                    }
+               }
+
+               mLogger.LogError($"Task id {taskId} was not found");
+          }
+
           public void RemoveTask(string taskId)
           {
                foreach(ITaskGroup group in mDatabase.GetAll())

@@ -34,6 +34,7 @@ namespace ConsoleUI
                               TaskOptions.CreateNewTaskOptions,
                               TaskOptions.GatAllTaskGroupOptions,
                               TaskOptions.GetAllTasksOptions,
+                              TaskOptions.CloseTasksOptions,
                               TaskOptions.RemoveTaskGroupOptions,
                               TaskOptions.RemoveTaskOptions,
                               TaskOptions.MoveTaskOptions,
@@ -44,6 +45,7 @@ namespace ConsoleUI
                          (TaskOptions.CreateNewTaskOptions options) => CreateNewTask(taskManager, options),
                          (TaskOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
                          (TaskOptions.GetAllTasksOptions options) => GetAllTasks(taskManager, options),
+                         (TaskOptions.CloseTasksOptions options) => CloseTask(taskManager, options),
                          (TaskOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
                          (TaskOptions.RemoveTaskOptions options) => RemoveTaskOptions(taskManager, options),
                          (TaskOptions.MoveTaskOptions options) => MoveTask(taskManager, options),
@@ -98,6 +100,30 @@ namespace ConsoleUI
                     tasks = taskManager.GetAllTasks();
 
                mConsolePrinter.PrintTasks(tasks, options);
+               return 0;
+          }
+
+          private static int CloseTask(ITaskManager taskManager, TaskOptions.CloseTasksOptions options)
+          {
+               if(string.IsNullOrEmpty(options.TaskId))
+               {
+                    mLogger.LogError($"No task id given");
+                    return 1;
+               }
+
+               taskManager.CloseTask(options.TaskId);
+               return 0;
+          }
+
+          private static int ReOpenTask(ITaskManager taskManager, TaskOptions.CloseTasksOptions options)
+          {
+               if (string.IsNullOrEmpty(options.TaskId))
+               {
+                    mLogger.LogError($"No task id given");
+                    return 1;
+               }
+
+               taskManager.ReOpenTask(options.TaskId);
                return 0;
           }
 

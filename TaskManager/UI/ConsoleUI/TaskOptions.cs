@@ -57,6 +57,13 @@ namespace ConsoleUI
                public bool IsDetailed { get; set; }
           }
 
+          [Verb("close-task", HelpText = "Marks task status as closed")]
+          public class CloseTasksOptions
+          {
+               [Value(0)]
+               public string TaskId { get; set; }
+          }
+
           [Verb("remove-task", HelpText = "Removes task")]
           public class RemoveTaskOptions
           {
