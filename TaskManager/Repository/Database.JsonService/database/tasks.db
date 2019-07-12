@@ -33,6 +33,50 @@
         "TimeCreated": "2019-07-10T00:46:18.7136704+03:00",
         "TimeLastOpened": "2019-07-10T00:46:18.7151758+03:00",
         "TimeClosed": "2019-07-12T14:32:51.3690055+03:00"
+      },
+      "1005": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "ID": "1005",
+        "Description": "use delegate which will not to save the database, insted of update",
+        "IsFinished": false,
+        "TimeCreated": "2019-07-12T14:37:19.6487345+03:00",
+        "TimeLastOpened": "2019-07-12T14:37:19.648747+03:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1006": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "ID": "1006",
+        "Description": "use dictionary to find tasks and groups in database",
+        "IsFinished": false,
+        "TimeCreated": "2019-07-12T14:37:35.7467326+03:00",
+        "TimeLastOpened": "2019-07-12T14:37:35.7467356+03:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1007": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "ID": "1007",
+        "Description": "add notes to task (with default task name)",
+        "IsFinished": false,
+        "TimeCreated": "2019-07-12T14:37:47.1563635+03:00",
+        "TimeLastOpened": "2019-07-12T14:37:47.1563665+03:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1008": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "ID": "1008",
+        "Description": "print only open task configurable",
+        "IsFinished": false,
+        "TimeCreated": "2019-07-12T14:41:24.934094+03:00",
+        "TimeLastOpened": "2019-07-12T14:41:24.934097+03:00",
+        "TimeClosed": "0001-01-01T00:00:00"
       }
     },
     "ID": "1003",

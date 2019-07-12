@@ -16,10 +16,10 @@ namespace ConsoleUI
                {
                     if (options.IsDetailed)
                          stringBuilder.AppendLine(
-                              StringFormatHelper(new string[] { group.ID, group.GroupName, group.Size.ToString() }, new int[] { -5, -15, -10 }));
+                              StringFormatHelper(new string[] { group.ID, group.GroupName, group.Size.ToString() }, new int[] { -5, -25, -10 }));
                     else
                          stringBuilder.AppendLine(
-                              StringFormatHelper(new string[] { group.ID, group.GroupName, }, new int[] { -5, -15 }));
+                              StringFormatHelper(new string[] { group.ID, group.GroupName, }, new int[] { -5, -25 }));
                }
 
                Console.WriteLine(stringBuilder.ToString());
@@ -28,9 +28,9 @@ namespace ConsoleUI
           private string GetTaskGroupHeader(bool shouldPrintExtraDetails)
           {
                if (shouldPrintExtraDetails)
-                    return StringFormatHelper(new string[] { "ID", "GROUP NAME", "SIZE" }, new int[] { -5, -15, -10 });
+                    return StringFormatHelper(new string[] { "ID", "GROUP NAME", "SIZE" }, new int[] { -5, -25, -10 });
                else
-                    return StringFormatHelper(new string[] { "ID", "GROUP NAME" }, new int[] { -5, -15 });
+                    return StringFormatHelper(new string[] { "ID", "GROUP NAME" }, new int[] { -5, -25 });
           }
 
           public void PrintTasks(IEnumerable<ITask> tasks, TaskOptions.GetAllTasksOptions options)
@@ -52,7 +52,7 @@ namespace ConsoleUI
                                         task.TimeLastOpened.ToString(),
                                         task.TimeClosed.ToString()
                                    },
-                                   new int[] { -5, -40, -10, -25, -25, -25 }));
+                                   new int[] { -5, -80, -10, -25, -25, -25 }));
                     else
                          stringBuilder.AppendLine(
                               StringFormatHelper(
@@ -62,7 +62,7 @@ namespace ConsoleUI
                                         task.Description,
                                         GetStringStatus(task.IsFinished),
                                    },
-                                   new int[] { -5, -40, -10 }));
+                                   new int[] { -5, -80, -10 }));
                }
 
                Console.WriteLine(stringBuilder.ToString());
@@ -72,9 +72,9 @@ namespace ConsoleUI
           {
                if (shouldPrintExtraDetails)
                     return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS", "TIME CREATED", "LAST OPEND TIME ", "CLOSED TIME" }, 
-                                              new int[] { -5, -40, -10, -25, -25, -25 });
+                                              new int[] { -5, -80, -10, -25, -25, -25 });
                else
-                    return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS" }, new int[] { -5, -40, -10 });
+                    return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS" }, new int[] { -5, -80, -10 });
           }
 
           private static string GetStringStatus(bool isFinished)
