@@ -3,18 +3,15 @@
     "mLogger": {
       "ShouldLogInformation": false
     },
+    "mTasksChildren": {},
+    "ID": "1000",
+    "GroupName": "Free"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
     "mTasksChildren": {
-      "1001": {
-        "mLogger": {
-          "ShouldLogInformation": false
-        },
-        "ID": "1001",
-        "Description": "add move of task functionality",
-        "IsFinished": false,
-        "TimeCreated": "2019-07-10T00:46:18.7136704+03:00",
-        "TimeLastOpened": "2019-07-10T00:46:18.7151758+03:00",
-        "TimeClosed": "0001-01-01T00:00:00"
-      },
       "1002": {
         "mLogger": {
           "ShouldLogInformation": false
@@ -25,9 +22,20 @@
         "TimeCreated": "2019-07-10T00:52:47.00586+03:00",
         "TimeLastOpened": "2019-07-10T00:52:47.0058641+03:00",
         "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1001": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "ID": "1001",
+        "Description": "add move of task functionality",
+        "IsFinished": false,
+        "TimeCreated": "2019-07-10T00:46:18.7136704+03:00",
+        "TimeLastOpened": "2019-07-10T00:46:18.7151758+03:00",
+        "TimeClosed": "0001-01-01T00:00:00"
       }
     },
-    "ID": "1000",
-    "GroupName": "Free"
+    "ID": "1003",
+    "GroupName": "Task-Manager-Work"
   }
 ]

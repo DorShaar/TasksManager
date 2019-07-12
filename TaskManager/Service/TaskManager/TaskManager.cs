@@ -3,7 +3,6 @@ using Logger.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using TaskData;
 using TaskData.Contracts;
 using TaskManager.Contracts;
 
@@ -131,6 +130,74 @@ namespace TaskManager
           {
                return GetAllTasks(
                     GetAllTasksGroups().FirstOrDefault(group => group.ID == taskGroupId));
+          }
+
+          public void RemoveTask(string taskId)
+          {
+               foreach(ITaskGroup group in mDatabase.GetAll())
+               {
+                    foreach(ITask task in group.GetAllTasks())
+                    {
+                         if (task.ID == taskId)
+                         {
+                              group.RemoveTask(taskId);
+                              break;
+                         }
+                    }
+               }
+          }
+
+          public void RemoveTask(string[] taskIds)
+          {
+               foreach(string taskId in taskIds)
+               {
+                    RemoveTask(taskId);
+               }
+          }
+
+          public void MoveTaskToGroupName(string taskId, string taskGroupName)
+          {
+               ITaskGroup taskGroup = mDatabase.GetByName(taskGroupName);
+               if(taskGroup == null)
+               {
+                    mLogger.LogError($"group name {taskGroupName} was not found");
+                    return;
+               }
+
+               MoveTaskToGroup(taskId, taskGroup);
+          }
+
+          public void MoveTaskToGroupId(string taskId, string taskGroupId)
+          {
+               ITaskGroup taskGroup = mDatabase.GetById(taskGroupId);
+               if (taskGroup == null)
+               {
+                    mLogger.LogError($"group id {taskGroupId} was not found");
+                    return;
+               }
+
+               MoveTaskToGroup(taskId, taskGroup);
+          }
+
+          private void MoveTaskToGroup(string taskId, ITaskGroup taskGroupDestination)
+          {
+               foreach (ITaskGroup sourceGroup in mDatabase.GetAll())
+               {
+                    foreach (ITask task in sourceGroup.GetAllTasks())
+                    {
+                         if (task.ID == taskId)
+                         {
+                              taskGroupDestination.AddTask(task);
+                              mDatabase.Update(taskGroupDestination);
+
+                              sourceGroup.RemoveTask(taskId);
+                              mDatabase.Update(sourceGroup);
+                              return;
+                         }
+                    }
+               }
+
+               mLogger.LogError($"Task id {taskId} was not found");
           }
 
           public void ChangeDatabasePath(string newDatabasePath)

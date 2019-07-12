@@ -119,6 +119,7 @@ namespace Database
                }
 
                mEntities.Add(newEntity);
+               SaveToFile();
           }
 
           public void Remove(T entity)
@@ -130,6 +131,7 @@ namespace Database
                }
 
                mEntities.Remove(entity);
+               SaveToFile();
           }
 
           public void RemoveById(string id)
@@ -182,6 +184,8 @@ namespace Database
                     entityToUpdate = addOrUpdateEntity;
                else
                     Insert(addOrUpdateEntity);
+
+               SaveToFile();
           }
 
           private void SaveToFile()

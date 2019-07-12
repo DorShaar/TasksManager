@@ -20,6 +20,10 @@ namespace TaskManager.Contracts
           IEnumerable<ITask> GetAllTasksByGroupName(string taskGroupName);
           IEnumerable<ITask> GetAllTasksByGroupId(string taskGroupId);
 
+          void RemoveTask(string taskId);
+          void MoveTaskToGroupName(string taskId, string taskGroupName);
+          void MoveTaskToGroupId(string taskId, string taskGroupId);
+
           void ChangeDatabasePath(string newDatabasePath);
      }
 }

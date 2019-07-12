@@ -56,5 +56,25 @@ namespace ConsoleUI
                [Option('d', "detail", HelpText = "Print more information about each task")]
                public bool IsDetailed { get; set; }
           }
+
+          [Verb("remove-task", HelpText = "Removes task")]
+          public class RemoveTaskOptions
+          {
+               [Value(0, HelpText = "Task id to remove")]
+               public string TaskId { get; set; }
+          }
+
+          [Verb("move-task", HelpText = "Moves a task to a given group")]
+          public class MoveTaskOptions
+          { 
+               [Value(0, HelpText = "Task id to move")]
+               public string TaskId { get; set; }
+
+               [Option('n', "name", HelpText = "Task group name to move the task to")]
+               public string TaskGroupName { get; set; }
+
+               [Option('i', "id", HelpText = "Task group id to move the task to")]
+               public string TaskGroupId { get; set; }
+          }
      }
 }

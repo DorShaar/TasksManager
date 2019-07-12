@@ -35,7 +35,9 @@ namespace ConsoleUI
                               TaskOptions.GatAllTaskGroupOptions,
                               TaskOptions.GetAllTasksOptions,
                               TaskOptions.RemoveTaskGroupOptions,
-                              
+                              TaskOptions.RemoveTaskOptions,
+                              TaskOptions.MoveTaskOptions,
+
                               ConfigOptions.SetDatabasePathOptions>(args)
                          .MapResult(
                          (TaskOptions.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
@@ -43,6 +45,8 @@ namespace ConsoleUI
                          (TaskOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
                          (TaskOptions.GetAllTasksOptions options) => GetAllTasks(taskManager, options),
                          (TaskOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
+                         (TaskOptions.RemoveTaskOptions options) => RemoveTaskOptions(taskManager, options),
+                         (TaskOptions.MoveTaskOptions options) => MoveTask(taskManager, options),
 
                          (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
                          (parserErrors) => 1
@@ -59,11 +63,8 @@ namespace ConsoleUI
                     mLogger.LogError($"{nameof(options.TaskGroupName)} is null or empty");
                     return 1;
                }
-               else
-               {
-                    taskManager.CreateNewTaskGroup(options.TaskGroupName);
-               }
 
+               taskManager.CreateNewTaskGroup(options.TaskGroupName);
                return 0;
           }
 
@@ -106,6 +107,39 @@ namespace ConsoleUI
                     taskManager.RemoveTaskGroupById(options.TaskGroupId);
                else if (!string.IsNullOrEmpty(options.TaskGroupName))
                     taskManager.RemoveTaskGroupByName(options.TaskGroupName);
+               else
+               {
+                    mLogger.LogError($"No group name or group id given");
+                    return 1;
+               }
+
+               return 0;
+          }
+
+          private static int RemoveTaskOptions(ITaskManager taskManager, TaskOptions.RemoveTaskOptions options)
+          {
+               if (string.IsNullOrEmpty(options.TaskId))
+               {
+                    mLogger.LogError($"No task id given to remove");
+                    return 1;
+               }
+
+               taskManager.RemoveTask(options.TaskId);
+               return 0;
+          }
+
+          private static int MoveTask(ITaskManager taskManager, TaskOptions.MoveTaskOptions options)
+          {
+               if (string.IsNullOrEmpty(options.TaskId))
+               {
+                    mLogger.LogError($"No task id given to move");
+                    return 1;
+               }
+
+               if (!string.IsNullOrEmpty(options.TaskGroupId))
+                    taskManager.MoveTaskToGroupId(options.TaskId, options.TaskGroupId);
+               else if (!string.IsNullOrEmpty(options.TaskGroupName))
+                    taskManager.MoveTaskToGroupName(options.TaskId, options.TaskGroupName);
                else
                {
                     mLogger.LogError($"No group name or group id given");

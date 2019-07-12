@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleUI": {
       "commandName": "Project",
-      "commandLineArgs": "get-tasks -d"
+      "commandLineArgs": "move-task 1001 -i 1003"
     }
   }
 }
