@@ -113,9 +113,9 @@ namespace ConsoleUI
                stringBuilder.AppendLine($"Task ID: {task.ID}");
                stringBuilder.AppendLine($"Description: {task.Description}");
                stringBuilder.AppendLine($"Status: {GetStringStatus(task.IsFinished)}");
-               stringBuilder.AppendLine($"Time created: {task.ID}");
-               stringBuilder.AppendLine($"Last opened time: {task.ID}");
-               stringBuilder.AppendLine($"Closed time: {task.ID}");
+               stringBuilder.AppendLine($"Time created: {task.TimeCreated}");
+               stringBuilder.AppendLine($"Last opened time: {task.TimeLastOpened}");
+               stringBuilder.AppendLine($"Closed time: {task.TimeClosed}");
                stringBuilder.AppendLine($"Note: {task.GetNote()}");
 
                Console.WriteLine(stringBuilder.ToString());

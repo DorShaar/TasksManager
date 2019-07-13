@@ -105,7 +105,7 @@ namespace TaskData
           {
                if(mNote == null)
                {
-                    mLogger.Log($"Task id {ID} has no note");
+                    mLogger.LogInformation($"Task id {ID} has no note");
                     return string.Empty;
                }
 
