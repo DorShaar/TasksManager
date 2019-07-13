@@ -1,11 +1,22 @@
-﻿using TaskData.Contracts;
+﻿using System.IO;
+using TaskData.Contracts;
 
 namespace TaskData
 {
      internal class Note : INote
      {
-          public string NotePath => throw new System.NotImplementedException();
+          private const string Extension = ".txt";
+          private readonly string mNoteDirecoryPath;
+          private readonly string mNoteName;
+          public string NotePath => Path.Combine(mNoteDirecoryPath, mNoteName + Extension);
+          public string NoteText => File.ReadAllText(NotePath);
 
-          string INote.Note => throw new System.NotImplementedException();
+          public Note(string directoryPath, string noteName)
+          {
+               mNoteDirecoryPath = directoryPath;
+               mNoteName = noteName;
+
+               File.Create(NotePath);
+          }
      }
 }

@@ -93,5 +93,14 @@ namespace ConsoleUI
                [Option('i', "id", HelpText = "Task group id to move the task to")]
                public string TaskGroupId { get; set; }
           }
+
+          // Notes.
+
+          [Verb("create-note", HelpText = "Create note to a given task or tasks group")]
+          public class CreateNoteOptions
+          {
+               [Option('i', "id", HelpText = "Task id to create the note")]
+               public string TaskId { get; set; }
+          }
      }
 }

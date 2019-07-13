@@ -4,5 +4,8 @@
      {
           string DatabaseDirectoryPath { get; }
           void SetDatabaseDirectoryPath(string newDatabaseDirectoryPath);
+
+          string NotesDirectoryPath { get; }
+          void SetNotesDirectoryPath(string newNotesDirectoryPath);
      }
 }

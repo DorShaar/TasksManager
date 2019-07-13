@@ -14,14 +14,15 @@ namespace Database
           private const string DatabaseName = "tasks.db";
           private const string NextIdHolderName = "id_producer.db";
 
-          private readonly string DatabaseFile;
           private readonly string NextIdPath;
 
           private readonly ILogger mLogger;
           private readonly IConfiguration mConfiguration;
           private readonly IObjectSerializer mSerializer;
-
+          
           private List<T> mEntities = new List<T>();
+
+          public string DatabasePath { get; }
 
           public Database(IConfiguration configuration, IObjectSerializer serializer, ILogger logger)
           {
@@ -35,7 +36,7 @@ namespace Database
                     return;
                }
 
-               DatabaseFile = Path.Combine(mConfiguration.DatabaseDirectoryPath, DatabaseName);
+               DatabasePath = Path.Combine(mConfiguration.DatabaseDirectoryPath, DatabaseName);
                NextIdPath = Path.Combine(mConfiguration.DatabaseDirectoryPath, NextIdHolderName);
                LoadInformation();
           }
@@ -56,14 +57,14 @@ namespace Database
 
           private void LoadDatabase()
           {
-               if (!File.Exists(DatabaseFile))
+               if (!File.Exists(DatabasePath))
                {
-                    mLogger.LogError($"Database file {DatabaseFile} does not exists");
-                    throw new FileNotFoundException("Database does not exists", DatabaseFile);
+                    mLogger.LogError($"Database file {DatabasePath} does not exists");
+                    throw new FileNotFoundException("Database does not exists", DatabasePath);
                }
 
-               mLogger.LogInformation($"Going to load database from {DatabaseFile}");
-               mEntities = mSerializer.Deserialize<List<T>>(DatabaseFile);
+               mLogger.LogInformation($"Going to load database from {DatabasePath}");
+               mEntities = mSerializer.Deserialize<List<T>>(DatabasePath);
           }
 
           private void LoadNextIdToProduce()
@@ -190,7 +191,7 @@ namespace Database
 
           private void SaveToFile()
           {
-               if (string.IsNullOrEmpty(DatabaseFile))
+               if (string.IsNullOrEmpty(DatabasePath))
                {
                     mLogger.LogError("No database path was given");
                     return;
@@ -204,7 +205,7 @@ namespace Database
 
                try
                {
-                    mSerializer.Serialize(mEntities, DatabaseFile);
+                    mSerializer.Serialize(mEntities, DatabasePath);
                     mSerializer.Serialize(IDProducer.IDProducer.PeekForNextId(), NextIdPath);
                }
                catch (Exception ex)

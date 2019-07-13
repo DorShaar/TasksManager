@@ -119,9 +119,9 @@ namespace TaskManager
 
           public IEnumerable<ITask> GetAllTasks(Func<ITask, bool> action)
           {
-               foreach(ITask task in GetAllTasks())
+               foreach (ITask task in GetAllTasks())
                {
-                    if(action(task))
+                    if (action(task))
                     {
                          yield return task;
                     }
@@ -241,6 +241,25 @@ namespace TaskManager
                               sourceGroup.RemoveTask(taskId);
                               mDatabase.Update(sourceGroup);
                               return;
+                         }
+                    }
+               }
+
+               mLogger.LogError($"Task id {taskId} was not found");
+          }
+
+          public void CreateNote(string taskId)
+          {
+               foreach (ITaskGroup sourceGroup in mDatabase.GetAll())
+               {
+                    foreach (ITask task in sourceGroup.GetAllTasks())
+                    {
+                         if(task.ID == taskId)
+                         {
+                              //task.CreateNote(mDatabase.DatabasePath);
+                              //mDatabase.Update(taskGroupDestination);
+
+                              //return;
                          }
                     }
                }

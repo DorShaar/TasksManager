@@ -14,5 +14,7 @@ namespace TaskData.Contracts
 
           void CloseTask();
           void ReOpenTask();
+          void CreateNote(string noteDirectoryPath);
+          void OpenNote();
      }
 }

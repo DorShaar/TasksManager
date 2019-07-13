@@ -1,3 +1,5 @@
+using FakeItEasy;
+using Logger.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Database.Configuration.Tests
@@ -5,12 +7,13 @@ namespace Database.Configuration.Tests
      [TestClass]
      public class ConfigurationTests
      {
+          private readonly ILogger mFakeLogger = A.Dummy<ILogger>();
           private const string TestDatabasePath = @"Resources\DatabaseConfig.yaml";
 
           [TestMethod]
           public void GetDatabasePath_NoException()
           {
-               Configuration configuration = new Configuration
+               Configuration configuration = new Configuration(mFakeLogger)
                {
                     ConfigurationYamlFilePath = TestDatabasePath
                };
@@ -20,7 +23,7 @@ namespace Database.Configuration.Tests
           [TestMethod]
           public void SetDatabasePath_Success()
           {
-               Configuration configuration = new Configuration()
+               Configuration configuration = new Configuration(mFakeLogger)
                {
                     ConfigurationYamlFilePath = TestDatabasePath
                };

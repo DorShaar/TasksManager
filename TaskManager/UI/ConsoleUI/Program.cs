@@ -40,6 +40,7 @@ namespace ConsoleUI
                               TaskOptions.RemoveTaskOptions,
                               TaskOptions.MoveTaskOptions,
                               TaskOptions.ReOpenTaskOptions,
+                              TaskOptions.CreateNoteOptions,
 
                               ConfigOptions.SetDatabasePathOptions>(args)
                          .MapResult(
@@ -52,6 +53,7 @@ namespace ConsoleUI
                          (TaskOptions.RemoveTaskOptions options) => RemoveTaskOptions(taskManager, options),
                          (TaskOptions.MoveTaskOptions options) => MoveTask(taskManager, options),
                          (TaskOptions.ReOpenTaskOptions options) => ReOpenTask(taskManager, options),
+                         (TaskOptions.CreateNoteOptions options) => CreateNote(taskManager, options),
 
                          (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
                          (parserErrors) => 1
@@ -183,6 +185,18 @@ namespace ConsoleUI
                     return 1;
                }
 
+               return 0;
+          }
+
+          private static int CreateNote(ITaskManager taskManager, TaskOptions.CreateNoteOptions options)
+          {
+               if (string.IsNullOrEmpty(options.TaskId))
+               {
+                    mLogger.LogError($"No task id given to move");
+                    return 1;
+               }
+
+               //taskManager.CreateNote();
                return 0;
           }
 

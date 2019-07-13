@@ -3,6 +3,6 @@
      public interface INote
      {
           string NotePath { get; }
-          string Note { get; }
+          string NoteText { get; }
      }
 }
