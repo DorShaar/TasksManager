@@ -103,6 +103,12 @@ namespace TaskData
 
           public string GetNote()
           {
+               if(mNote == null)
+               {
+                    mLogger.Log($"Task id {ID} has no note");
+                    return string.Empty;
+               }
+
                return mNote.NoteText;
           }
      }

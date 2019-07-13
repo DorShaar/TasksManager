@@ -70,10 +70,10 @@
         },
         "ID": "1007",
         "Description": "add notes to task (with default task name)",
-        "IsFinished": false,
+        "IsFinished": true,
         "TimeCreated": "2019-07-12T14:37:47.1563635+03:00",
         "TimeLastOpened": "2019-07-12T14:37:47.1563665+03:00",
-        "TimeClosed": "0001-01-01T00:00:00"
+        "TimeClosed": "2019-07-13T18:07:20.9871463+03:00"
       },
       "1008": {
         "mLogger": {

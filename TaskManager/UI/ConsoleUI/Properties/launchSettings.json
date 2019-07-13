@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleUI": {
       "commandName": "Project",
-      "commandLineArgs": "info-task 1007"
+      "commandLineArgs": "get-note 1008"
     }
   }
 }
