@@ -94,10 +94,10 @@
         "mNote": null,
         "ID": "1010",
         "Description": "print all tasks from the last X hours/days",
-        "IsFinished": false,
+        "IsFinished": true,
         "TimeCreated": "2019-07-13T18:14:17.3536517+03:00",
         "TimeLastOpened": "2019-07-13T18:14:17.3536551+03:00",
-        "TimeClosed": "0001-01-01T00:00:00"
+        "TimeClosed": "2019-07-14T01:56:24.2222717+03:00"
       }
     },
     "ID": "1003",

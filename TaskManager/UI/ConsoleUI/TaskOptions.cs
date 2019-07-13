@@ -53,8 +53,14 @@ namespace ConsoleUI
                [Option('i', "id", HelpText = "Get tasks by group id")]
                public string TaskGroupId { get; set; }
 
-               [Option('a', "all", HelpText = "Print all tasks")]
+               [Option('a', "all", HelpText = "Print all closed tasks")]
                public bool ShouldPrintAll { get; set; }
+
+               [Option('h', "hours", HelpText = "Print all tasks from the last given hours")]
+               public int Hours { get; set; }
+
+               [Option('y', "days", HelpText = "Print all tasks from the last given hours")]
+               public int Days { get; set; }
 
                [Option('d', "detail", HelpText = "Print more information about each task")]
                public bool IsDetailed { get; set; }
