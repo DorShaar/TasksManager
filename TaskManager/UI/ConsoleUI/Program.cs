@@ -27,36 +27,42 @@ namespace ConsoleUI
                     return;
                }
 
-               int exitCode;
+               int exitCode = parser.ParseArguments<
+               TaskOptions.CreateNewTaskGroupOptions,
+               TaskOptions.GatAllTaskGroupOptions,
+               TaskOptions.RemoveTaskGroupOptions,
 
-               exitCode = parser
-                         .ParseArguments<
-                              TaskOptions.CreateNewTaskGroupOptions,
-                              TaskOptions.CreateNewTaskOptions,
-                              TaskOptions.GatAllTaskGroupOptions,
-                              TaskOptions.GetAllTasksOptions,
-                              TaskOptions.CloseTasksOptions,
-                              TaskOptions.RemoveTaskGroupOptions,
-                              TaskOptions.RemoveTaskOptions,
-                              TaskOptions.MoveTaskOptions,
-                              TaskOptions.ReOpenTaskOptions,
-                              TaskOptions.CreateNoteOptions,
+               TaskOptions.CreateNewTaskOptions,
+               TaskOptions.GetAllTasksOptions,
+               TaskOptions.CloseTasksOptions,
+               TaskOptions.RemoveTaskOptions,
+               TaskOptions.MoveTaskOptions,
+               TaskOptions.ReOpenTaskOptions,
+               TaskOptions.GetInformationTaskOptions,
 
-                              ConfigOptions.SetDatabasePathOptions>(args)
-                         .MapResult(
-                         (TaskOptions.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
-                         (TaskOptions.CreateNewTaskOptions options) => CreateNewTask(taskManager, options),
-                         (TaskOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
-                         (TaskOptions.GetAllTasksOptions options) => GetAllTasks(taskManager, options),
-                         (TaskOptions.CloseTasksOptions options) => CloseTask(taskManager, options),
-                         (TaskOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
-                         (TaskOptions.RemoveTaskOptions options) => RemoveTaskOptions(taskManager, options),
-                         (TaskOptions.MoveTaskOptions options) => MoveTask(taskManager, options),
-                         (TaskOptions.ReOpenTaskOptions options) => ReOpenTask(taskManager, options),
-                         (TaskOptions.CreateNoteOptions options) => CreateNote(taskManager, options),
+               TaskOptions.CreateNoteOptions,
+               TaskOptions.OpenNoteOptions,
+               TaskOptions.GetNoteOptions,
 
-                         (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
-                         (parserErrors) => 1
+               ConfigOptions.SetDatabasePathOptions>(args).MapResult(
+                    (TaskOptions.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
+                    (TaskOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
+                    (TaskOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
+
+                    (TaskOptions.CreateNewTaskOptions options) => CreateNewTask(taskManager, options),
+                    (TaskOptions.GetAllTasksOptions options) => GetAllTasks(taskManager, options),
+                    (TaskOptions.CloseTasksOptions options) => CloseTask(taskManager, options),
+                    (TaskOptions.RemoveTaskOptions options) => RemoveTaskOptions(taskManager, options),
+                    (TaskOptions.MoveTaskOptions options) => MoveTask(taskManager, options),
+                    (TaskOptions.ReOpenTaskOptions options) => ReOpenTask(taskManager, options),
+                    (TaskOptions.GetInformationTaskOptions options) => GetTaskInformation(taskManager, options),
+
+                    (TaskOptions.CreateNoteOptions options) => CreateNote(taskManager, options),
+                    (TaskOptions.OpenNoteOptions options) => OpenNote(taskManager, options),
+                    (TaskOptions.GetNoteOptions options) => GetNote(taskManager, options),
+
+                    (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
+                    (parserErrors) => 1
                );
 
                if (exitCode != 0)
@@ -140,6 +146,19 @@ namespace ConsoleUI
                return 0;
           }
 
+          private static int GetTaskInformation(ITaskManager taskManager, TaskOptions.GetInformationTaskOptions options)
+          {
+               if (string.IsNullOrEmpty(options.TaskId))
+               {
+                    mLogger.LogError($"No task id given to create note");
+                    return 1;
+               }
+
+               mConsolePrinter.PrintTaskInformation(
+                    taskManager.GetAllTasks((ITask task) => task.ID == options.TaskId).First());
+               return 0;
+          }
+
           private static int RemoveTaskGroup(ITaskManager taskManager, TaskOptions.RemoveTaskGroupOptions options)
           {
                if (!string.IsNullOrEmpty(options.TaskGroupId))
@@ -192,11 +211,39 @@ namespace ConsoleUI
           {
                if (string.IsNullOrEmpty(options.TaskId))
                {
-                    mLogger.LogError($"No task id given to move");
+                    mLogger.LogError($"No task id given to create note");
                     return 1;
                }
 
-               //taskManager.CreateNote();
+               string textToWrite = options.Text;
+               if (options.Text == null)
+                    textToWrite = string.Empty;
+
+               taskManager.CreateNote(options.TaskId, textToWrite);
+               return 0;
+          }
+
+          private static int OpenNote(ITaskManager taskManager, TaskOptions.OpenNoteOptions options)
+          {
+               if (string.IsNullOrEmpty(options.TaskId))
+               {
+                    mLogger.LogError($"No task id given to open note");
+                    return 1;
+               }
+
+               taskManager.OpenNote(options.TaskId);
+               return 0;
+          }
+
+          private static int GetNote(ITaskManager taskManager, TaskOptions.GetNoteOptions options)
+          {
+               if (string.IsNullOrEmpty(options.TaskId))
+               {
+                    mLogger.LogError($"No task id given to get note");
+                    return 1;
+               }
+
+               mLogger.Log(taskManager.GetNote(options.TaskId));
                return 0;
           }
 

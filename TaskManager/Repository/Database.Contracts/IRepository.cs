@@ -6,6 +6,7 @@ namespace Database.Contracts
      public interface IRepository<T> where T : ITaskGroup
      {
           string DatabasePath { get; }
+          string NotesDirectoryPath { get; }
 
           IEnumerable<T> GetAll();
           T GetById(string id);

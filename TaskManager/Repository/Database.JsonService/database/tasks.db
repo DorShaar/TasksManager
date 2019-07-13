@@ -16,6 +16,7 @@
         "mLogger": {
           "ShouldLogInformation": false
         },
+        "mNote": null,
         "ID": "1002",
         "Description": "create console printer",
         "IsFinished": true,
@@ -27,6 +28,7 @@
         "mLogger": {
           "ShouldLogInformation": false
         },
+        "mNote": null,
         "ID": "1001",
         "Description": "add move of task functionality",
         "IsFinished": true,
@@ -38,6 +40,7 @@
         "mLogger": {
           "ShouldLogInformation": false
         },
+        "mNote": null,
         "ID": "1005",
         "Description": "use delegate which will not to save the database, insted of update",
         "IsFinished": false,
@@ -49,6 +52,7 @@
         "mLogger": {
           "ShouldLogInformation": false
         },
+        "mNote": null,
         "ID": "1006",
         "Description": "use dictionary to find tasks and groups in database",
         "IsFinished": false,
@@ -59,6 +63,10 @@
       "1007": {
         "mLogger": {
           "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Users\\Public\\DorShaar\\C#Work\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1007"
         },
         "ID": "1007",
         "Description": "add notes to task (with default task name)",
@@ -71,6 +79,7 @@
         "mLogger": {
           "ShouldLogInformation": false
         },
+        "mNote": null,
         "ID": "1008",
         "Description": "print only open task configurable",
         "IsFinished": true,

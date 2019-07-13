@@ -248,23 +248,56 @@ namespace TaskManager
                mLogger.LogError($"Task id {taskId} was not found");
           }
 
-          public void CreateNote(string taskId)
+          public void CreateNote(string taskId, string content)
           {
-               foreach (ITaskGroup sourceGroup in mDatabase.GetAll())
+               foreach (ITaskGroup taskGroup in mDatabase.GetAll())
                {
-                    foreach (ITask task in sourceGroup.GetAllTasks())
+                    foreach (ITask task in taskGroup.GetAllTasks())
                     {
                          if(task.ID == taskId)
                          {
-                              //task.CreateNote(mDatabase.DatabasePath);
-                              //mDatabase.Update(taskGroupDestination);
-
-                              //return;
+                              task.CreateNote(mDatabase.NotesDirectoryPath, content);
+                              mDatabase.Update(taskGroup);
+                              return;
                          }
                     }
                }
 
                mLogger.LogError($"Task id {taskId} was not found");
+          }
+
+          public void OpenNote(string taskId)
+          {
+               foreach (ITaskGroup taskGroup in mDatabase.GetAll())
+               {
+                    foreach (ITask task in taskGroup.GetAllTasks())
+                    {
+                         if (task.ID == taskId)
+                         {
+                              task.OpenNote();
+                              return;
+                         }
+                    }
+               }
+
+               mLogger.LogError($"Task id {taskId} was not found");
+          }
+
+          public string GetNote(string taskId)
+          {
+               foreach (ITaskGroup taskGroup in mDatabase.GetAll())
+               {
+                    foreach (ITask task in taskGroup.GetAllTasks())
+                    {
+                         if (task.ID == taskId)
+                         {
+                              return task.GetNote();
+                         }
+                    }
+               }
+
+               mLogger.LogError($"Task id {taskId} was not found");
+               return string.Empty;
           }
 
           public void ChangeDatabasePath(string newDatabasePath)

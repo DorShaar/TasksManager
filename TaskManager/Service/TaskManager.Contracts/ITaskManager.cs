@@ -27,7 +27,9 @@ namespace TaskManager.Contracts
           void MoveTaskToGroupId(string taskId, string taskGroupId);
 
           // Notes.
-          void CreateNote(string taskId);
+          void CreateNote(string taskId, string content);
+          void OpenNote(string taskId);
+          string GetNote(string taskId);
 
           // Database.
           void ChangeDatabasePath(string newDatabasePath);

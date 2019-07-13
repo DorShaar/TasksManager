@@ -73,24 +73,37 @@ namespace TaskData
                mLogger?.Log($"Task {ID} re-opened at {TimeLastOpened}");
           }
 
-          public void CreateNote(string noteDirectoryPath)
+          public void CreateNote(string noteDirectoryPath, string content)
           {
                if (mNote != null)
+               {
                     mLogger.Log($"Cannot create note since note {mNote.NotePath} is already exist");
+                    return;
+               }
 
-               mNote = new Note(noteDirectoryPath, ID);
+               mNote = new Note(noteDirectoryPath, ID, content);
           }
 
           public void OpenNote()
           {
-               Process process = new Process
+               ProcessStartInfo startInfo = new ProcessStartInfo(mNote.NotePath)
                {
-                    StartInfo = new ProcessStartInfo(mNote.NotePath)
+                    UseShellExecute = true
                };
 
-               mLogger.LogInformation($"Going to start process {process.ProcessName}");
+               Process process = new Process
+               {
+                    StartInfo = startInfo
+               };
+
+               mLogger.LogInformation($"Going to start process {process.StartInfo.FileName}");
                process.Start();
-               mLogger.LogInformation($"Finished running process {process.ProcessName}");
+               mLogger.LogInformation($"Finished running process {process.StartInfo.FileName}");
+          }
+
+          public string GetNote()
+          {
+               return mNote.NoteText;
           }
      }
 }

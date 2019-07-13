@@ -71,15 +71,10 @@ namespace ConsoleUI
           private string GetTasksHeader(bool shouldPrintExtraDetails)
           {
                if (shouldPrintExtraDetails)
-                    return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS", "TIME CREATED", "LAST OPEND TIME ", "CLOSED TIME" }, 
+                    return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS", "TIME CREATED", "LAST OPENED TIME ", "CLOSED TIME" }, 
                                               new int[] { -5, -80, -10, -25, -25, -25 });
                else
                     return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS" }, new int[] { -5, -80, -10 });
-          }
-
-          private static string GetStringStatus(bool isFinished)
-          {
-               return isFinished ? "Done" : "Open";
           }
 
           private string StringFormatHelper(string[] args, int[] argsLength)
@@ -109,6 +104,26 @@ namespace ConsoleUI
                }
 
                return stringBuilder.ToString();
+          }
+
+          public void PrintTaskInformation(ITask task)
+          {
+               StringBuilder stringBuilder = new StringBuilder();
+
+               stringBuilder.AppendLine($"Task ID: {task.ID}");
+               stringBuilder.AppendLine($"Description: {task.Description}");
+               stringBuilder.AppendLine($"Status: {GetStringStatus(task.IsFinished)}");
+               stringBuilder.AppendLine($"Time created: {task.ID}");
+               stringBuilder.AppendLine($"Last opened time: {task.ID}");
+               stringBuilder.AppendLine($"Closed time: {task.ID}");
+               stringBuilder.AppendLine($"Note: {task.GetNote()}");
+
+               Console.WriteLine(stringBuilder.ToString());
+          }
+
+          private static string GetStringStatus(bool isFinished)
+          {
+               return isFinished ? "Done" : "Open";
           }
      }
 }

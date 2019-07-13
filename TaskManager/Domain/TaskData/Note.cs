@@ -1,22 +1,50 @@
-﻿using System.IO;
+﻿using Newtonsoft.Json;
+using System.IO;
 using TaskData.Contracts;
 
 namespace TaskData
 {
-     internal class Note : INote
+     public class Note : INote
      {
-          private const string Extension = ".txt";
+          private readonly string Extension;
+
+          [JsonProperty]
           private readonly string mNoteDirecoryPath;
+
+          [JsonProperty]
           private readonly string mNoteName;
+
+          [JsonIgnore]
           public string NotePath => Path.Combine(mNoteDirecoryPath, mNoteName + Extension);
+
+          [JsonIgnore]
           public string NoteText => File.ReadAllText(NotePath);
 
+          [JsonConstructor]
           public Note(string directoryPath, string noteName)
           {
+               Extension = ".txt";
                mNoteDirecoryPath = directoryPath;
                mNoteName = noteName;
 
-               File.Create(NotePath);
+               if(!string.IsNullOrEmpty(directoryPath) && !string.IsNullOrEmpty(noteName))
+               {
+                    Directory.CreateDirectory(directoryPath);
+                    File.Create(NotePath);
+               }
+          }
+
+          public Note(string directoryPath, string noteName, string content)
+          {
+               Extension = ".txt";
+               mNoteDirecoryPath = directoryPath;
+               mNoteName = noteName;
+
+               if (!string.IsNullOrEmpty(directoryPath) && !string.IsNullOrEmpty(noteName))
+               {
+                    Directory.CreateDirectory(directoryPath);
+                    File.WriteAllText(NotePath, content);
+               }
           }
      }
 }

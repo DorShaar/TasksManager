@@ -23,6 +23,7 @@ namespace Database.JsonService
                settings.Converters.Add(new TaskGroupConverter());
                settings.Converters.Add(new TaskConverter());
                settings.Converters.Add(new LoggerConverter());
+               settings.Converters.Add(new NoteConverter());
                return JsonConvert.DeserializeObject<T>(File.ReadAllText(databasePath), settings);
           }
 
@@ -44,6 +45,24 @@ namespace Database.JsonService
                }
           }
 
+          private class TaskGroupConverter : JsonConverter
+          {
+               public override bool CanConvert(Type objectType)
+               {
+                    return objectType == typeof(ITaskGroup);
+               }
+
+               public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+               {
+                    return serializer.Deserialize(reader, typeof(TaskGroup));
+               }
+
+               public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+               {
+                    serializer.Serialize(writer, value, typeof(TaskGroup));
+               }
+          }
+
           private class LoggerConverter : JsonConverter
           {
                public override bool CanConvert(Type objectType)
@@ -62,21 +81,21 @@ namespace Database.JsonService
                }
           }
 
-          private class TaskGroupConverter : JsonConverter
+          private class NoteConverter : JsonConverter
           {
                public override bool CanConvert(Type objectType)
                {
-                    return objectType == typeof(ITaskGroup);
+                    return objectType == typeof(INote);
                }
 
                public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
                {
-                    return serializer.Deserialize(reader, typeof(TaskGroup));
+                    return serializer.Deserialize(reader, typeof(Note));
                }
 
                public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
                {
-                    serializer.Serialize(writer, value, typeof(TaskGroup));
+                    serializer.Serialize(writer, value, typeof(Note));
                }
           }
      }

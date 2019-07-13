@@ -2,6 +2,7 @@ using FakeItEasy;
 using Logger.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.IO;
 using System.Threading;
 
 namespace TaskData.Tests
@@ -12,6 +13,7 @@ namespace TaskData.Tests
           private readonly ILogger mLogger = A.Dummy<ILogger>();
           private readonly string DummyDescription = "dummy description";
           private readonly int SleepTimeInMs = 2000;
+          private readonly string NotesDirectory = "TempNotesDirecory";
 
           [TestMethod]
           public void CreateNewTask_TimeCreatedIsNow()
@@ -83,6 +85,28 @@ namespace TaskData.Tests
                DateTime createdTime = task.TimeLastOpened;
                task.ReOpenTask();
                Assert.AreEqual(task.TimeLastOpened, createdTime);
+          }
+
+          [TestMethod]
+          public void CreateNote_AlreadyCreated_NoCreation()
+          {
+               string excpectedText = "should not be deleted";
+               string notePath = null;
+               try
+               {
+                    Task task = new Task(DummyDescription, mLogger);
+                    task.CreateNote(NotesDirectory, excpectedText);
+                    notePath = Path.Combine(NotesDirectory, task.ID + ".txt");
+
+                    task.CreateNote(NotesDirectory, "another content");
+
+                    Assert.AreEqual(excpectedText, File.ReadAllText(notePath));
+               }
+               finally
+               {
+                    File.Delete(notePath);
+                    Directory.Delete(NotesDirectory);
+               }
           }
 
           private bool IsTimesAlmostTheSame(DateTime time1, DateTime time2)

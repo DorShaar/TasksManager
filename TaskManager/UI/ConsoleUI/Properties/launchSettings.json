@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleUI": {
       "commandName": "Project",
-      "commandLineArgs": "close-task 1008"
+      "commandLineArgs": "info-task 1007"
     }
   }
 }

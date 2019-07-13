@@ -33,5 +33,29 @@ namespace Database.Configuration.Tests
                configuration.SetDatabaseDirectoryPath(newDatabasePathString);
                Assert.AreEqual(configuration.DatabaseDirectoryPath, newDatabasePathString);
           }
+
+          [TestMethod]
+          public void GetNotesPath_NoException()
+          {
+               Configuration configuration = new Configuration(mFakeLogger)
+               {
+                    ConfigurationYamlFilePath = TestDatabasePath
+               };
+               Assert.AreEqual("this_notes_path_should_be_updated", configuration.NotesDirectoryPath);
+          }
+
+          [TestMethod]
+          public void SetNotesPath_Success()
+          {
+               Configuration configuration = new Configuration(mFakeLogger)
+               {
+                    ConfigurationYamlFilePath = TestDatabasePath
+               };
+
+               string newNotesPathString = "new_notes_path";
+
+               configuration.SetNotesDirectoryPath(newNotesPathString);
+               Assert.AreEqual(configuration.NotesDirectoryPath, newNotesPathString);
+          }
      }
 }

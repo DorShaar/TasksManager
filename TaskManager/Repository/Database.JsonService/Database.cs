@@ -23,6 +23,7 @@ namespace Database
           private List<T> mEntities = new List<T>();
 
           public string DatabasePath { get; }
+          public string NotesDirectoryPath { get => mConfiguration.NotesDirectoryPath; }
 
           public Database(IConfiguration configuration, IObjectSerializer serializer, ILogger logger)
           {
