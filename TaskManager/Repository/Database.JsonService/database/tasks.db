@@ -36,18 +36,6 @@
         "TimeLastOpened": "2019-07-10T00:46:18.7151758+03:00",
         "TimeClosed": "2019-07-12T14:32:51.3690055+03:00"
       },
-      "1005": {
-        "mLogger": {
-          "ShouldLogInformation": false
-        },
-        "mNote": null,
-        "ID": "1005",
-        "Description": "use delegate which will not to save the database, insted of update",
-        "IsFinished": false,
-        "TimeCreated": "2019-07-12T14:37:19.6487345+03:00",
-        "TimeLastOpened": "2019-07-12T14:37:19.648747+03:00",
-        "TimeClosed": "0001-01-01T00:00:00"
-      },
       "1006": {
         "mLogger": {
           "ShouldLogInformation": false

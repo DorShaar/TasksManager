@@ -169,10 +169,18 @@ namespace ConsoleUI
 
           private static int RemoveTaskGroup(ITaskManager taskManager, TaskOptions.RemoveTaskGroupOptions options)
           {
+               if(options.ShouldHardDelete)
+               {
+                    mLogger.Log("Would you like to delete that group with all of its inner tasks? If so, press y");
+                    string userInput = Console.ReadLine();
+                    if (userInput.ToLower() != "y")
+                         return 0;
+               }
+
                if (!string.IsNullOrEmpty(options.TaskGroupId))
-                    taskManager.RemoveTaskGroupById(options.TaskGroupId);
+                    taskManager.RemoveTaskGroupById(options.TaskGroupId, !options.ShouldHardDelete);
                else if (!string.IsNullOrEmpty(options.TaskGroupName))
-                    taskManager.RemoveTaskGroupByName(options.TaskGroupName);
+                    taskManager.RemoveTaskGroupByName(options.TaskGroupName, !options.ShouldHardDelete);
                else
                {
                     mLogger.LogError($"No group name or group id given");

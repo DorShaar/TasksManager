@@ -116,7 +116,7 @@ namespace Database
 
                if (mEntities.Find(entity => entity.GroupName == newEntity.GroupName) != null)
                {
-                    mLogger.LogError($"Group ID: {newEntity.GroupName} is already found in database");
+                    mLogger.LogError($"Group name: {newEntity.GroupName} is already found in database");
                     return;
                }
 
@@ -132,7 +132,13 @@ namespace Database
                     return;
                }
 
+               foreach (ITask task in entity.GetAllTasks())
+               {
+                    mLogger.Log($"Removing inner task id {task.ID}");
+               }
+
                mEntities.Remove(entity);
+               mLogger.Log($"Task group id {entity.ID} group name {entity.GroupName} removed");
                SaveToFile();
           }
 

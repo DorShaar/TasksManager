@@ -87,7 +87,7 @@ namespace TaskManager.Integration.Tests
                mTaskManager.CreateNewTaskGroup(taskGroupName);
                Assert.AreEqual(mTaskManager.GetAllTasks(taskGroup => taskGroup.GroupName == taskGroupName).Count(), 0);
 
-               mTaskManager.RemoveTaskGroupByName(taskGroupName);
+               mTaskManager.RemoveTaskGroupByName(taskGroupName, false);
                Assert.IsNull(mTaskManager.GetAllTasks(taskGroup => taskGroup.GroupName == taskGroupName));
           }
      }

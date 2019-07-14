@@ -8,8 +8,8 @@ namespace TaskManager.Contracts
      {
           // TasksGroups.
           void CreateNewTaskGroup(string groupName);
-          void RemoveTaskGroupByName(string name);
-          void RemoveTaskGroupById(string id);
+          void RemoveTaskGroupByName(string name, bool shouldMoveInnerTasks);
+          void RemoveTaskGroupById(string id, bool shouldMoveInnerTasks);
           IEnumerable<ITaskGroup> GetAllTasksGroups();
 
           // Tasks.

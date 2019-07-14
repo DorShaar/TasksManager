@@ -46,24 +46,48 @@ namespace TaskManager
                mDatabase.Insert(mTaskGroupBuilder.Create(groupName, mLogger));
           }
 
-          public void RemoveTaskGroupByName(string name)
+          public void RemoveTaskGroupByName(string tasksGroupName, bool shouldMoveInnerTasks)
           {
-               ITaskGroup taskGroup = mDatabase.GetByName(name);
-               RemoveTaskGroup(taskGroup);
+               ITaskGroup taskGroup = mDatabase.GetByName(tasksGroupName);
+
+               if (taskGroup == null)
+               {
+                    mLogger.LogError($"Task group {tasksGroupName} does not exists");
+                    return;
+               }
+
+               RemoveTaskGroup(taskGroup, shouldMoveInnerTasks);
           }
 
-          public void RemoveTaskGroupById(string id)
+          public void RemoveTaskGroupById(string tasksGroupId, bool shouldMoveInnerTasks)
           {
-               ITaskGroup taskGroup = mDatabase.GetById(id);
-               RemoveTaskGroup(taskGroup);
+               ITaskGroup taskGroup = mDatabase.GetById(tasksGroupId);
+
+               if (taskGroup == null)
+               {
+                    mLogger.LogError($"Task group {tasksGroupId} does not exists");
+                    return;
+               }
+
+               RemoveTaskGroup(taskGroup, shouldMoveInnerTasks);
           }
 
-          private void RemoveTaskGroup(ITaskGroup taskGroup)
+          private void RemoveTaskGroup(ITaskGroup taskGroup, bool shouldMoveInnerTasks)
           {
                if (taskGroup == mFreeTasksGroup)
                {
                     mLogger.LogError($"Cannot delete {FreeTaskGroupName} from database");
                     return;
+               }
+
+               if (shouldMoveInnerTasks)
+               {
+                    // Should iterate with for and not for each because we are changing the size of the IEnumarable.
+                    ITask[] tasksToMove = taskGroup.GetAllTasks().ToArray();
+                    for (int i = 0; i < tasksToMove.Length; ++i)
+                    {
+                         MoveTaskToGroup(tasksToMove[i].ID, mFreeTasksGroup);
+                    }
                }
 
                mDatabase.Remove(taskGroup);
@@ -87,12 +111,26 @@ namespace TaskManager
           public void CreateNewTaskByGroupName(string tasksGroupName, string description)
           {
                ITaskGroup taskGroup = mDatabase.GetByName(tasksGroupName);
+
+               if (taskGroup == null)
+               {
+                    mLogger.LogError($"Task group {tasksGroupName} does not exists");
+                    return;
+               }
+
                CreateNewTask(taskGroup, description);
           }
 
           public void CreateNewTaskByGroupId(string tasksGroupId, string description)
           {
                ITaskGroup taskGroup = mDatabase.GetById(tasksGroupId);
+
+               if (taskGroup == null)
+               {
+                    mLogger.LogError($"Task group {tasksGroupId} does not exists");
+                    return;
+               }
+
                CreateNewTask(taskGroup, description);
           }
 
@@ -254,7 +292,7 @@ namespace TaskManager
                {
                     foreach (ITask task in taskGroup.GetAllTasks())
                     {
-                         if(task.ID == taskId)
+                         if (task.ID == taskId)
                          {
                               task.CreateNote(mDatabase.NotesDirectoryPath, content);
                               mDatabase.Update(taskGroup);

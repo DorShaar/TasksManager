@@ -8,7 +8,7 @@ namespace ConsoleUI
           [Verb("create-group", HelpText = "Create tasks group")]
           public class CreateNewTaskGroupOptions
           {
-               [Value(0)]
+               [Value(0, HelpText = "Name of new task group")]
                public string TaskGroupName { get; set; }
           }
 
@@ -20,6 +20,9 @@ namespace ConsoleUI
 
                [Option('i', "id", HelpText = "Remove task group by id")]
                public string TaskGroupId { get; set; }
+
+               [Option('h', "hard", HelpText = "Remove task group by id with all inner tasks")]
+               public bool ShouldHardDelete{ get; set; }
           }
 
           [Verb("get-groups", HelpText = "Get all groups")]
@@ -34,7 +37,7 @@ namespace ConsoleUI
           [Verb("create-task", HelpText = "Create task")]
           public class CreateNewTaskOptions
           {
-               [Value(0)]
+               [Value(0, HelpText = "Name of new task")]
                public string Description { get; set; }
 
                [Option('n', "name", HelpText = "Add created task to tasks group by name")]
@@ -69,7 +72,7 @@ namespace ConsoleUI
           [Verb("close-task", HelpText = "Marks task status as closed")]
           public class CloseTasksOptions
           {
-               [Value(0)]
+               [Value(0, HelpText = "id of task to close")]
                public string TaskId { get; set; }
           }
 
