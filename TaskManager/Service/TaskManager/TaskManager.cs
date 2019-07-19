@@ -279,6 +279,11 @@ namespace TaskManager
             return string.Empty;
         }
 
+        public string GetDatabasePath()
+        {
+            return mDatabase.DatabasePath;
+        }
+
         public void ChangeDatabasePath(string newDatabasePath)
         {
             mDatabase.SetDatabasePath(newDatabasePath);

@@ -25,6 +25,9 @@ namespace ConsoleUI
         [Verb("get-groups", HelpText = "Get all groups")]
         public class GatAllTaskGroupOptions
         {
+            [Option('a', "all", HelpText = "Print all closed tasks")]
+            public bool ShouldPrintAll { get; set; }
+
             [Option('d', "detail", HelpText = "Print more information about each group")]
             public bool IsDetailed { get; set; }
         }
@@ -47,7 +50,7 @@ namespace ConsoleUI
             [Value(0, HelpText = "Task group name or id")]
             public string TaskGroup { get; set; }
 
-            [Option('a', "all", HelpText = "Print all closed tasks")]
+            [Option('a', "all", HelpText = "Print all tasks, even the closed ones")]
             public bool ShouldPrintAll { get; set; }
 
             [Option('h', "hours", HelpText = "Print all tasks from the last given hours")]

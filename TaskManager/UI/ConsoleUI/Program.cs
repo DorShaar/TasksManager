@@ -44,6 +44,7 @@ namespace ConsoleUI
             TaskOptions.OpenNoteOptions,
             TaskOptions.GetNoteOptions,
 
+            ConfigOptions.GetDatabasePathOptions,
             ConfigOptions.SetDatabasePathOptions>(args).MapResult(
                  (TaskOptions.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
                  (TaskOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
@@ -62,6 +63,7 @@ namespace ConsoleUI
                  (TaskOptions.GetNoteOptions options) => GetNote(taskManager, options),
 
                  (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
+                 (ConfigOptions.GetDatabasePathOptions options) => GetDatabasePath(taskManager, options),
                  (parserErrors) => 1
             );
 
@@ -268,6 +270,12 @@ namespace ConsoleUI
             }
 
             mLogger.Log(taskManager.GetNote(options.TaskId));
+            return 0;
+        }
+
+        private static int GetDatabasePath(ITaskManager taskManager, ConfigOptions.GetDatabasePathOptions options)
+        {
+            mConsolePrinter.Print(taskManager.GetDatabasePath(), "Database path");
             return 0;
         }
 
