@@ -107,7 +107,11 @@ namespace ConsoleUI
 
         private static int GatAllTaskGroup(ITaskManager taskManager, TaskOptions.GatAllTaskGroupOptions options)
         {
-            mConsolePrinter.PrintTasksGroup(taskManager.GetAllTasksGroups(), options);
+            IEnumerable<ITaskGroup> groupsToPrint = taskManager.GetAllTasksGroups();
+            if (!options.ShouldPrintAll)
+                groupsToPrint = groupsToPrint.Where((ITaskGroup group) => (!group.IsFinished));
+
+            mConsolePrinter.PrintTasksGroup(groupsToPrint, options);
             return 0;
         }
 
@@ -273,7 +277,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int GetDatabasePath(ITaskManager taskManager, ConfigOptions.GetDatabasePathOptions options)
+        private static int GetDatabasePath(ITaskManager taskManager, ConfigOptions.GetDatabasePathOptions _)
         {
             mConsolePrinter.Print(taskManager.GetDatabasePath(), "Database path");
             return 0;

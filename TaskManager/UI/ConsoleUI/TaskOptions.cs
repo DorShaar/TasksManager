@@ -25,7 +25,7 @@ namespace ConsoleUI
         [Verb("get-groups", HelpText = "Get all groups")]
         public class GatAllTaskGroupOptions
         {
-            [Option('a', "all", HelpText = "Print all closed tasks")]
+            [Option('a', "all", HelpText = "Print all groups, even groups which all their tasks are closed")]
             public bool ShouldPrintAll { get; set; }
 
             [Option('d', "detail", HelpText = "Print more information about each group")]

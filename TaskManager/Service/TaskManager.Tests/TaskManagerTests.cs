@@ -55,8 +55,7 @@ namespace TaskManager.Integration.Tests
             ITask task5 = mTaskManager.CreateNewTask(taskGroupC, "C1");
             mTaskManager.CloseTask(task5.ID);
 
-            Assert.AreEqual(mTaskManager.GetAllTasks(group => group.IsFinished == true).Count(), 3);
-            Assert.AreEqual(mTaskManager.GetAllTasks(task => task.IsFinished == true).Count(), 3);
+            Assert.AreEqual(mTaskManager.GetAllTasks((ITask task) => task.IsFinished == true).Count(), 3);
         }
 
         [TestMethod]
