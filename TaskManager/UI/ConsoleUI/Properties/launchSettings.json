@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleUI": {
       "commandName": "Project",
-      "commandLineArgs": "remove-group -i 1014"
+      "commandLineArgs": "get-tasks task-manager-app"
     }
   }
 }

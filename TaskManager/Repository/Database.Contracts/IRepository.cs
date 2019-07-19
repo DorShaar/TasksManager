@@ -9,14 +9,11 @@ namespace Database.Contracts
           string NotesDirectoryPath { get; }
 
           IEnumerable<T> GetAll();
-          T GetById(string id);
-          T GetByName(string id);
+          T GetEntity(string entity);
           void Insert(T entity);
           void Update(T entity);
           void AddOrUpdate(T entity);
           void Remove(T entity);
-          void RemoveById(string id);
-          void RemoveByName(string name);
 
           void SetDatabasePath(string newDatabasePath);
      }
