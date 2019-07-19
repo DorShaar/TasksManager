@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using Composition;
+using ConsoleUI.Options;
 using Logger.Contracts;
 using System;
 using System.Collections.Generic;
@@ -28,9 +29,9 @@ namespace ConsoleUI
             }
 
             int exitCode = parser.ParseArguments<
-            TaskOptions.CreateNewTaskGroupOptions,
-            TaskOptions.GatAllTaskGroupOptions,
-            TaskOptions.RemoveTaskGroupOptions,
+            TaskGroupOptions.CreateNewTaskGroupOptions,
+            TaskGroupOptions.GatAllTaskGroupOptions,
+            TaskGroupOptions.RemoveTaskGroupOptions,
 
             TaskOptions.CreateNewTaskOptions,
             TaskOptions.GetAllTasksOptions,
@@ -40,15 +41,15 @@ namespace ConsoleUI
             TaskOptions.ReOpenTaskOptions,
             TaskOptions.GetInformationTaskOptions,
 
-            TaskOptions.CreateNoteOptions,
-            TaskOptions.OpenNoteOptions,
-            TaskOptions.GetNoteOptions,
+            NotesOptions.CreateNoteOptions,
+            NotesOptions.OpenNoteOptions,
+            NotesOptions.GetNoteOptions,
 
             ConfigOptions.GetDatabasePathOptions,
             ConfigOptions.SetDatabasePathOptions>(args).MapResult(
-                 (TaskOptions.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
-                 (TaskOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
-                 (TaskOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
+                 (TaskGroupOptions.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
+                 (TaskGroupOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
+                 (TaskGroupOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
 
                  (TaskOptions.CreateNewTaskOptions options) => CreateNewTask(taskManager, options),
                  (TaskOptions.GetAllTasksOptions options) => GetAllTasks(taskManager, options),
@@ -58,9 +59,9 @@ namespace ConsoleUI
                  (TaskOptions.ReOpenTaskOptions options) => ReOpenTask(taskManager, options),
                  (TaskOptions.GetInformationTaskOptions options) => GetTaskInformation(taskManager, options),
 
-                 (TaskOptions.CreateNoteOptions options) => CreateNote(taskManager, options),
-                 (TaskOptions.OpenNoteOptions options) => OpenNote(taskManager, options),
-                 (TaskOptions.GetNoteOptions options) => GetNote(taskManager, options),
+                 (NotesOptions.CreateNoteOptions options) => CreateNote(taskManager, options),
+                 (NotesOptions.OpenNoteOptions options) => OpenNote(taskManager, options),
+                 (NotesOptions.GetNoteOptions options) => GetNote(taskManager, options),
 
                  (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
                  (ConfigOptions.GetDatabasePathOptions options) => GetDatabasePath(taskManager, options),
@@ -71,7 +72,7 @@ namespace ConsoleUI
                 Console.WriteLine($"Finished executing with exit code: {exitCode}");
         }
 
-        private static int CreateNewTaskGroup(ITaskManager taskManager, TaskOptions.CreateNewTaskGroupOptions options)
+        private static int CreateNewTaskGroup(ITaskManager taskManager, TaskGroupOptions.CreateNewTaskGroupOptions options)
         {
             if (string.IsNullOrEmpty(options.TaskGroupName))
             {
@@ -105,7 +106,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int GatAllTaskGroup(ITaskManager taskManager, TaskOptions.GatAllTaskGroupOptions options)
+        private static int GatAllTaskGroup(ITaskManager taskManager, TaskGroupOptions.GatAllTaskGroupOptions options)
         {
             IEnumerable<ITaskGroup> groupsToPrint = taskManager.GetAllTasksGroups();
             if (!options.ShouldPrintAll)
@@ -185,7 +186,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int RemoveTaskGroup(ITaskManager taskManager, TaskOptions.RemoveTaskGroupOptions options)
+        private static int RemoveTaskGroup(ITaskManager taskManager, TaskGroupOptions.RemoveTaskGroupOptions options)
         {
             if (options.ShouldHardDelete)
             {
@@ -237,7 +238,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int CreateNote(ITaskManager taskManager, TaskOptions.CreateNoteOptions options)
+        private static int CreateNote(ITaskManager taskManager, NotesOptions.CreateNoteOptions options)
         {
             if (string.IsNullOrEmpty(options.TaskId))
             {
@@ -253,7 +254,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int OpenNote(ITaskManager taskManager, TaskOptions.OpenNoteOptions options)
+        private static int OpenNote(ITaskManager taskManager, NotesOptions.OpenNoteOptions options)
         {
             if (string.IsNullOrEmpty(options.TaskId))
             {
@@ -265,7 +266,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int GetNote(ITaskManager taskManager, TaskOptions.GetNoteOptions options)
+        private static int GetNote(ITaskManager taskManager, NotesOptions.GetNoteOptions options)
         {
             if (string.IsNullOrEmpty(options.TaskId))
             {

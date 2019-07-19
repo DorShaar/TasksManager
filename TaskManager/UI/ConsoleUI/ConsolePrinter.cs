@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleUI.Options;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TaskData.Contracts;
@@ -7,7 +8,7 @@ namespace ConsoleUI
 {
     internal class ConsolePrinter
     {
-        public void PrintTasksGroup(IEnumerable<ITaskGroup> groups, TaskOptions.GatAllTaskGroupOptions options)
+        public void PrintTasksGroup(IEnumerable<ITaskGroup> groups, TaskGroupOptions.GatAllTaskGroupOptions options)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
