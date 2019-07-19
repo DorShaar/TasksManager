@@ -82,13 +82,11 @@ namespace TaskManager
         /// <summary>
         /// Create new task into <param name="tasksGroup"/>.
         /// </summary>
-        public ITask CreateNewTask(string tasksGroupName, string description)
+        public ITask CreateNewTask(ITaskGroup tasksGroup, string description)
         {
-            ITaskGroup tasksGroup = mDatabase.GetEntity(tasksGroupName);
-
             if (tasksGroup == null)
             {
-                mLogger.LogError($"Task group {tasksGroupName} does not exists");
+                mLogger.LogError($"Given task group is null");
                 return null;
             }
 

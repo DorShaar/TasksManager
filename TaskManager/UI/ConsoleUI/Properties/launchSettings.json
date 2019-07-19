@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleUI": {
       "commandName": "Project",
-      "commandLineArgs": "get-tasks task-manager-app"
+      "commandLineArgs": "remove-group \"to deltee\" -h"
     }
   }
 }

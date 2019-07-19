@@ -30,12 +30,10 @@ namespace TaskManager.Integration.Tests
         [TestMethod]
         public void GetAllTasksByGroup_3Tasks_3TasksReturned()
         {
-            string taskGroupName = "A";
-
-            ITaskGroup taskGroup = mTaskGroupBuilder.Create(taskGroupName, mLogger);
-            ITask task1 = mTaskManager.CreateNewTask(taskGroupName, "1");
-            ITask task2 = mTaskManager.CreateNewTask(taskGroupName, "2");
-            ITask task3 = mTaskManager.CreateNewTask(taskGroupName, "3");
+            ITaskGroup taskGroup = mTaskGroupBuilder.Create("A", mLogger);
+            ITask task1 = mTaskManager.CreateNewTask(taskGroup, "1");
+            ITask task2 = mTaskManager.CreateNewTask(taskGroup, "2");
+            ITask task3 = mTaskManager.CreateNewTask(taskGroup, "3");
 
             Assert.AreEqual(mTaskManager.GetAllTasks((ITaskGroup group) => group.ID == taskGroup.ID).Count(), 3);
         }
@@ -43,22 +41,18 @@ namespace TaskManager.Integration.Tests
         [TestMethod]
         public void GetAllTasksByTask_ClosedTasks_3TasksReturned()
         {
-            string taskGroupAName = "A";
-            string taskGroupBName = "B";
-            string taskGroupCName = "C";
-
-            ITaskGroup taskGroupA = mTaskGroupBuilder.Create(taskGroupAName, mLogger);
-            ITask task1 = mTaskManager.CreateNewTask(taskGroupAName, "A1");
-            ITask task2 = mTaskManager.CreateNewTask(taskGroupAName, "A2");
+            ITaskGroup taskGroupA = mTaskGroupBuilder.Create("A", mLogger);
+            ITask task1 = mTaskManager.CreateNewTask(taskGroupA, "A1");
+            ITask task2 = mTaskManager.CreateNewTask(taskGroupA, "A2");
             mTaskManager.CloseTask(task1.ID);
 
-            ITaskGroup taskGroupB = mTaskGroupBuilder.Create(taskGroupBName, mLogger);
-            ITask task3 = mTaskManager.CreateNewTask(taskGroupBName, "B1");
-            ITask task4 = mTaskManager.CreateNewTask(taskGroupBName, "B2");
+            ITaskGroup taskGroupB = mTaskGroupBuilder.Create("B", mLogger);
+            ITask task3 = mTaskManager.CreateNewTask(taskGroupB, "B1");
+            ITask task4 = mTaskManager.CreateNewTask(taskGroupB, "B2");
             mTaskManager.CloseTask(task4.ID);
 
-            ITaskGroup taskGroupC = mTaskGroupBuilder.Create(taskGroupCName, mLogger);
-            ITask task5 = mTaskManager.CreateNewTask(taskGroupCName, "C1");
+            ITaskGroup taskGroupC = mTaskGroupBuilder.Create("C", mLogger);
+            ITask task5 = mTaskManager.CreateNewTask(taskGroupC, "C1");
             mTaskManager.CloseTask(task5.ID);
 
             Assert.AreEqual(mTaskManager.GetAllTasks(group => group.IsFinished == true).Count(), 3);
@@ -74,9 +68,8 @@ namespace TaskManager.Integration.Tests
         [TestMethod]
         public void CreateNewTask_AddNewTaskToGroup_Success()
         {
-            string taskGroupName = "A";
-            mTaskGroupBuilder.Create(taskGroupName, mLogger);
-            mTaskManager.CreateNewTask(taskGroupName, "New Task Group");
+            ITaskGroup taskGroup = mTaskGroupBuilder.Create("A", mLogger);
+            mTaskManager.CreateNewTask(taskGroup, "New Task Group");
             Assert.AreEqual(mTaskManager.GetAllTasksGroups().Count(), 2);
         }
 

@@ -84,7 +84,19 @@ namespace ConsoleUI
         private static int CreateNewTask(ITaskManager taskManager, TaskOptions.CreateNewTaskOptions options)
         {
             if (!string.IsNullOrEmpty(options.TaskGroup))
-                taskManager.CreateNewTask(options.TaskGroup, options.Description);
+            {
+                ITaskGroup taskGroup = taskManager.GetAllTasksGroups().Where(group => group.ID == options.TaskGroup).FirstOrDefault();
+                if(taskGroup == null)
+                    taskGroup = taskManager.GetAllTasksGroups().Where(group => group.GroupName == options.TaskGroup).FirstOrDefault();
+
+                if (taskGroup == null)
+                {
+                    mLogger.LogError($"Task group {options.TaskGroup} does not exist");
+                    return 1;
+                }
+
+                taskManager.CreateNewTask(taskGroup, options.Description);
+            }
             else
                 taskManager.CreateNewTask(options.Description);
 
