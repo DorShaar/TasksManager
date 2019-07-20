@@ -140,8 +140,17 @@ namespace ConsoleUI
                 allTasks = taskManager.GetAllTasks();
 
             IEnumerable<ITask> tasksToPrint = allTasks;
-            if (!options.ShouldPrintAll)
-                tasksToPrint = allTasks.Where(task => task.IsFinished == false);
+
+            if (!string.IsNullOrEmpty(options.Status) && options.ShouldPrintAll)
+            {
+                mLogger.LogError("Cannot quary all tasks with specific status quary");
+                return 1;
+            }
+
+            if(!string.IsNullOrEmpty(options.Status))
+                tasksToPrint = tasksToPrint.Where(task => task.Status.ToString().Equals(options.Status, StringComparison.CurrentCultureIgnoreCase));
+            else if (!options.ShouldPrintAll)
+                tasksToPrint = tasksToPrint.Where(task => task.IsFinished == false);
 
             if (options.Hours != 0)
                 tasksToPrint = tasksToPrint.Where(

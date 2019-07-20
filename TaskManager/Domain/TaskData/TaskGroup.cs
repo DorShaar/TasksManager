@@ -59,7 +59,7 @@ namespace TaskData
         public ITask GetTask(string id)
         {
             if (!mTasksChildren.TryGetValue(id, out ITask task))
-                mLogger?.Log($"Task id {id} was not found in group {GroupName}");
+                mLogger?.LogInformation($"Task id {id} was not found in group {GroupName}");
 
             return task;
         }

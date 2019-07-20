@@ -23,6 +23,9 @@ namespace ConsoleUI.Options
             [Option('a', "all", HelpText = "Print all tasks, even the closed ones")]
             public bool ShouldPrintAll { get; set; }
 
+            [Option('s', "days", HelpText = "Print all tasks which by given status")]
+            public string Status { get; set; }
+
             [Option('h', "hours", HelpText = "Print all tasks from the last given hours")]
             public int Hours { get; set; }
 

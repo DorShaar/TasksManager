@@ -36,7 +36,7 @@ namespace TaskData
         }
 
         [JsonConstructor]
-        internal Task(ILogger logger, string id, string description, INote note,
+        internal Task(ILogger logger, string id, string description, Status status, INote note,
                        DateTime timeCreated, DateTime timeLastOpened, DateTime timeLastOnWork, DateTime timeClosed)
         {
             mLogger = logger;
@@ -44,6 +44,8 @@ namespace TaskData
 
             ID = id;
             Description = description;
+            Status = status;
+
             TimeCreated = timeCreated;
             TimeLastOpened = timeLastOpened;
             TimeLastOnWork = timeLastOnWork;
