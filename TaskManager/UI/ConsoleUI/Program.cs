@@ -39,15 +39,17 @@ namespace ConsoleUI
             TaskOptions.RemoveTaskOptions,
             TaskOptions.MoveTaskOptions,
             TaskOptions.ReOpenTaskOptions,
+            //TaskOptions.OnWorkTaskOptions,
             TaskOptions.GetInformationTaskOptions,
 
             NotesOptions.CreateNoteOptions,
             NotesOptions.CreateGeneralNoteOptions,
+            //NotesOptions.GetGeneralNotesOptions,
             NotesOptions.OpenNoteOptions,
             NotesOptions.GetNoteOptions,
 
-            ConfigOptions.GetDatabasePathOptions,
-            ConfigOptions.SetDatabasePathOptions>(args).MapResult(
+            ConfigOptions.GetDatabasePathOptions
+            /*ConfigOptions.SetDatabasePathOptions*/>(args).MapResult(
                  (TaskGroupOptions.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
                  (TaskGroupOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
                  (TaskGroupOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
@@ -58,15 +60,17 @@ namespace ConsoleUI
                  (TaskOptions.RemoveTaskOptions options) => RemoveTaskOptions(taskManager, options),
                  (TaskOptions.MoveTaskOptions options) => MoveTask(taskManager, options),
                  (TaskOptions.ReOpenTaskOptions options) => ReOpenTask(taskManager, options),
+                 (TaskOptions.OnWorkTaskOptions options) => MarkTaskAsOnWork(taskManager, options),
                  (TaskOptions.GetInformationTaskOptions options) => GetTaskInformation(taskManager, options),
 
                  (NotesOptions.CreateNoteOptions options) => CreateNote(taskManager, options),
-                 (NotesOptions.CreateGeneralNoteOptions options) => CreateGeneralNoteOptions(taskManager, options),
+                 (NotesOptions.CreateGeneralNoteOptions options) => CreateGeneralNote(taskManager, options),
+                 //(NotesOptions.GetGeneralNotesOptions options) => GetGeneralNotes(taskManager, options), 
                  (NotesOptions.OpenNoteOptions options) => OpenNote(taskManager, options),
                  (NotesOptions.GetNoteOptions options) => GetNote(taskManager, options),
 
                  (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
-                 (ConfigOptions.GetDatabasePathOptions options) => GetDatabasePath(taskManager, options),
+                 //(ConfigOptions.GetDatabasePathOptions options) => GetDatabasePath(taskManager, options),
                  (parserErrors) => 1
             );
 
@@ -91,7 +95,7 @@ namespace ConsoleUI
             if (!string.IsNullOrEmpty(options.TaskGroup))
             {
                 ITaskGroup taskGroup = taskManager.GetAllTasksGroups().Where(group => group.ID == options.TaskGroup).FirstOrDefault();
-                if(taskGroup == null)
+                if (taskGroup == null)
                     taskGroup = taskManager.GetAllTasksGroups().Where(group => group.GroupName == options.TaskGroup).FirstOrDefault();
 
                 if (taskGroup == null)
@@ -172,6 +176,18 @@ namespace ConsoleUI
             }
 
             taskManager.ReOpenTask(options.TaskId);
+            return 0;
+        }
+
+        private static int MarkTaskAsOnWork(ITaskManager taskManager, TaskOptions.OnWorkTaskOptions options)
+        {
+            if (string.IsNullOrEmpty(options.TaskId))
+            {
+                mLogger.LogError($"No task id given");
+                return 1;
+            }
+
+            taskManager.MarkTaskOnWork(options.TaskId);
             return 0;
         }
 
@@ -256,7 +272,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int CreateGeneralNoteOptions(ITaskManager taskManager, NotesOptions.CreateGeneralNoteOptions options)
+        private static int CreateGeneralNote(ITaskManager taskManager, NotesOptions.CreateGeneralNoteOptions options)
         {
             if (string.IsNullOrEmpty(options.NoteSubject))
             {
@@ -264,7 +280,7 @@ namespace ConsoleUI
                 return 1;
             }
 
-            if(options.NoteSubject.Length > 20)
+            if (options.NoteSubject.Length > 20)
             {
                 mLogger.LogError($"Note subject {options.NoteSubject} is too long. Must be 20 characters");
                 return 1;

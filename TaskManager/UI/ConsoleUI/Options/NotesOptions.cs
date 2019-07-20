@@ -24,6 +24,11 @@ namespace ConsoleUI.Options
             public string Text { get; set; }
         }
 
+        [Verb("get-general-notes", HelpText = "Get all general notes names")]
+        public class GetGeneralNotesOptions
+        {
+        }
+
         [Verb("open-note", HelpText = "Open note with the default text editor")]
         public class OpenNoteOptions
         {

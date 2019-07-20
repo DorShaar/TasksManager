@@ -14,16 +14,19 @@ namespace Database
         private const string DatabaseName = "tasks.db";
         private const string NextIdHolderName = "id_producer.db";
 
-        private readonly string NextIdPath;
-
         private readonly ILogger mLogger;
         private readonly IConfiguration mConfiguration;
         private readonly IObjectSerializer mSerializer;
 
         private List<T> mEntities = new List<T>();
 
+        private readonly string NextIdPath;
         public string DatabasePath { get; }
-        public string NotesDirectoryPath { get => mConfiguration.NotesDirectoryPath; }
+
+        /// <summary>
+        /// That is the path to the directory of all the notes.
+        /// </summary>
+        public string NotesDatabaseDirectoryPath { get => mConfiguration.NotesDirectoryPath; }
 
         public Database(IConfiguration configuration, IObjectSerializer serializer, ILogger logger)
         {
@@ -77,7 +80,7 @@ namespace Database
             }
 
             mLogger.LogInformation("Going to load next id");
-            IDProducer.IDProducer.SetNextID(mSerializer.Deserialize<int>(Path.Combine(mConfiguration.DatabaseDirectoryPath, NextIdHolderName)));
+            IDProducer.IDProducer.SetNextID(mSerializer.Deserialize<int>(NextIdPath));
         }
 
         /// <summary>
@@ -128,7 +131,7 @@ namespace Database
 
             foreach (ITask task in entity.GetAllTasks())
             {
-                mLogger.Log($"Removing inner task id {task.ID}");
+                mLogger.Log($"Removing inner task id {task.ID} description {task.Description}");
             }
 
             mEntities.Remove(entity);

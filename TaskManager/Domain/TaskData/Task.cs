@@ -1,7 +1,6 @@
 ﻿using Logger.Contracts;
 using Newtonsoft.Json;
 using System;
-using System.Diagnostics;
 using TaskData.Contracts;
 
 namespace TaskData
@@ -15,11 +14,17 @@ namespace TaskData
         private INote mNote;
 
         public string ID { get; }
+
         public string Description { get; set; } = string.Empty;
-        public bool IsFinished { get; private set; } = false;
+
+        [JsonIgnore]
+        public bool IsFinished { get => Status == Status.Closed ? true : false ; }
+
+        public Status Status { get; private set; } = Status.Open;
 
         public DateTime TimeCreated { get; } = DateTime.Now;
         public DateTime TimeLastOpened { get; private set; } = DateTime.Now;
+        public DateTime TimeLastOnWork { get; private set; }
         public DateTime TimeClosed { get; private set; }
 
         public Task(string description, ILogger logger)
@@ -31,17 +36,17 @@ namespace TaskData
         }
 
         [JsonConstructor]
-        internal Task(ILogger logger, string id, string description, bool isFinished, INote note,
-                       DateTime timeCreated, DateTime timeLastOpened, DateTime timeClosed)
+        internal Task(ILogger logger, string id, string description, INote note,
+                       DateTime timeCreated, DateTime timeLastOpened, DateTime timeLastOnWork, DateTime timeClosed)
         {
             mLogger = logger;
             mNote = note;
 
             ID = id;
             Description = description;
-            IsFinished = isFinished;
             TimeCreated = timeCreated;
             TimeLastOpened = timeLastOpened;
+            TimeLastOnWork = timeLastOnWork;
             TimeClosed = timeClosed;
 
             mLogger?.Log($"Task id {ID} restored");
@@ -49,28 +54,41 @@ namespace TaskData
 
         public void CloseTask()
         {
-            if (IsFinished)
+            if (Status == Status.Closed)
             {
                 mLogger?.Log($"Task {ID} is already closed");
                 return;
             }
 
-            IsFinished = true;
+            Status = Status.Closed;
             TimeClosed = DateTime.Now;
             mLogger?.Log($"Task {ID} closed at {TimeClosed}");
         }
 
         public void ReOpenTask()
         {
-            if (!IsFinished)
+            if (Status == Status.Open)
             {
                 mLogger?.Log($"Task {ID} is already open");
                 return;
             }
 
-            IsFinished = false;
+            Status = Status.Open;
             TimeLastOpened = DateTime.Now;
             mLogger?.Log($"Task {ID} re-opened at {TimeLastOpened}");
+        }
+
+        public void MarkTaskOnWork()
+        {
+            if (Status == Status.OnWork)
+            {
+                mLogger?.Log($"Task {ID} is already on work");
+                return;
+            }
+
+            Status = Status.OnWork;
+            TimeLastOnWork = DateTime.Now;
+            mLogger?.Log($"Task {ID} marked on work at {TimeLastOpened}");
         }
 
         public void CreateNote(string noteDirectoryPath, string content)

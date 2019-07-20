@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleUI": {
       "commandName": "Project",
-      "commandLineArgs": "get-note test"
+      "commandLineArgs": "create-task \"tam tam\" 1007"
     }
   }
 }

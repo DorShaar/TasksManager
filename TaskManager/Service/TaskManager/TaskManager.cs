@@ -181,6 +181,22 @@ namespace TaskManager
             mLogger.LogError($"Task id {taskId} was not found");
         }
 
+        public void MarkTaskOnWork(string taskId)
+        {
+            foreach (ITaskGroup group in mDatabase.GetAll())
+            {
+                ITask task = group.GetTask(taskId);
+                if (task != null)
+                {
+                    task.MarkTaskOnWork();
+                    mDatabase.Update(group);
+                    return;
+                }
+            }
+
+            mLogger.LogError($"Task id {taskId} was not found");
+        }
+
         public void RemoveTask(string taskId)
         {
             foreach (ITaskGroup group in mDatabase.GetAll())

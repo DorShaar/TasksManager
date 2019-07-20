@@ -54,6 +54,13 @@ namespace ConsoleUI.Options
             public string TaskId { get; set; }
         }
 
+        [Verb("work-task", HelpText = "Mark task as on work")]
+        public class OnWorkTaskOptions
+        {
+            [Value(0, HelpText = "Task id to mark as on work")]
+            public string TaskId { get; set; }
+        }
+
         [Verb("move-task", HelpText = "Moves a task to a given group")]
         public class MoveTaskOptions
         {
