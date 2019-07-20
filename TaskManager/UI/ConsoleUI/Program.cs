@@ -42,6 +42,7 @@ namespace ConsoleUI
             TaskOptions.GetInformationTaskOptions,
 
             NotesOptions.CreateNoteOptions,
+            NotesOptions.CreateGeneralNoteOptions,
             NotesOptions.OpenNoteOptions,
             NotesOptions.GetNoteOptions,
 
@@ -60,6 +61,7 @@ namespace ConsoleUI
                  (TaskOptions.GetInformationTaskOptions options) => GetTaskInformation(taskManager, options),
 
                  (NotesOptions.CreateNoteOptions options) => CreateNote(taskManager, options),
+                 (NotesOptions.CreateGeneralNoteOptions options) => CreateGeneralNoteOptions(taskManager, options),
                  (NotesOptions.OpenNoteOptions options) => OpenNote(taskManager, options),
                  (NotesOptions.GetNoteOptions options) => GetNote(taskManager, options),
 
@@ -254,27 +256,49 @@ namespace ConsoleUI
             return 0;
         }
 
+        private static int CreateGeneralNoteOptions(ITaskManager taskManager, NotesOptions.CreateGeneralNoteOptions options)
+        {
+            if (string.IsNullOrEmpty(options.NoteSubject))
+            {
+                mLogger.LogError($"No task subject given to create note");
+                return 1;
+            }
+
+            if(options.NoteSubject.Length > 20)
+            {
+                mLogger.LogError($"Note subject {options.NoteSubject} is too long. Must be 20 characters");
+                return 1;
+            }
+
+            string textToWrite = options.Text;
+            if (options.Text == null)
+                textToWrite = string.Empty;
+
+            taskManager.CreateGeneralNote(options.NoteSubject, textToWrite);
+            return 0;
+        }
+
         private static int OpenNote(ITaskManager taskManager, NotesOptions.OpenNoteOptions options)
         {
-            if (string.IsNullOrEmpty(options.TaskId))
+            if (string.IsNullOrEmpty(options.NoteName))
             {
                 mLogger.LogError($"No task id given to open note");
                 return 1;
             }
 
-            taskManager.OpenNote(options.TaskId);
+            taskManager.OpenNote(options.NoteName);
             return 0;
         }
 
         private static int GetNote(ITaskManager taskManager, NotesOptions.GetNoteOptions options)
         {
-            if (string.IsNullOrEmpty(options.TaskId))
+            if (string.IsNullOrEmpty(options.NoteName))
             {
                 mLogger.LogError($"No task id given to get note");
                 return 1;
             }
 
-            mLogger.Log(taskManager.GetNote(options.TaskId));
+            mLogger.Log(taskManager.GetNote(options.NoteName));
             return 0;
         }
 

@@ -13,17 +13,26 @@ namespace TaskManager
     public class TaskManager : ITaskManager
     {
         private readonly ILogger mLogger;
-        private ITaskGroup mFreeTasksGroup;
-        private readonly IRepository<ITaskGroup> mDatabase;
-        private readonly ITaskGroupBuilder mTaskGroupBuilder;
 
+        private ITaskGroup mFreeTasksGroup;
         internal static readonly string FreeTaskGroupName = "Free";
 
-        public TaskManager(IRepository<ITaskGroup> database, ITaskGroupBuilder taskGroupBuilder, ILogger logger)
+        private readonly ITaskGroupBuilder mTaskGroupBuilder;
+        private readonly IRepository<ITaskGroup> mDatabase;
+
+        private readonly INoteBuilder mNoteBuilder;
+        private readonly GeneralNotesDatabase mNotesDatabase;
+
+        public TaskManager(IRepository<ITaskGroup> database, ITaskGroupBuilder taskGroupBuilder, INoteBuilder noteBuilder, ILogger logger)
         {
             mLogger = logger;
+
             mDatabase = database;
             mTaskGroupBuilder = taskGroupBuilder;
+
+            mNotesDatabase = new GeneralNotesDatabase(mDatabase.NotesDatabaseDirectoryPath, noteBuilder, mLogger);
+            mNoteBuilder = noteBuilder;
+
             InitializeFreeTasksGroup();
         }
 
@@ -144,14 +153,12 @@ namespace TaskManager
         {
             foreach (ITaskGroup group in mDatabase.GetAll())
             {
-                foreach (ITask task in group.GetAllTasks())
+                ITask task = group.GetTask(taskId);
+                if (task != null)
                 {
-                    if (task.ID == taskId)
-                    {
-                        task.CloseTask();
-                        mDatabase.Update(group);
-                        return;
-                    }
+                    task.CloseTask();
+                    mDatabase.Update(group);
+                    return;
                 }
             }
 
@@ -162,36 +169,32 @@ namespace TaskManager
         {
             foreach (ITaskGroup group in mDatabase.GetAll())
             {
-                foreach (ITask task in group.GetAllTasks())
+                ITask task = group.GetTask(taskId);
+                if (task != null)
                 {
-                    if (task.ID == taskId)
-                    {
-                        task.CloseTask();
-                        mDatabase.Update(group);
-                        return;
-                    }
+                    task.CloseTask();
+                    mDatabase.Update(group);
+                    return;
                 }
             }
 
             mLogger.LogError($"Task id {taskId} was not found");
         }
 
-        public void RemoveTask(string taskToRemove)
+        public void RemoveTask(string taskId)
         {
             foreach (ITaskGroup group in mDatabase.GetAll())
             {
-                foreach (ITask task in group.GetAllTasks())
+                ITask task = group.GetTask(taskId);
+                if (task != null)
                 {
-                    if (task.ID == taskToRemove)
-                    {
-                        group.RemoveTask(taskToRemove);
-                        mDatabase.Update(group);
-                        return;
-                    }
+                    group.RemoveTask(taskId);
+                    mDatabase.Update(group);
+                    return;
                 }
             }
 
-            mLogger.LogError($"Task {taskToRemove} was not found");
+            mLogger.LogError($"Task {taskId} was not found");
         }
 
         public void MoveTaskToGroup(string taskId, string taskGroup)
@@ -210,17 +213,15 @@ namespace TaskManager
         {
             foreach (ITaskGroup sourceGroup in mDatabase.GetAll())
             {
-                foreach (ITask task in sourceGroup.GetAllTasks())
+                ITask task = sourceGroup.GetTask(taskId);
+                if (task != null)
                 {
-                    if (task.ID == taskId)
-                    {
-                        taskGroupDestination.AddTask(task);
-                        mDatabase.Update(taskGroupDestination);
+                    taskGroupDestination.AddTask(task);
+                    mDatabase.Update(taskGroupDestination);
 
-                        sourceGroup.RemoveTask(taskId);
-                        mDatabase.Update(sourceGroup);
-                        return;
-                    }
+                    sourceGroup.RemoveTask(taskId);
+                    mDatabase.Update(sourceGroup);
+                    return;
                 }
             }
 
@@ -231,51 +232,66 @@ namespace TaskManager
         {
             foreach (ITaskGroup taskGroup in mDatabase.GetAll())
             {
-                foreach (ITask task in taskGroup.GetAllTasks())
+                ITask task = taskGroup.GetTask(taskId);
+                if (task != null)
                 {
-                    if (task.ID == taskId)
-                    {
-                        task.CreateNote(mDatabase.NotesDirectoryPath, content);
-                        mDatabase.Update(taskGroup);
-                        return;
-                    }
+                    task.CreateNote(mDatabase.NotesDatabaseDirectoryPath, content);
+                    mDatabase.Update(taskGroup);
+                    return;
                 }
             }
 
             mLogger.LogError($"Task id {taskId} was not found");
         }
 
-        public void OpenNote(string taskId)
+        public void CreateGeneralNote(string taskSubject, string content)
         {
-            foreach (ITaskGroup taskGroup in mDatabase.GetAll())
-            {
-                foreach (ITask task in taskGroup.GetAllTasks())
-                {
-                    if (task.ID == taskId)
-                    {
-                        task.OpenNote();
-                        return;
-                    }
-                }
-            }
-
-            mLogger.LogError($"Task id {taskId} was not found");
+            mNoteBuilder.CreateNote(mDatabase.NotesDatabaseDirectoryPath, taskSubject, content);
+            mLogger.Log($"Note {taskSubject} created in {mDatabase.NotesDatabaseDirectoryPath}");
         }
 
-        public string GetNote(string taskId)
+        public void OpenNote(string noteName)
         {
+            // First searches on general notes.
+            INote note = mNotesDatabase.GetNote(noteName);
+            if(note != null)
+            {
+                note.Open();
+                return;
+            }
+
+            // Secondly searches on private notes (in tasks).
+            string taskId = noteName;
             foreach (ITaskGroup taskGroup in mDatabase.GetAll())
             {
-                foreach (ITask task in taskGroup.GetAllTasks())
+                ITask task = taskGroup.GetTask(taskId);
+                if (task != null)
                 {
-                    if (task.ID == taskId)
-                    {
-                        return task.GetNote();
-                    }
+                    task.OpenNote();
+                    return;
                 }
             }
 
-            mLogger.LogError($"Task id {taskId} was not found");
+            mLogger.LogError($"Note {noteName} was not found");
+        }
+
+        public string GetNote(string noteName)
+        {
+            // First searches on general notes.
+            INote note = mNotesDatabase.GetNote(noteName);
+            if (note != null)
+                return note.Text;
+
+            // Secondly searches on private notes (in tasks).
+            string taskId = noteName;
+            foreach (ITaskGroup taskGroup in mDatabase.GetAll())
+            {
+                ITask task = taskGroup.GetTask(taskId);
+                if (task != null)
+                    return task.GetNote();
+            }
+
+            mLogger.LogError($"Note {noteName} was not found");
             return string.Empty;
         }
 

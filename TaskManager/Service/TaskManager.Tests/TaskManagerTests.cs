@@ -17,14 +17,15 @@ namespace TaskManager.Integration.Tests
         private static readonly IConfiguration mConfiguration = A.Dummy<IConfiguration>();
         private static readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
         private static readonly ITaskGroupBuilder mTaskGroupBuilder = new TaskGroupBuilder();
+        private static readonly INoteBuilder mNoteBuilder = new NoteBuilder();
         private static IRepository<ITaskGroup> mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
-        private static TaskManager mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mLogger);
+        private static TaskManager mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mNoteBuilder, mLogger);
 
         [TestInitialize]
         public void Startup()
         {
             mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
-            mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mLogger);
+            mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mNoteBuilder, mLogger);
         }
 
         [TestMethod]

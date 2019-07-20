@@ -3,11 +3,11 @@ using TaskData.Contracts;
 
 namespace TaskData
 {
-     public class TaskGroupBuilder : ITaskGroupBuilder
-     {
-          public ITaskGroup Create(string groupName, ILogger logger)
-          {
-               return new TaskGroup(groupName, logger);
-          }
-     }
+    public class TaskGroupBuilder : ITaskGroupBuilder
+    {
+        public ITaskGroup Create(string groupName, ILogger logger)
+        {
+            return new TaskGroup(groupName, logger);
+        }
+    }
 }

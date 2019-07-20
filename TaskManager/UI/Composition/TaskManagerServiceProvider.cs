@@ -13,56 +13,57 @@ using Database.JsonService;
 
 namespace Composition
 {
-     public class TaskManagerServiceProvider
-     {
-          private readonly IServiceProvider mServiceProvider;
+    public class TaskManagerServiceProvider
+    {
+        private readonly IServiceProvider mServiceProvider;
 
-          public TaskManagerServiceProvider()
-          {
-               mServiceProvider = CreateServiceProvider();
-          }
+        public TaskManagerServiceProvider()
+        {
+            mServiceProvider = CreateServiceProvider();
+        }
 
-          private IServiceProvider CreateServiceProvider()
-          {
-               ServiceCollection serviceCollection = new ServiceCollection();
+        private IServiceProvider CreateServiceProvider()
+        {
+            ServiceCollection serviceCollection = new ServiceCollection();
 
-               // Register logger.
-               serviceCollection.AddSingleton<ILogger, ConsoleLogger>();
+            // Register logger.
+            serviceCollection.AddSingleton<ILogger, ConsoleLogger>();
 
-               // Register object serializer.
-               serviceCollection.AddSingleton<IObjectSerializer, JsonSerializerWrapper>();
+            // Register object serializer.
+            serviceCollection.AddSingleton<IObjectSerializer, JsonSerializerWrapper>();
 
-               RegisterTaskDataEntities(serviceCollection);
+            RegisterTaskDataEntities(serviceCollection);
 
-               RegisterDatabaseEntities(serviceCollection);
+            RegisterDatabaseEntities(serviceCollection);
 
-               // Register TaskManager service.
-               serviceCollection.AddSingleton<ITaskManager, TaskManager.TaskManager>();
+            // Register TaskManager service.
+            serviceCollection.AddSingleton<ITaskManager, TaskManager.TaskManager>();
 
-               return serviceCollection.BuildServiceProvider();
-          }
+            return serviceCollection.BuildServiceProvider();
+        }
 
-          private void RegisterTaskDataEntities(ServiceCollection serviceCollection)
-          {
-               serviceCollection.AddSingleton<ITask, Task>();
-               serviceCollection.AddSingleton<ITaskGroup, TaskGroup>();
-               serviceCollection.AddSingleton<ITaskGroupBuilder, TaskGroupBuilder>();
-          }
+        private void RegisterTaskDataEntities(ServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<INoteBuilder, NoteBuilder>();
+            serviceCollection.AddSingleton<ITask, Task>();
+            serviceCollection.AddSingleton<ITaskGroup, TaskGroup>();
+            serviceCollection.AddSingleton<ITaskGroupBuilder, TaskGroupBuilder>();
+        }
 
-          private void RegisterDatabaseEntities(ServiceCollection serviceCollection)
-          {
-               serviceCollection.AddSingleton<IRepository<ITaskGroup>, Database<ITaskGroup>>();
-               serviceCollection.AddSingleton<IConfiguration, Configuration>();
-          }
+        private void RegisterDatabaseEntities(ServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IRepository<ITaskGroup>, Database<ITaskGroup>>();
+            serviceCollection.AddSingleton<IConfiguration, Configuration>();
+        }
 
-          public ITaskManager GetTaskManagerService()
-          {
-               return mServiceProvider.GetService<ITaskManager>();
-          }
+        public ITaskManager GetTaskManagerService()
+        {
+            return mServiceProvider.GetService<ITaskManager>();
+        }
 
-          public ILogger GetLoggerService()
-          {
-               return mServiceProvider.GetService<ILogger>();
-          }
-     }
+        public ILogger GetLoggerService()
+        {
+            return mServiceProvider.GetService<ILogger>();
+        }
+    }
 }

@@ -24,6 +24,7 @@ namespace TaskManager.Contracts
 
         // Notes.
         void CreateNote(string taskId, string content);
+        void CreateGeneralNote(string taskSubject, string content);
         void OpenNote(string taskId);
         string GetNote(string taskId);
 
