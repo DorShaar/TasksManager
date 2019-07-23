@@ -160,12 +160,18 @@ namespace ConsoleUI
                 tasksToPrint = tasksToPrint.Where(task => task.IsFinished == false);
 
             if (options.Hours != 0)
-                tasksToPrint = tasksToPrint.Where(
-                     task => task.TimeCreated.AddHours(options.Hours) >= DateTime.Now);
+                tasksToPrint = tasksToPrint
+                    .Where(task => task.TimeCreated.AddHours(options.Hours) >= DateTime.Now    ||
+                                   task.TimeClosed.AddHours(options.Hours) >= DateTime.Now     ||
+                                   task.TimeLastOnWork.AddHours(options.Hours) >= DateTime.Now ||
+                                   task.TimeLastOpened.AddHours(options.Hours) >= DateTime.Now );
 
             if (options.Days != 0)
-                tasksToPrint = tasksToPrint.Where(
-                     task => task.TimeCreated.AddDays(options.Days) >= DateTime.Now);
+                tasksToPrint = tasksToPrint
+                    .Where(task => task.TimeCreated.AddDays(options.Days) >= DateTime.Now ||
+                                   task.TimeClosed.AddDays(options.Days) >= DateTime.Now ||
+                                   task.TimeLastOnWork.AddDays(options.Days) >= DateTime.Now ||
+                                   task.TimeLastOpened.AddDays(options.Days) >= DateTime.Now);
 
             mConsolePrinter.PrintTasks(tasksToPrint, options);
             return 0;
