@@ -102,6 +102,7 @@ namespace TaskData
             }
 
             mNote = new Note(noteDirectoryPath, ID, content);
+            OpenNote();
         }
 
         public void OpenNote()
