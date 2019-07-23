@@ -172,7 +172,7 @@ namespace TaskManager
                 ITask task = group.GetTask(taskId);
                 if (task != null)
                 {
-                    task.CloseTask();
+                    task.ReOpenTask();
                     mDatabase.Update(group);
                     return;
                 }
