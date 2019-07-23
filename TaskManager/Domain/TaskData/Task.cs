@@ -90,7 +90,7 @@ namespace TaskData
 
             Status = Status.OnWork;
             TimeLastOnWork = DateTime.Now;
-            mLogger?.Log($"Task {ID} marked on work at {TimeLastOpened}");
+            mLogger?.Log($"Task {ID} marked on work at {TimeLastOnWork}");
         }
 
         public void CreateNote(string noteDirectoryPath, string content)
