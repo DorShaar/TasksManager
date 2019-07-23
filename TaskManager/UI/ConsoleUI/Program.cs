@@ -135,6 +135,12 @@ namespace ConsoleUI
                 allTasks = taskManager.GetAllTasks((ITaskGroup task) => task.ID == options.TaskGroup);
                 if (allTasks == null)
                     allTasks = taskManager.GetAllTasks((ITaskGroup task) => task.GroupName == options.TaskGroup);
+
+                if(allTasks == null)
+                {
+                    mLogger.LogError($"No task group {options.TaskGroup} exist");
+                    return 1;
+                }
             }
             else
                 allTasks = taskManager.GetAllTasks();
