@@ -39,7 +39,7 @@ namespace ConsoleUI
             TaskOptions.RemoveTaskOptions,
             TaskOptions.MoveTaskOptions,
             TaskOptions.ReOpenTaskOptions,
-            //TaskOptions.OnWorkTaskOptions,
+            TaskOptions.OnWorkTaskOptions,
             TaskOptions.GetInformationTaskOptions,
 
             NotesOptions.CreateNoteOptions,
