@@ -48,12 +48,13 @@ namespace ConsoleUI
                               {
                                         task.ID,
                                         task.Description,
-                                        GetStringStatus(task.IsFinished),
+                                        GetStringStatus(task.Status),
                                         task.TimeCreated.ToString(),
                                         task.TimeLastOpened.ToString(),
+                                        task.TimeLastOnWork.ToString(),
                                         task.TimeClosed.ToString()
                               },
-                              new int[] { -5, -80, -10, -25, -25, -25 }));
+                              new int[] { -5, -80, -10, -25, -25, -25, -25 }));
                 else
                     stringBuilder.AppendLine(
                          StringFormatHelper(
@@ -61,7 +62,7 @@ namespace ConsoleUI
                               {
                                         task.ID,
                                         task.Description,
-                                        GetStringStatus(task.IsFinished),
+                                        GetStringStatus(task.Status),
                               },
                               new int[] { -5, -80, -10 }));
             }
@@ -72,8 +73,8 @@ namespace ConsoleUI
         private string GetTasksHeader(bool shouldPrintExtraDetails)
         {
             if (shouldPrintExtraDetails)
-                return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS", "TIME CREATED", "LAST OPENED TIME ", "CLOSED TIME" },
-                                          new int[] { -5, -80, -10, -25, -25, -25 });
+                return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS", "TIME CREATED", "LAST OPENED TIME", "LAST WORK START TIME", "CLOSED TIME" },
+                                          new int[] { -5, -80, -10, -25, -25, -25, -25 });
             else
                 return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS" }, new int[] { -5, -80, -10 });
         }
@@ -113,7 +114,7 @@ namespace ConsoleUI
 
             stringBuilder.AppendLine($"Task ID: {task.ID}");
             stringBuilder.AppendLine($"Description: {task.Description}");
-            stringBuilder.AppendLine($"Status: {GetStringStatus(task.IsFinished)}");
+            stringBuilder.AppendLine($"Status: { GetStringStatus(task.Status)}");
             stringBuilder.AppendLine($"Time created: {task.TimeCreated}");
             stringBuilder.AppendLine($"Last opened time: {task.TimeLastOpened}");
             stringBuilder.AppendLine($"Closed time: {task.TimeClosed}");
@@ -122,9 +123,15 @@ namespace ConsoleUI
             Console.WriteLine(stringBuilder.ToString());
         }
 
-        private static string GetStringStatus(bool isFinished)
+        private static string GetStringStatus(Status status)
         {
-            return isFinished ? "Done" : "Open";
+            string statusStr;
+            if (status == Status.OnWork)
+                statusStr = "On-Work";
+            else
+                statusStr = status.ToString();
+
+            return statusStr;
         }
 
         public void Print(string data, string header)

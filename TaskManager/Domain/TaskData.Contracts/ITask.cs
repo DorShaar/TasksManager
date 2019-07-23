@@ -11,6 +11,7 @@ namespace TaskData.Contracts
 
         DateTime TimeCreated { get; }
         DateTime TimeLastOpened { get; }
+        DateTime TimeLastOnWork { get; }
         DateTime TimeClosed { get; }
 
         void CloseTask();
