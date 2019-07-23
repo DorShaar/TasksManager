@@ -4,6 +4,7 @@ using ConsoleUI.Options;
 using Logger.Contracts;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using TaskData.Contracts;
 using TaskManager.Contracts;
@@ -44,9 +45,9 @@ namespace ConsoleUI
 
             NotesOptions.CreateNoteOptions,
             NotesOptions.CreateGeneralNoteOptions,
-            //NotesOptions.GetGeneralNotesOptions,
+            NotesOptions.GetNotesOptions,
             NotesOptions.OpenNoteOptions,
-            NotesOptions.GetNoteOptions,
+            //NotesOptions.GetNoteOptions,
 
             ConfigOptions.GetDatabasePathOptions
             /*ConfigOptions.SetDatabasePathOptions*/>(args).MapResult(
@@ -65,12 +66,12 @@ namespace ConsoleUI
 
                  (NotesOptions.CreateNoteOptions options) => CreateNote(taskManager, options),
                  (NotesOptions.CreateGeneralNoteOptions options) => CreateGeneralNote(taskManager, options),
-                 //(NotesOptions.GetGeneralNotesOptions options) => GetGeneralNotes(taskManager, options), 
+                 (NotesOptions.GetNotesOptions options) => GetNotes(taskManager, options),
                  (NotesOptions.OpenNoteOptions options) => OpenNote(taskManager, options),
-                 (NotesOptions.GetNoteOptions options) => GetNote(taskManager, options),
+                 //(NotesOptions.GetNoteOptions options) => GetNote(taskManager, options),
 
-                 (ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
-                 //(ConfigOptions.GetDatabasePathOptions options) => GetDatabasePath(taskManager, options),
+                 //(ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
+                 (ConfigOptions.GetDatabasePathOptions options) => GetDatabasePath(taskManager, options),
                  (parserErrors) => 1
             );
 
@@ -306,6 +307,24 @@ namespace ConsoleUI
                 textToWrite = string.Empty;
 
             taskManager.CreateGeneralNote(options.NoteSubject, textToWrite);
+            return 0;
+        }
+
+        private static int GetNotes(ITaskManager taskManager, NotesOptions.GetNotesOptions options)
+        {
+            IEnumerable<INote> allNotes = taskManager.GetNotes();
+            IEnumerable<string> notesToPrint = allNotes.Select(note => Path.GetFileNameWithoutExtension(note.NotePath));
+
+            // Print only general notes.
+            if (!options.ShouldPrintAllNotes)
+                notesToPrint = notesToPrint.Where(note => !int.TryParse(note, out int _));
+
+            mLogger.Log("NOTES");
+            foreach(string noteName in notesToPrint)
+            {
+                mLogger.Log(noteName);
+            }
+
             return 0;
         }
 

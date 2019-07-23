@@ -32,6 +32,17 @@ namespace TaskManager
             }
         }
 
+        public IEnumerable<INote> GetNotes()
+        {
+            if (!mIsInitialized)
+            {
+                InitializeNotes();
+                mIsInitialized = true;
+            }
+
+            return mGeneralNotes.Values;
+        }
+
         /// <summary>
         /// Get the note file name without extension and return <see cref="INote"/>.
         /// </summary>

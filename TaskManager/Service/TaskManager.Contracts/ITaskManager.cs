@@ -27,6 +27,7 @@ namespace TaskManager.Contracts
         void CreateNote(string taskId, string content);
         void CreateGeneralNote(string taskSubject, string content);
         void OpenNote(string taskId);
+        IEnumerable<INote> GetNotes();
         string GetNote(string taskId);
 
         // Database.

@@ -291,6 +291,11 @@ namespace TaskManager
             mLogger.LogError($"Note {noteName} was not found");
         }
 
+        public IEnumerable<INote> GetNotes()
+        {
+            return mNotesDatabase.GetNotes();
+        }
+
         public string GetNote(string noteName)
         {
             // First searches on general notes.
