@@ -4,7 +4,7 @@ namespace ConsoleUI.Options
 {
     internal class TaskOptions
     {       
-        [Verb("create-task", HelpText = "Create task")]
+        [Verb("create task", HelpText = "Create task")]
         public class CreateNewTaskOptions
         {
             [Value(0, HelpText = "Name of new task")]
@@ -14,7 +14,7 @@ namespace ConsoleUI.Options
             public string TaskGroup { get; set; }
         }
 
-        [Verb("get-tasks", HelpText = "Get all task")]
+        [Verb("get tasks", HelpText = "Get all task")]
         public class GetAllTasksOptions
         {
             [Value(0, HelpText = "Task group name or id")]
@@ -36,35 +36,35 @@ namespace ConsoleUI.Options
             public bool IsDetailed { get; set; }
         }
 
-        [Verb("close-task", HelpText = "Marks task status as closed")]
+        [Verb("close task", HelpText = "Marks task status as closed")]
         public class CloseTasksOptions
         {
             [Value(0, HelpText = "Id of task to close")]
             public string TaskId { get; set; }
         }
 
-        [Verb("remove-task", HelpText = "Removes task")]
+        [Verb("remove task", HelpText = "Removes task")]
         public class RemoveTaskOptions
         {
             [Value(0, HelpText = "Task id to remove")]
             public string TaskId { get; set; }
         }
 
-        [Verb("reopen-task", HelpText = "Reopen a closed task")]
+        [Verb("reopen task", HelpText = "Reopen a closed task")]
         public class ReOpenTaskOptions
         {
             [Value(0, HelpText = "Task id to open again")]
             public string TaskId { get; set; }
         }
 
-        [Verb("work-task", HelpText = "Mark task as on work")]
+        [Verb("work task", HelpText = "Mark task as on work")]
         public class OnWorkTaskOptions
         {
             [Value(0, HelpText = "Task id to mark as on work")]
             public string TaskId { get; set; }
         }
 
-        [Verb("move-task", HelpText = "Moves a task to a given group")]
+        [Verb("move task", HelpText = "Moves a task to a given group")]
         public class MoveTaskOptions
         {
             [Value(0, HelpText = "Task id to move")]
@@ -74,7 +74,7 @@ namespace ConsoleUI.Options
             public string TaskGroup { get; set; }
         }
 
-        [Verb("info-task", HelpText = "Get task information")]
+        [Verb("info task", HelpText = "Get task information")]
         public class GetInformationTaskOptions
         {
             [Value(0, HelpText = "Task id to get information")]
