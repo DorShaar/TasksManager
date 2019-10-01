@@ -46,7 +46,7 @@ namespace TaskData
 
         public ITask CreateTask(string description)
         {
-            Task createdTask = new Task(description, mLogger);
+            Task createdTask = new Task(GroupName, description, mLogger);
             AddTask(createdTask);
             return createdTask;
         }

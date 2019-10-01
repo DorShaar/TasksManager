@@ -47,6 +47,7 @@ namespace ConsoleUI
                               new string[]
                               {
                                         task.ID,
+                                        task.Group,
                                         task.Description,
                                         GetStringStatus(task.Status),
                                         task.TimeCreated.ToString(),
@@ -54,17 +55,18 @@ namespace ConsoleUI
                                         task.TimeLastOnWork.ToString(),
                                         task.TimeClosed.ToString()
                               },
-                              new int[] { -5, -80, -10, -25, -25, -25, -25 }));
+                              new int[] { -5, -20, -80, -10, -25, -25, -25, -25 }));
                 else
                     stringBuilder.AppendLine(
                          StringFormatHelper(
                               new string[]
                               {
                                         task.ID,
+                                        task.Group,
                                         task.Description,
                                         GetStringStatus(task.Status),
                               },
-                              new int[] { -5, -80, -10 }));
+                              new int[] { -5, -20, -80, -10 }));
             }
 
             Console.WriteLine(stringBuilder.ToString());
@@ -73,10 +75,10 @@ namespace ConsoleUI
         private string GetTasksHeader(bool shouldPrintExtraDetails)
         {
             if (shouldPrintExtraDetails)
-                return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS", "TIME CREATED", "LAST OPENED TIME", "LAST WORK START TIME", "CLOSED TIME" },
-                                          new int[] { -5, -80, -10, -25, -25, -25, -25 });
+                return StringFormatHelper(new string[] { "ID", "Parent", "DESCRIPTION", "STATUS", "TIME CREATED", "LAST OPENED TIME", "LAST WORK START TIME", "CLOSED TIME" },
+                                          new int[] { -5, -20, -80, -10, -25, -25, -25, -25 });
             else
-                return StringFormatHelper(new string[] { "ID", "DESCRIPTION", "STATUS" }, new int[] { -5, -80, -10 });
+                return StringFormatHelper(new string[] { "ID", "Parent", "DESCRIPTION", "STATUS" }, new int[] { -5, -20, -80, -10 });
         }
 
         private string StringFormatHelper(string[] args, int[] argsLength)

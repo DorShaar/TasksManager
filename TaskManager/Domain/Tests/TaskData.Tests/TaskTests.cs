@@ -11,6 +11,7 @@ namespace TaskData.Tests
      public class TaskTests
      {
           private readonly ILogger mLogger = A.Dummy<ILogger>();
+          private readonly string DummyGroupName = "dummy group";
           private readonly string DummyDescription = "dummy description";
           private readonly int SleepTimeInMs = 2000;
           private readonly string NotesDirectory = "TempNotesDirecory";
@@ -18,14 +19,14 @@ namespace TaskData.Tests
           [TestMethod]
           public void CreateNewTask_TimeCreatedIsNow()
           {
-               Task task = new Task(DummyDescription, mLogger);
+               Task task = new Task(DummyGroupName, DummyDescription, mLogger);
                Assert.IsTrue(IsTimesAlmostTheSame(task.TimeCreated, DateTime.Now));
           }
 
           [TestMethod]
           public void CloseTask_IsFinished_True()
           {
-               Task task = new Task(DummyDescription, mLogger);
+               Task task = new Task(DummyGroupName, DummyDescription, mLogger);
                Assert.IsFalse(task.IsFinished);
                task.CloseTask();
                Assert.IsTrue(task.IsFinished);
@@ -34,7 +35,7 @@ namespace TaskData.Tests
           [TestMethod]
           public void CloseTask_TimeCloseIsNow()
           {
-               Task task = new Task(DummyDescription, mLogger);
+               Task task = new Task(DummyGroupName, DummyDescription, mLogger);
                task.CloseTask();
                Assert.IsTrue(IsTimesAlmostTheSame(task.TimeClosed, DateTime.Now));
           }
@@ -42,7 +43,7 @@ namespace TaskData.Tests
           [TestMethod]
           public void CloseTask_ClosedTask_NoChange()
           {
-               Task task = new Task(DummyDescription, mLogger);
+               Task task = new Task(DummyGroupName, DummyDescription, mLogger);
                task.CloseTask();
                DateTime closeTime = task.TimeClosed;
                task.CloseTask();
@@ -52,7 +53,7 @@ namespace TaskData.Tests
           [TestMethod]
           public void ReOpenTask_TimeLastOpenIsNow()
           {
-               Task task = new Task(DummyDescription, mLogger);
+               Task task = new Task(DummyGroupName, DummyDescription, mLogger);
                task.CloseTask();
                Thread.Sleep(SleepTimeInMs);
                task.ReOpenTask();
@@ -62,7 +63,7 @@ namespace TaskData.Tests
           [TestMethod]
           public void ReOpenTask_TimCreated_NoChange()
           {
-               Task task = new Task(DummyDescription, mLogger);
+               Task task = new Task(DummyGroupName, DummyDescription, mLogger);
                DateTime createdTime = task.TimeCreated;
                task.CloseTask();
                task.ReOpenTask();
@@ -72,7 +73,7 @@ namespace TaskData.Tests
           [TestMethod]
           public void ReOpenTask_IsFinished_False()
           {
-               Task task = new Task(DummyDescription, mLogger);
+               Task task = new Task(DummyGroupName, DummyDescription, mLogger);
                task.CloseTask();
                task.ReOpenTask();
                Assert.IsFalse(task.IsFinished);
@@ -81,7 +82,7 @@ namespace TaskData.Tests
           [TestMethod]
           public void ReOpeneTask_OpenedTask_NoChange()
           {
-               Task task = new Task(DummyDescription, mLogger);
+               Task task = new Task(DummyGroupName, DummyDescription, mLogger);
                DateTime createdTime = task.TimeLastOpened;
                task.ReOpenTask();
                Assert.AreEqual(task.TimeLastOpened, createdTime);
@@ -94,7 +95,7 @@ namespace TaskData.Tests
                string notePath = null;
                try
                {
-                    Task task = new Task(DummyDescription, mLogger);
+                    Task task = new Task(DummyGroupName, DummyDescription, mLogger);
                     task.CreateNote(NotesDirectory, excpectedText);
                     notePath = Path.Combine(NotesDirectory, task.ID + ".txt");
 

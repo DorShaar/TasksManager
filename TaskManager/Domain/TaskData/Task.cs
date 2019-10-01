@@ -15,6 +15,8 @@ namespace TaskData
 
         public string ID { get; }
 
+        public string Group { get; }
+
         public string Description { get; set; } = string.Empty;
 
         [JsonIgnore]
@@ -27,22 +29,24 @@ namespace TaskData
         public DateTime TimeLastOnWork { get; private set; }
         public DateTime TimeClosed { get; private set; }
 
-        public Task(string description, ILogger logger)
+        public Task(string group, string description, ILogger logger)
         {
             mLogger = logger;
             ID = IDProducer.IDProducer.ProduceID();
+            Group = group;
             Description = description;
             mLogger?.Log($"New task id {ID} created with description: {Description}");
         }
 
         [JsonConstructor]
-        internal Task(ILogger logger, string id, string description, Status status, INote note,
+        internal Task(ILogger logger, string id, string group, string description, Status status, INote note,
                        DateTime timeCreated, DateTime timeLastOpened, DateTime timeLastOnWork, DateTime timeClosed)
         {
             mLogger = logger;
             mNote = note;
 
             ID = id;
+            Group = group;
             Description = description;
             Status = status;
 

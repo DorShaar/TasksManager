@@ -22,58 +22,61 @@ namespace ConsoleUI
             mLogger = serviceProvider.GetLoggerService();
             ITaskManager taskManager = serviceProvider.GetTaskManagerService();
 
-            var parser = new Parser(config => config.HelpWriter = Console.Out);
-            if (args.Length == 0)
+            int exitCode = 1;
+            using (Parser parser = new Parser(config => config.HelpWriter = Console.Out))
             {
-                parser.ParseArguments<TaskOptions>(new[] { "--help" });
-                return;
+                if (args.Length == 0)
+                {
+                    parser.ParseArguments<TaskOptions>(new[] { "--help" });
+                    return;
+                }
+
+                exitCode = parser.ParseArguments<
+                TaskGroupOptions.CreateNewTaskGroupOptions,
+                TaskGroupOptions.GatAllTaskGroupOptions,
+                TaskGroupOptions.RemoveTaskGroupOptions,
+
+                TaskOptions.CreateNewTaskOptions,
+                TaskOptions.GetAllTasksOptions,
+                TaskOptions.CloseTasksOptions,
+                TaskOptions.RemoveTaskOptions,
+                TaskOptions.MoveTaskOptions,
+                TaskOptions.ReOpenTaskOptions,
+                TaskOptions.OnWorkTaskOptions,
+                TaskOptions.GetInformationTaskOptions,
+
+                NotesOptions.CreateNoteOptions,
+                NotesOptions.CreateGeneralNoteOptions,
+                NotesOptions.GetNotesOptions,
+                NotesOptions.OpenNoteOptions,
+                //NotesOptions.GetNoteOptions,
+
+                ConfigOptions.GetDatabasePathOptions
+                /*ConfigOptions.SetDatabasePathOptions*/>(args).MapResult(
+                     (TaskGroupOptions.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
+                     (TaskGroupOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
+                     (TaskGroupOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
+
+                     (TaskOptions.CreateNewTaskOptions options) => CreateNewTask(taskManager, options),
+                     (TaskOptions.GetAllTasksOptions options) => GetAllTasks(taskManager, options),
+                     (TaskOptions.CloseTasksOptions options) => CloseTask(taskManager, options),
+                     (TaskOptions.RemoveTaskOptions options) => RemoveTaskOptions(taskManager, options),
+                     (TaskOptions.MoveTaskOptions options) => MoveTask(taskManager, options),
+                     (TaskOptions.ReOpenTaskOptions options) => ReOpenTask(taskManager, options),
+                     (TaskOptions.OnWorkTaskOptions options) => MarkTaskAsOnWork(taskManager, options),
+                     (TaskOptions.GetInformationTaskOptions options) => GetTaskInformation(taskManager, options),
+
+                     (NotesOptions.CreateNoteOptions options) => CreateNote(taskManager, options),
+                     (NotesOptions.CreateGeneralNoteOptions options) => CreateGeneralNote(taskManager, options),
+                     (NotesOptions.GetNotesOptions options) => GetNotes(taskManager, options),
+                     (NotesOptions.OpenNoteOptions options) => OpenNote(taskManager, options),
+                     //(NotesOptions.GetNoteOptions options) => GetNote(taskManager, options),
+
+                     //(ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
+                     (ConfigOptions.GetDatabasePathOptions options) => GetDatabasePath(taskManager, options),
+                     (parserErrors) => 1
+                );
             }
-
-            int exitCode = parser.ParseArguments<
-            TaskGroupOptions.CreateNewTaskGroupOptions,
-            TaskGroupOptions.GatAllTaskGroupOptions,
-            TaskGroupOptions.RemoveTaskGroupOptions,
-
-            TaskOptions.CreateNewTaskOptions,
-            TaskOptions.GetAllTasksOptions,
-            TaskOptions.CloseTasksOptions,
-            TaskOptions.RemoveTaskOptions,
-            TaskOptions.MoveTaskOptions,
-            TaskOptions.ReOpenTaskOptions,
-            TaskOptions.OnWorkTaskOptions,
-            TaskOptions.GetInformationTaskOptions,
-
-            NotesOptions.CreateNoteOptions,
-            NotesOptions.CreateGeneralNoteOptions,
-            NotesOptions.GetNotesOptions,
-            NotesOptions.OpenNoteOptions,
-            //NotesOptions.GetNoteOptions,
-
-            ConfigOptions.GetDatabasePathOptions
-            /*ConfigOptions.SetDatabasePathOptions*/>(args).MapResult(
-                 (TaskGroupOptions.CreateNewTaskGroupOptions options) => CreateNewTaskGroup(taskManager, options),
-                 (TaskGroupOptions.GatAllTaskGroupOptions options) => GatAllTaskGroup(taskManager, options),
-                 (TaskGroupOptions.RemoveTaskGroupOptions options) => RemoveTaskGroup(taskManager, options),
-
-                 (TaskOptions.CreateNewTaskOptions options) => CreateNewTask(taskManager, options),
-                 (TaskOptions.GetAllTasksOptions options) => GetAllTasks(taskManager, options),
-                 (TaskOptions.CloseTasksOptions options) => CloseTask(taskManager, options),
-                 (TaskOptions.RemoveTaskOptions options) => RemoveTaskOptions(taskManager, options),
-                 (TaskOptions.MoveTaskOptions options) => MoveTask(taskManager, options),
-                 (TaskOptions.ReOpenTaskOptions options) => ReOpenTask(taskManager, options),
-                 (TaskOptions.OnWorkTaskOptions options) => MarkTaskAsOnWork(taskManager, options),
-                 (TaskOptions.GetInformationTaskOptions options) => GetTaskInformation(taskManager, options),
-
-                 (NotesOptions.CreateNoteOptions options) => CreateNote(taskManager, options),
-                 (NotesOptions.CreateGeneralNoteOptions options) => CreateGeneralNote(taskManager, options),
-                 (NotesOptions.GetNotesOptions options) => GetNotes(taskManager, options),
-                 (NotesOptions.OpenNoteOptions options) => OpenNote(taskManager, options),
-                 //(NotesOptions.GetNoteOptions options) => GetNote(taskManager, options),
-
-                 //(ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
-                 (ConfigOptions.GetDatabasePathOptions options) => GetDatabasePath(taskManager, options),
-                 (parserErrors) => 1
-            );
 
             if (exitCode != 0)
                 Console.WriteLine($"Finished executing with exit code: {exitCode}");
@@ -129,24 +132,9 @@ namespace ConsoleUI
         /// </summary>
         private static int GetAllTasks(ITaskManager taskManager, TaskOptions.GetAllTasksOptions options)
         {
-            IEnumerable<ITask> allTasks;
-
-            if (!string.IsNullOrEmpty(options.TaskGroup))
-            {
-                allTasks = taskManager.GetAllTasks((ITaskGroup task) => task.ID == options.TaskGroup);
-                if (allTasks == null)
-                    allTasks = taskManager.GetAllTasks((ITaskGroup task) => task.GroupName == options.TaskGroup);
-
-                if(allTasks == null)
-                {
-                    mLogger.LogError($"No task group {options.TaskGroup} exist");
-                    return 1;
-                }
-            }
-            else
-                allTasks = taskManager.GetAllTasks();
-
-            IEnumerable<ITask> tasksToPrint = allTasks;
+            IEnumerable<ITask> tasksToPrint = GetTasksToPrintByOptions(taskManager, options);
+            if (tasksToPrint == null)
+                return 1;
 
             if (!string.IsNullOrEmpty(options.Status) && options.ShouldPrintAll)
             {
@@ -175,6 +163,25 @@ namespace ConsoleUI
 
             mConsolePrinter.PrintTasks(tasksToPrint, options);
             return 0;
+        }
+
+        private static IEnumerable<ITask> GetTasksToPrintByOptions(ITaskManager taskManager, TaskOptions.GetAllTasksOptions options)
+        {
+            IEnumerable<ITask> allTasks = null;
+
+            if (!string.IsNullOrEmpty(options.TaskGroup))
+            {
+                allTasks = taskManager.GetAllTasks((ITaskGroup task) => task.ID == options.TaskGroup);
+                if (allTasks == null)
+                    allTasks = taskManager.GetAllTasks((ITaskGroup task) => task.GroupName == options.TaskGroup);
+
+                if (allTasks == null)
+                    mLogger.LogError($"No task group {options.TaskGroup} exist");
+            }
+            else
+                allTasks = taskManager.GetAllTasks();
+
+            return allTasks;
         }
 
         private static int CloseTask(ITaskManager taskManager, TaskOptions.CloseTasksOptions options)

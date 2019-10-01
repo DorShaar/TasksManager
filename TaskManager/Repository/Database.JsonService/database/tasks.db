@@ -3,7 +3,98 @@
     "mLogger": {
       "ShouldLogInformation": false
     },
-    "mTasksChildren": {},
+    "mTasksChildren": {
+      "1022": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1022",
+        "Group": null,
+        "Description": "Buy Chilkat license",
+        "Status": 1,
+        "TimeCreated": "2019-07-18T16:33:26.4425395+03:00",
+        "TimeLastOpened": "2019-07-18T16:33:26.4425434+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-21T18:51:03.2943605+03:00"
+      },
+      "1036": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1036",
+        "Group": null,
+        "Description": "officeX fix srcFilePath == string.Empty is wrong, should replace with IsnullOrString",
+        "Status": 1,
+        "TimeCreated": "2019-07-22T16:59:37.0990851+03:00",
+        "TimeLastOpened": "2019-07-22T16:59:37.0990885+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-24T18:44:03.7548504+03:00"
+      },
+      "1030": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Users\\dor.shaar\\TaskManagerApp\\database\\notes",
+          "mNoteName": "1030"
+        },
+        "ID": "1030",
+        "Group": null,
+        "Description": "fuji electric email issue bug check",
+        "Status": 1,
+        "TimeCreated": "2019-07-21T10:45:55.4263936+03:00",
+        "TimeLastOpened": "2019-07-21T10:45:55.4263982+03:00",
+        "TimeLastOnWork": "2019-07-21T19:14:38.8452342+03:00",
+        "TimeClosed": "2019-07-21T20:15:45.6119958+03:00"
+      },
+      "1067": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1067",
+        "Group": null,
+        "Description": "split ExtractArchiveAction",
+        "Status": 1,
+        "TimeCreated": "2019-07-30T16:23:40.0437831+03:00",
+        "TimeLastOpened": "2019-07-30T16:23:40.0437876+03:00",
+        "TimeLastOnWork": "2019-07-30T16:23:46.5852227+03:00",
+        "TimeClosed": "2019-07-30T17:09:17.9744521+03:00"
+      },
+      "1077": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1077"
+        },
+        "ID": "1077",
+        "Group": null,
+        "Description": "update-reporter-roy-fast-task",
+        "Status": 1,
+        "TimeCreated": "2019-08-05T18:26:06.5061609+03:00",
+        "TimeLastOpened": "2019-08-05T18:26:06.5061642+03:00",
+        "TimeLastOnWork": "2019-08-05T18:26:13.4180247+03:00",
+        "TimeClosed": "2019-08-05T19:44:58.6817063+03:00"
+      },
+      "1166": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1166",
+        "Group": "Free",
+        "Description": "test",
+        "Status": 0,
+        "TimeCreated": "2019-10-01T13:45:50.1247118+03:00",
+        "TimeLastOpened": "2019-10-01T13:45:50.1247161+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      }
+    },
     "ID": "1000",
     "GroupName": "Free"
   },
@@ -18,62 +109,255 @@
         },
         "mNote": null,
         "ID": "1002",
-        "Description": "create console printer",
-        "IsFinished": true,
-        "TimeCreated": "2019-07-10T00:52:47.00586+03:00",
-        "TimeLastOpened": "2019-07-10T00:52:47.0058641+03:00",
-        "TimeClosed": "2019-07-12T14:32:16.861503+03:00"
+        "Group": null,
+        "Description": "Add more logging",
+        "Status": 1,
+        "TimeCreated": "2019-07-14T15:32:04.6064574+03:00",
+        "TimeLastOpened": "2019-07-14T15:32:04.6099011+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-18T10:52:16.9834834+03:00"
       },
-      "1001": {
+      "1003": {
         "mLogger": {
           "ShouldLogInformation": false
         },
         "mNote": null,
-        "ID": "1001",
-        "Description": "add move of task functionality",
-        "IsFinished": true,
-        "TimeCreated": "2019-07-10T00:46:18.7136704+03:00",
-        "TimeLastOpened": "2019-07-10T00:46:18.7151758+03:00",
-        "TimeClosed": "2019-07-12T14:32:51.3690055+03:00"
+        "ID": "1003",
+        "Group": null,
+        "Description": "use blocker client",
+        "Status": 1,
+        "TimeCreated": "2019-07-14T15:32:21.1408522+03:00",
+        "TimeLastOpened": "2019-07-14T15:32:21.140857+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-18T10:52:22.5928933+03:00"
       },
+      "1004": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1004",
+        "Group": null,
+        "Description": "use reporter client",
+        "Status": 1,
+        "TimeCreated": "2019-07-14T15:32:30.0196995+03:00",
+        "TimeLastOpened": "2019-07-14T15:32:30.0197044+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-18T10:52:27.5620878+03:00"
+      },
+      "1037": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1037",
+        "Group": null,
+        "Description": "fix bug with blocked.png",
+        "Status": 1,
+        "TimeCreated": "2019-07-22T19:03:54.8213308+03:00",
+        "TimeLastOpened": "2019-07-22T19:03:54.8213355+03:00",
+        "TimeLastOnWork": "2019-07-23T09:47:59.1979711+03:00",
+        "TimeClosed": "2019-07-23T10:19:12.7432245+03:00"
+      },
+      "1042": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1042",
+        "Group": null,
+        "Description": "ppt bug resources.png",
+        "Status": 1,
+        "TimeCreated": "2019-07-23T09:47:20.113888+03:00",
+        "TimeLastOpened": "2019-07-23T09:47:20.1138919+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-23T09:47:43.0348797+03:00"
+      },
+      "1053": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1053",
+        "Group": null,
+        "Description": "Check dll upgrade (for flatten fix)",
+        "Status": 1,
+        "TimeCreated": "2019-07-28T15:35:48.1935793+03:00",
+        "TimeLastOpened": "2019-07-28T15:35:48.1935891+03:00",
+        "TimeLastOnWork": "2019-07-28T15:35:55.8020504+03:00",
+        "TimeClosed": "2019-07-28T17:07:19.2452315+03:00"
+      }
+    },
+    "ID": "1001",
+    "GroupName": "ppt-component"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
       "1006": {
         "mLogger": {
           "ShouldLogInformation": false
         },
         "mNote": null,
         "ID": "1006",
-        "Description": "use dictionary to find tasks and groups in database",
-        "IsFinished": false,
-        "TimeCreated": "2019-07-12T14:37:35.7467326+03:00",
-        "TimeLastOpened": "2019-07-12T14:37:35.7467356+03:00",
-        "TimeClosed": "0001-01-01T00:00:00"
+        "Group": null,
+        "Description": "fix null exception when giving wrong group name on create-task",
+        "Status": 1,
+        "TimeCreated": "2019-07-14T15:34:26.7174136+03:00",
+        "TimeLastOpened": "2019-07-14T15:34:26.7174177+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-20T01:14:09.9452873+03:00"
       },
-      "1007": {
+      "1014": {
         "mLogger": {
           "ShouldLogInformation": false
         },
-        "mNote": {
-          "mNoteDirecoryPath": "C:\\Users\\Public\\DorShaar\\C#Work\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
-          "mNoteName": "1007"
-        },
-        "ID": "1007",
-        "Description": "add notes to task (with default task name)",
-        "IsFinished": true,
-        "TimeCreated": "2019-07-12T14:37:47.1563635+03:00",
-        "TimeLastOpened": "2019-07-12T14:37:47.1563665+03:00",
-        "TimeClosed": "2019-07-13T18:07:20.9871463+03:00"
+        "mNote": null,
+        "ID": "1014",
+        "Group": null,
+        "Description": "add status on",
+        "Status": 1,
+        "TimeCreated": "2019-07-17T13:59:45.0468916+03:00",
+        "TimeLastOpened": "2019-07-17T13:59:45.0468955+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-20T06:31:49.2076623+03:00"
       },
+      "1013": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1013",
+        "Group": null,
+        "Description": "fix confusion when writing get-tasks <number> instead of -i <number>",
+        "Status": 1,
+        "TimeCreated": "2019-07-17T13:58:55.7832516+03:00",
+        "TimeLastOpened": "2019-07-17T13:58:55.7832555+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-20T01:12:16.5012617+03:00"
+      },
+      "1015": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1015",
+        "Group": null,
+        "Description": "add general notes",
+        "Status": 1,
+        "TimeCreated": "2019-07-17T14:09:11.9798726+03:00",
+        "TimeLastOpened": "2019-07-17T14:09:11.9798766+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-20T06:31:53.1757483+03:00"
+      },
+      "1016": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1016",
+        "Group": null,
+        "Description": "do now show groups which their tasks are closed",
+        "Status": 1,
+        "TimeCreated": "2019-07-18T10:53:18.6737586+03:00",
+        "TimeLastOpened": "2019-07-18T10:53:18.6737628+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-20T01:57:37.8288322+03:00"
+      },
+      "1027": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1027",
+        "Group": null,
+        "Description": "implement get database path",
+        "Status": 1,
+        "TimeCreated": "2019-07-19T21:07:33.6037102+03:00",
+        "TimeLastOpened": "2019-07-19T21:07:33.6037143+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-20T01:24:30.3118367+03:00"
+      },
+      "1039": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1039",
+        "Group": null,
+        "Description": "re-open task",
+        "Status": 1,
+        "TimeCreated": "2019-07-23T09:45:21.1376209+03:00",
+        "TimeLastOpened": "2019-07-23T09:45:21.1376252+03:00",
+        "TimeLastOnWork": "2019-07-23T20:48:48.2996533+03:00",
+        "TimeClosed": "2019-07-23T20:55:18.0096904+03:00"
+      },
+      "1040": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1040",
+        "Group": null,
+        "Description": "time printing wrong when on work or opening task",
+        "Status": 1,
+        "TimeCreated": "2019-07-23T09:45:46.0186837+03:00",
+        "TimeLastOpened": "2019-07-23T09:45:46.0186875+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-23T20:55:25.7021869+03:00"
+      },
+      "1041": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1041",
+        "Group": null,
+        "Description": "Status will show also on worn",
+        "Status": 1,
+        "TimeCreated": "2019-07-23T09:46:02.5631882+03:00",
+        "TimeLastOpened": "2019-07-23T09:46:02.5631925+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-23T21:05:17.5219676+03:00"
+      }
+    },
+    "ID": "1005",
+    "GroupName": "task-manager-app"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
       "1008": {
         "mLogger": {
           "ShouldLogInformation": false
         },
         "mNote": null,
         "ID": "1008",
-        "Description": "print only open task configurable",
-        "IsFinished": true,
-        "TimeCreated": "2019-07-12T14:41:24.934094+03:00",
-        "TimeLastOpened": "2019-07-12T14:41:24.934097+03:00",
-        "TimeClosed": "2019-07-13T01:40:38.5027774+03:00"
+        "Group": null,
+        "Description": "test pdf on container",
+        "Status": 1,
+        "TimeCreated": "2019-07-17T13:01:53.5987063+03:00",
+        "TimeLastOpened": "2019-07-17T13:01:53.5987104+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-18T10:48:01.0322591+03:00"
+      },
+      "1009": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1009",
+        "Group": null,
+        "Description": "use reporter client",
+        "Status": 1,
+        "TimeCreated": "2019-07-17T13:02:38.5110791+03:00",
+        "TimeLastOpened": "2019-07-17T13:02:38.511084+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-17T16:16:01.5789061+03:00"
       },
       "1010": {
         "mLogger": {
@@ -81,14 +365,1782 @@
         },
         "mNote": null,
         "ID": "1010",
-        "Description": "print all tasks from the last X hours/days",
-        "IsFinished": true,
-        "TimeCreated": "2019-07-13T18:14:17.3536517+03:00",
-        "TimeLastOpened": "2019-07-13T18:14:17.3536551+03:00",
-        "TimeClosed": "2019-07-14T01:56:24.2222717+03:00"
+        "Group": null,
+        "Description": "use blocker client",
+        "Status": 1,
+        "TimeCreated": "2019-07-17T13:03:17.9833477+03:00",
+        "TimeLastOpened": "2019-07-17T13:03:17.9833529+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-17T14:06:19.1382538+03:00"
+      },
+      "1011": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1011",
+        "Group": null,
+        "Description": "password protected implementation",
+        "Status": 1,
+        "TimeCreated": "2019-07-17T13:03:52.6058992+03:00",
+        "TimeLastOpened": "2019-07-17T13:03:52.6059045+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-06T15:57:45.5830349+03:00"
+      },
+      "1023": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1023",
+        "Group": null,
+        "Description": "Update Nugets",
+        "Status": 1,
+        "TimeCreated": "2019-07-18T16:37:35.1732616+03:00",
+        "TimeLastOpened": "2019-07-18T16:37:35.1732664+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-18T17:17:47.4432222+03:00"
+      },
+      "1029": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1029",
+        "Group": null,
+        "Description": "validate url handler uses safe browsing and not dummy",
+        "Status": 1,
+        "TimeCreated": "2019-07-21T10:43:37.6158082+03:00",
+        "TimeLastOpened": "2019-07-21T10:43:37.6158115+03:00",
+        "TimeLastOnWork": "2019-07-21T20:19:35.6016356+03:00",
+        "TimeClosed": "2019-07-21T20:27:00.7839542+03:00"
+      },
+      "1035": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1035",
+        "Group": null,
+        "Description": "look on pdf flatten",
+        "Status": 1,
+        "TimeCreated": "2019-07-22T10:26:31.7651916+03:00",
+        "TimeLastOpened": "2019-07-22T10:26:31.7651953+03:00",
+        "TimeLastOnWork": "2019-07-22T19:04:10.220662+03:00",
+        "TimeClosed": "2019-07-23T09:43:10.5099554+03:00"
+      },
+      "1038": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1038",
+        "Group": null,
+        "Description": "Linux PDF component: When trying to remove multimedia, and error is thrown, and the file is stuck.",
+        "Status": 1,
+        "TimeCreated": "2019-07-22T19:09:44.800454+03:00",
+        "TimeLastOpened": "2019-07-22T19:09:44.8004583+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-23T17:52:20.5016554+03:00"
+      },
+      "1045": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Users\\dor.shaar\\TaskManagerApp\\database\\notes",
+          "mNoteName": "1045"
+        },
+        "ID": "1045",
+        "Group": null,
+        "Description": "inline images are stuck in correlator bug",
+        "Status": 1,
+        "TimeCreated": "2019-07-23T17:53:12.151885+03:00",
+        "TimeLastOpened": "2019-07-23T17:53:12.1518885+03:00",
+        "TimeLastOnWork": "2019-07-23T22:28:06.2447456+03:00",
+        "TimeClosed": "2019-07-24T18:49:10.2873971+03:00"
+      },
+      "1052": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1052",
+        "Group": null,
+        "Description": "Remove images files after sanitization end",
+        "Status": 1,
+        "TimeCreated": "2019-07-28T15:35:25.7019666+03:00",
+        "TimeLastOpened": "2019-07-28T15:35:25.7019701+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-27T09:11:17.3522337+03:00"
+      },
+      "1072": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1072",
+        "Group": null,
+        "Description": "validate signature for pdf",
+        "Status": 1,
+        "TimeCreated": "2019-08-04T13:59:23.7787366+03:00",
+        "TimeLastOpened": "2019-08-04T13:59:23.7787409+03:00",
+        "TimeLastOnWork": "2019-08-04T13:59:38.1110826+03:00",
+        "TimeClosed": "2019-08-08T10:19:09.4632565+03:00"
+      },
+      "1073": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1073",
+        "Group": null,
+        "Description": "merge null-exception-remove-multimedia",
+        "Status": 1,
+        "TimeCreated": "2019-08-05T14:33:30.6505848+03:00",
+        "TimeLastOpened": "2019-08-05T14:33:30.6505883+03:00",
+        "TimeLastOnWork": "2019-08-14T09:54:09.5704044+03:00",
+        "TimeClosed": "2019-08-14T14:43:07.4039052+03:00"
+      },
+      "1081": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1081",
+        "Group": null,
+        "Description": "Add sanitization UTs (Disinfection.PDF.Tests.Unit)",
+        "Status": 1,
+        "TimeCreated": "2019-08-07T14:53:53.1440148+03:00",
+        "TimeLastOpened": "2019-08-07T14:53:53.1440188+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-27T08:48:16.6868126+03:00"
+      },
+      "1089": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1089",
+        "Group": null,
+        "Description": "check signature validation in pdf",
+        "Status": 1,
+        "TimeCreated": "2019-08-08T10:19:03.3071246+03:00",
+        "TimeLastOpened": "2019-08-08T10:19:03.3071286+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-20T10:46:44.720485+03:00"
+      },
+      "1116": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1116",
+        "Group": null,
+        "Description": "No security handler available Exception in signature validate",
+        "Status": 1,
+        "TimeCreated": "2019-08-20T19:28:40.3182561+03:00",
+        "TimeLastOpened": "2019-08-20T19:28:40.3182645+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-20T19:28:55.5839188+03:00"
+      },
+      "1117": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1117",
+        "Group": null,
+        "Description": "Add UT to signature validate with advanced security handler",
+        "Status": 0,
+        "TimeCreated": "2019-08-21T17:09:41.1424312+03:00",
+        "TimeLastOpened": "2019-08-21T17:09:41.1424359+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1162": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1162",
+        "Group": null,
+        "Description": "Test new pdf .so - fix rewriting elements",
+        "Status": 0,
+        "TimeCreated": "2019-09-24T10:39:26.3503894+03:00",
+        "TimeLastOpened": "2019-09-24T10:39:26.3503929+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "0001-01-01T00:00:00"
       }
     },
-    "ID": "1003",
-    "GroupName": "Task-Manager-Work"
+    "ID": "1007",
+    "GroupName": "pdf-component"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1018": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1018",
+        "Group": null,
+        "Description": "IsPasswordProtected implement",
+        "Status": 1,
+        "TimeCreated": "2019-07-18T10:56:40.22955+03:00",
+        "TimeLastOpened": "2019-07-18T10:56:40.2295602+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-18T13:17:42.0002198+03:00"
+      },
+      "1019": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1019",
+        "Group": null,
+        "Description": "write composition",
+        "Status": 1,
+        "TimeCreated": "2019-07-18T12:19:46.3031011+03:00",
+        "TimeLastOpened": "2019-07-18T12:19:46.3031059+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-18T12:19:51.8512523+03:00"
+      },
+      "1020": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1020",
+        "Group": null,
+        "Description": "write ConsoleApp + QueueWorker",
+        "Status": 1,
+        "TimeCreated": "2019-07-18T12:20:33.1064317+03:00",
+        "TimeLastOpened": "2019-07-18T12:20:33.1064358+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-18T14:40:09.297932+03:00"
+      },
+      "1021": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1021",
+        "Group": null,
+        "Description": "support password protected",
+        "Status": 1,
+        "TimeCreated": "2019-07-18T14:41:25.4125522+03:00",
+        "TimeLastOpened": "2019-07-18T14:41:25.4125561+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-06T16:01:34.9332687+03:00"
+      },
+      "1024": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1024",
+        "Group": null,
+        "Description": "Create UT",
+        "Status": 1,
+        "TimeCreated": "2019-07-18T17:36:24.4712589+03:00",
+        "TimeLastOpened": "2019-07-18T17:36:24.4712651+03:00",
+        "TimeLastOnWork": "2019-07-21T09:53:54.883939+03:00",
+        "TimeClosed": "2019-07-21T16:59:27.2193567+03:00"
+      },
+      "1025": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1025",
+        "Group": null,
+        "Description": "update dockerfile with UT also",
+        "Status": 1,
+        "TimeCreated": "2019-07-18T17:36:44.2198597+03:00",
+        "TimeLastOpened": "2019-07-18T17:36:44.2198641+03:00",
+        "TimeLastOnWork": "2019-07-21T17:01:09.9567688+03:00",
+        "TimeClosed": "2019-07-21T17:32:45.8541103+03:00"
+      },
+      "1028": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Users\\dor.shaar\\TaskManagerApp\\database\\notes",
+          "mNoteName": "1028"
+        },
+        "ID": "1028",
+        "Group": null,
+        "Description": "copy from word x",
+        "Status": 1,
+        "TimeCreated": "2019-07-21T10:22:04.0454598+03:00",
+        "TimeLastOpened": "2019-07-21T10:22:04.0454633+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-21T16:20:25.8756872+03:00"
+      },
+      "1031": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1031",
+        "Group": null,
+        "Description": "replace dummy Votiro reporter and dummy reporter with reporter client",
+        "Status": 1,
+        "TimeCreated": "2019-07-21T11:10:31.5140467+03:00",
+        "TimeLastOpened": "2019-07-21T11:10:31.5140502+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-06T16:01:25.7357453+03:00"
+      },
+      "1032": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Users\\dor.shaar\\TaskManagerApp\\database\\notes",
+          "mNoteName": "1032"
+        },
+        "ID": "1032",
+        "Group": null,
+        "Description": "self test E2E",
+        "Status": 1,
+        "TimeCreated": "2019-07-21T16:20:50.3457215+03:00",
+        "TimeLastOpened": "2019-07-21T16:20:50.3457261+03:00",
+        "TimeLastOnWork": "2019-07-21T17:32:51.6611435+03:00",
+        "TimeClosed": "2019-07-22T19:02:12.9380603+03:00"
+      },
+      "1043": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1043",
+        "Group": null,
+        "Description": "copy VBA UT",
+        "Status": 1,
+        "TimeCreated": "2019-07-23T13:39:59.5866269+03:00",
+        "TimeLastOpened": "2019-07-23T13:39:59.5866312+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-24T18:49:27.9249376+03:00"
+      },
+      "1044": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1044",
+        "Group": null,
+        "Description": "Copy Xceed replacment from WordX",
+        "Status": 1,
+        "TimeCreated": "2019-07-23T13:40:24.6308298+03:00",
+        "TimeLastOpened": "2019-07-23T13:40:24.6308339+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-24T18:49:30.7328633+03:00"
+      }
+    },
+    "ID": "1017",
+    "GroupName": "pptx-component"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1034": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1034",
+        "Group": null,
+        "Description": "Jww bug 45878",
+        "Status": 0,
+        "TimeCreated": "2019-07-21T19:14:10.5398832+03:00",
+        "TimeLastOpened": "2019-07-21T19:14:10.5398878+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1047": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1047",
+        "Group": null,
+        "Description": "ppt with active X after remove macro corrupted - bug 46822",
+        "Status": 1,
+        "TimeCreated": "2019-07-24T18:46:40.4965278+03:00",
+        "TimeLastOpened": "2019-07-24T18:46:40.4965409+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-25T10:04:46.7456376+03:00"
+      },
+      "1057": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1057"
+        },
+        "ID": "1057",
+        "Group": null,
+        "Description": "HtmlToPlainText displays hidden links - bug 46852",
+        "Status": 1,
+        "TimeCreated": "2019-07-29T10:38:00.621955+03:00",
+        "TimeLastOpened": "2019-07-30T12:18:51.4828672+03:00",
+        "TimeLastOnWork": "2019-07-30T18:55:38.0296348+03:00",
+        "TimeClosed": "2019-07-30T19:12:44.3660849+03:00"
+      },
+      "1058": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1058",
+        "Group": null,
+        "Description": "HtmlToPlainText clickable links are broken - bug 46855",
+        "Status": 1,
+        "TimeCreated": "2019-07-29T10:38:42.0086034+03:00",
+        "TimeLastOpened": "2019-07-29T10:38:42.0086111+03:00",
+        "TimeLastOnWork": "2019-09-05T17:52:11.3746482+03:00",
+        "TimeClosed": "2019-09-05T17:52:15.0938405+03:00"
+      },
+      "1080": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1080",
+        "Group": null,
+        "Description": "bug 40791 korean eml to becomes ??? ",
+        "Status": 0,
+        "TimeCreated": "2019-08-06T16:06:48.6364152+03:00",
+        "TimeLastOpened": "2019-08-06T16:06:48.6364186+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1082": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1082",
+        "Group": null,
+        "Description": "bug 47190 PPF->no PPF->PPF damaged output",
+        "Status": 1,
+        "TimeCreated": "2019-08-07T20:56:15.9116337+03:00",
+        "TimeLastOpened": "2019-08-07T20:56:15.9116373+03:00",
+        "TimeLastOnWork": "2019-08-15T12:31:39.1851178+03:00",
+        "TimeClosed": "2019-08-15T14:00:06.6697331+03:00"
+      },
+      "1101": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1101",
+        "Group": null,
+        "Description": "excelXml cannot be loaded with Gdip exception dll not found",
+        "Status": 1,
+        "TimeCreated": "2019-08-12T11:37:34.500062+03:00",
+        "TimeLastOpened": "2019-08-15T11:18:25.2112734+03:00",
+        "TimeLastOnWork": "2019-08-15T11:18:41.622504+03:00",
+        "TimeClosed": "2019-08-15T12:31:28.4678685+03:00"
+      },
+      "1108": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1108",
+        "Group": null,
+        "Description": "wdp leadtools support question",
+        "Status": 1,
+        "TimeCreated": "2019-08-15T10:20:34.8717765+03:00",
+        "TimeLastOpened": "2019-08-15T10:20:34.8717812+03:00",
+        "TimeLastOnWork": "2019-08-15T10:23:03.3535707+03:00",
+        "TimeClosed": "2019-08-15T11:07:12.3161188+03:00"
+      },
+      "1109": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1109",
+        "Group": null,
+        "Description": "Report ppf->not ppf->ppf damaged",
+        "Status": 1,
+        "TimeCreated": "2019-08-15T10:32:49.8589164+03:00",
+        "TimeLastOpened": "2019-08-15T10:32:49.8589202+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-15T10:33:15.8560986+03:00"
+      },
+      "1110": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1110"
+        },
+        "ID": "1110",
+        "Group": null,
+        "Description": "not enough memory available in worksheet",
+        "Status": 1,
+        "TimeCreated": "2019-08-19T13:25:01.6068278+03:00",
+        "TimeLastOpened": "2019-08-19T13:25:01.6068309+03:00",
+        "TimeLastOnWork": "2019-09-23T10:58:15.3795323+03:00",
+        "TimeClosed": "2019-09-23T11:48:43.598082+03:00"
+      },
+      "1119": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1119",
+        "Group": null,
+        "Description": "Images in pptx turns to the right",
+        "Status": 1,
+        "TimeCreated": "2019-08-25T09:52:27.7605524+03:00",
+        "TimeLastOpened": "2019-08-25T10:13:10.9299284+03:00",
+        "TimeLastOnWork": "2019-09-12T14:50:29.8634716+03:00",
+        "TimeClosed": "2019-09-12T16:57:54.9383083+03:00"
+      },
+      "1165": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1165"
+        },
+        "ID": "1165",
+        "Group": null,
+        "Description": "aspose unsupported file format on password protected",
+        "Status": 2,
+        "TimeCreated": "2019-09-25T16:54:51.4970744+03:00",
+        "TimeLastOpened": "2019-09-25T16:54:51.4970791+03:00",
+        "TimeLastOnWork": "2019-09-25T16:54:59.9530284+03:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      }
+    },
+    "ID": "1046",
+    "GroupName": "Report to 3rd party"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1049": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1049",
+        "Group": null,
+        "Description": "implement for 7z",
+        "Status": 1,
+        "TimeCreated": "2019-07-24T18:48:40.2373374+03:00",
+        "TimeLastOpened": "2019-07-24T18:48:40.2373419+03:00",
+        "TimeLastOnWork": "2019-07-24T18:48:52.996272+03:00",
+        "TimeClosed": "2019-07-28T08:53:31.3025663+03:00"
+      },
+      "1050": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1050",
+        "Group": null,
+        "Description": "implement for Rar",
+        "Status": 1,
+        "TimeCreated": "2019-07-24T18:48:45.9282739+03:00",
+        "TimeLastOpened": "2019-07-24T18:48:45.9282786+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-28T08:53:51.8045578+03:00"
+      },
+      "1051": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1051"
+        },
+        "ID": "1051",
+        "Group": null,
+        "Description": "Make it work e2e",
+        "Status": 1,
+        "TimeCreated": "2019-07-28T08:54:27.9909614+03:00",
+        "TimeLastOpened": "2019-07-28T08:54:27.9909653+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-29T19:22:44.8704586+03:00"
+      },
+      "1066": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1066",
+        "Group": null,
+        "Description": "Add Action for Zip and test",
+        "Status": 1,
+        "TimeCreated": "2019-07-30T13:19:59.5393331+03:00",
+        "TimeLastOpened": "2019-07-30T13:19:59.5393366+03:00",
+        "TimeLastOnWork": "2019-08-14T17:42:32.8900232+03:00",
+        "TimeClosed": "2019-08-23T17:08:17.5106128+03:00"
+      }
+    },
+    "ID": "1048",
+    "GroupName": "Bomb attack for archives"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1056": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1056",
+        "Group": null,
+        "Description": "License for Leadtools",
+        "Status": 1,
+        "TimeCreated": "2019-07-29T10:36:07.6283439+03:00",
+        "TimeLastOpened": "2019-07-29T10:36:07.6283479+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-11T13:59:18.3139035+03:00"
+      },
+      "1012": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1012",
+        "Group": null,
+        "Description": "apply secure black box license",
+        "Status": 1,
+        "TimeCreated": "2019-07-17T13:35:34.1299113+03:00",
+        "TimeLastOpened": "2019-07-17T13:35:34.1299155+03:00",
+        "TimeLastOnWork": "2019-08-15T14:01:34.564587+03:00",
+        "TimeClosed": "2019-08-20T18:39:57.5808884+03:00"
+      },
+      "1115": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1115",
+        "Group": null,
+        "Description": "few excel files have red warning line after load and save",
+        "Status": 1,
+        "TimeCreated": "2019-08-20T17:50:10.0550784+03:00",
+        "TimeLastOpened": "2019-08-20T17:50:10.055082+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-20T17:50:16.0504943+03:00"
+      }
+    },
+    "ID": "1055",
+    "GroupName": "ThirdParty-Updates"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1060": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1060",
+        "Group": null,
+        "Description": "test cab on linux",
+        "Status": 1,
+        "TimeCreated": "2019-07-29T12:40:44.4892192+03:00",
+        "TimeLastOpened": "2019-07-29T12:40:44.4892231+03:00",
+        "TimeLastOnWork": "2019-07-29T12:41:45.8017195+03:00",
+        "TimeClosed": "2019-07-29T19:21:09.6302869+03:00"
+      },
+      "1061": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1061",
+        "Group": null,
+        "Description": "implement cab",
+        "Status": 1,
+        "TimeCreated": "2019-07-29T12:41:03.8963365+03:00",
+        "TimeLastOpened": "2019-07-29T12:41:03.89634+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-29T19:21:32.0166435+03:00"
+      },
+      "1062": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1062",
+        "Group": null,
+        "Description": "test cab service",
+        "Status": 1,
+        "TimeCreated": "2019-07-29T12:41:21.4106134+03:00",
+        "TimeLastOpened": "2019-07-29T12:41:21.4106207+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-29T19:21:51.2321529+03:00"
+      },
+      "1063": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1063",
+        "Group": null,
+        "Description": "UT for cab",
+        "Status": 1,
+        "TimeCreated": "2019-07-29T12:41:37.8802535+03:00",
+        "TimeLastOpened": "2019-07-29T12:41:37.8802573+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-07-29T19:21:53.5111319+03:00"
+      }
+    },
+    "ID": "1059",
+    "GroupName": "cab-component"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1065": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1065"
+        },
+        "ID": "1065",
+        "Group": null,
+        "Description": "add configuration and updated yamks to all components",
+        "Status": 1,
+        "TimeCreated": "2019-07-29T19:23:59.5797176+03:00",
+        "TimeLastOpened": "2019-07-29T19:23:59.5797216+03:00",
+        "TimeLastOnWork": "2019-07-29T19:25:07.3683142+03:00",
+        "TimeClosed": "2019-08-01T00:42:25.4251639+03:00"
+      }
+    },
+    "ID": "1064",
+    "GroupName": "configuration-and-yaml-update"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1069": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1069",
+        "Group": null,
+        "Description": "Test HtmlToPlainText with Aspose.Email 19.7",
+        "Status": 1,
+        "TimeCreated": "2019-08-01T11:38:53.5841405+03:00",
+        "TimeLastOpened": "2019-08-01T11:38:53.5841459+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-01T12:31:03.1023958+03:00"
+      }
+    },
+    "ID": "1068",
+    "GroupName": "ThirdParty-Checks"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1071": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1071"
+        },
+        "ID": "1071",
+        "Group": null,
+        "Description": "children is published instead of parent",
+        "Status": 1,
+        "TimeCreated": "2019-08-01T13:17:30.4430741+03:00",
+        "TimeLastOpened": "2019-08-01T13:17:30.4430781+03:00",
+        "TimeLastOnWork": "2019-08-04T12:08:05.1954455+03:00",
+        "TimeClosed": "2019-08-06T15:55:18.0012611+03:00"
+      }
+    },
+    "ID": "1070",
+    "GroupName": "bugs-88"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1026": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1026",
+        "Group": null,
+        "Description": "Add password protected support",
+        "Status": 1,
+        "TimeCreated": "2019-07-18T17:37:25.7297469+03:00",
+        "TimeLastOpened": "2019-07-18T17:37:25.7297514+03:00",
+        "TimeLastOnWork": "2019-08-06T13:29:15.089119+03:00",
+        "TimeClosed": "2019-08-06T16:07:44.2473948+03:00"
+      },
+      "1078": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1078",
+        "Group": null,
+        "Description": "pdf ppf",
+        "Status": 1,
+        "TimeCreated": "2019-08-06T15:58:12.3858539+03:00",
+        "TimeLastOpened": "2019-08-06T15:58:12.3858583+03:00",
+        "TimeLastOnWork": "2019-08-06T16:07:51.4832546+03:00",
+        "TimeClosed": "2019-08-08T10:17:01.2965477+03:00"
+      },
+      "1083": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1083",
+        "Group": null,
+        "Description": "ppf-zip",
+        "Status": 1,
+        "TimeCreated": "2019-08-07T20:57:11.3951057+03:00",
+        "TimeLastOpened": "2019-08-07T20:57:11.3951105+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-11T20:01:57.6954303+03:00"
+      },
+      "1084": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1084",
+        "Group": null,
+        "Description": "ppf-rar",
+        "Status": 1,
+        "TimeCreated": "2019-08-08T10:15:45.625325+03:00",
+        "TimeLastOpened": "2019-08-08T10:15:45.6253294+03:00",
+        "TimeLastOnWork": "2019-08-08T10:15:58.7730138+03:00",
+        "TimeClosed": "2019-08-11T20:02:05.9432994+03:00"
+      },
+      "1099": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1099"
+        },
+        "ID": "1099",
+        "Group": null,
+        "Description": "create dummy PPF support",
+        "Status": 1,
+        "TimeCreated": "2019-08-12T09:20:51.1221136+03:00",
+        "TimeLastOpened": "2019-08-12T11:39:47.3549111+03:00",
+        "TimeLastOnWork": "2019-08-12T09:21:01.5783102+03:00",
+        "TimeClosed": "2019-08-13T18:40:16.0028821+03:00"
+      }
+    },
+    "ID": "1074",
+    "GroupName": "Password-Protected-Support"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1090": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1090"
+        },
+        "ID": "1090",
+        "Group": null,
+        "Description": "fix Initialize log context",
+        "Status": 1,
+        "TimeCreated": "2019-08-08T11:45:05.3551513+03:00",
+        "TimeLastOpened": "2019-08-08T11:45:05.3551563+03:00",
+        "TimeLastOnWork": "2019-08-08T11:49:32.9088766+03:00",
+        "TimeClosed": "2019-08-08T17:00:10.5630312+03:00"
+      },
+      "1091": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1091",
+        "Group": null,
+        "Description": "zip exe inside not blocked",
+        "Status": 1,
+        "TimeCreated": "2019-08-08T17:00:37.2225169+03:00",
+        "TimeLastOpened": "2019-08-08T17:00:37.2225219+03:00",
+        "TimeLastOnWork": "2019-08-08T17:00:46.2315794+03:00",
+        "TimeClosed": "2019-08-11T13:42:10.903336+03:00"
+      }
+    },
+    "ID": "1075",
+    "GroupName": "bugs-89"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1076": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1076",
+        "Group": null,
+        "Description": "Inject IConfiguration in method and not in ctor",
+        "Status": 0,
+        "TimeCreated": "2019-08-05T15:04:49.8237603+03:00",
+        "TimeLastOpened": "2019-08-05T15:04:49.8237646+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1095": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1095",
+        "Group": null,
+        "Description": "fix 7z with exe",
+        "Status": 1,
+        "TimeCreated": "2019-08-11T13:47:13.4537733+03:00",
+        "TimeLastOpened": "2019-08-11T13:47:13.4537789+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-13T10:36:16.2168291+03:00"
+      },
+      "1096": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1096",
+        "Group": null,
+        "Description": "check 5 Fuji bugs with new Aspose.Email 07.19",
+        "Status": 1,
+        "TimeCreated": "2019-08-11T14:00:12.6758061+03:00",
+        "TimeLastOpened": "2019-08-11T14:00:12.6758104+03:00",
+        "TimeLastOnWork": "2019-08-11T14:00:24.3917728+03:00",
+        "TimeClosed": "2019-08-11T18:08:57.1676284+03:00"
+      },
+      "1107": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1107",
+        "Group": null,
+        "Description": "fix ProcessRunnerWrapper",
+        "Status": 1,
+        "TimeCreated": "2019-08-15T09:40:03.5464811+03:00",
+        "TimeLastOpened": "2019-08-15T09:40:03.546485+03:00",
+        "TimeLastOnWork": "2019-08-15T09:47:00.8406853+03:00",
+        "TimeClosed": "2019-08-19T11:55:52.1290238+03:00"
+      },
+      "1126": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1126",
+        "Group": null,
+        "Description": "Empty zip throws exception in sanitization",
+        "Status": 1,
+        "TimeCreated": "2019-08-27T10:47:46.8198924+03:00",
+        "TimeLastOpened": "2019-08-27T10:47:46.8198989+03:00",
+        "TimeLastOnWork": "2019-08-27T10:47:56.4987169+03:00",
+        "TimeClosed": "2019-08-27T11:42:39.6844179+03:00"
+      },
+      "1127": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1127"
+        },
+        "ID": "1127",
+        "Group": null,
+        "Description": "find delta btween TFS and GitVotiro",
+        "Status": 1,
+        "TimeCreated": "2019-08-27T11:43:17.4725705+03:00",
+        "TimeLastOpened": "2019-08-27T11:43:17.4725743+03:00",
+        "TimeLastOnWork": "2019-08-27T11:43:38.393761+03:00",
+        "TimeClosed": "2019-08-27T15:38:29.0353878+03:00"
+      }
+    },
+    "ID": "1092",
+    "GroupName": "bugs-90"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1093": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1093",
+        "Group": null,
+        "Description": "fix 7z with exe",
+        "Status": 1,
+        "TimeCreated": "2019-08-11T13:47:01.1729607+03:00",
+        "TimeLastOpened": "2019-08-11T13:47:01.1729652+03:00",
+        "TimeLastOnWork": "2019-08-14T14:42:53.8549141+03:00",
+        "TimeClosed": "2019-08-14T17:41:42.8320249+03:00"
+      },
+      "1094": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1094"
+        },
+        "ID": "1094",
+        "Group": null,
+        "Description": "fix rar with exe",
+        "Status": 1,
+        "TimeCreated": "2019-08-11T13:47:10.3249069+03:00",
+        "TimeLastOpened": "2019-08-11T13:47:10.3249126+03:00",
+        "TimeLastOnWork": "2019-08-13T15:41:31.3730335+03:00",
+        "TimeClosed": "2019-08-14T14:42:50.0126448+03:00"
+      },
+      "1103": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1103"
+        },
+        "ID": "1103",
+        "Group": null,
+        "Description": "test archives",
+        "Status": 1,
+        "TimeCreated": "2019-08-13T10:39:07.8944799+03:00",
+        "TimeLastOpened": "2019-08-13T10:39:07.8944844+03:00",
+        "TimeLastOnWork": "2019-08-13T10:39:26.1706755+03:00",
+        "TimeClosed": "2019-08-13T11:36:09.5922563+03:00"
+      }
+    },
+    "ID": "1102",
+    "GroupName": "archives-problems"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1105": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1105",
+        "Group": null,
+        "Description": "UT with hirarchy",
+        "Status": 1,
+        "TimeCreated": "2019-08-13T15:41:03.7323714+03:00",
+        "TimeLastOpened": "2019-08-13T15:41:03.7323751+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-13T18:03:28.1701793+03:00"
+      },
+      "1106": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1106",
+        "Group": null,
+        "Description": "empty directory",
+        "Status": 1,
+        "TimeCreated": "2019-08-13T15:41:13.017373+03:00",
+        "TimeLastOpened": "2019-08-13T15:41:13.0173772+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-13T18:03:30.4153752+03:00"
+      }
+    },
+    "ID": "1104",
+    "GroupName": "archive replace directory to files"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1112": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1112",
+        "Group": null,
+        "Description": "7z detected as unkown in container",
+        "Status": 1,
+        "TimeCreated": "2019-08-20T10:48:18.5457856+03:00",
+        "TimeLastOpened": "2019-08-20T10:48:18.5457914+03:00",
+        "TimeLastOnWork": "2019-08-20T10:48:27.0452103+03:00",
+        "TimeClosed": "2019-08-20T15:16:20.6076776+03:00"
+      },
+      "1113": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1113"
+        },
+        "ID": "1113",
+        "Group": null,
+        "Description": "update QueueWorker program with Tasks",
+        "Status": 1,
+        "TimeCreated": "2019-08-20T14:01:32.0616535+03:00",
+        "TimeLastOpened": "2019-08-20T14:01:32.0616568+03:00",
+        "TimeLastOnWork": "2019-08-20T14:01:40.8692901+03:00",
+        "TimeClosed": "2019-08-21T18:20:43.3127734+03:00"
+      },
+      "1114": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1114",
+        "Group": null,
+        "Description": "Url repuation does work for eml",
+        "Status": 1,
+        "TimeCreated": "2019-08-20T15:17:22.700563+03:00",
+        "TimeLastOpened": "2019-08-20T15:17:22.7005672+03:00",
+        "TimeLastOnWork": "2019-08-21T19:17:56.0170102+03:00",
+        "TimeClosed": "2019-08-22T15:20:30.8892876+03:00"
+      },
+      "1118": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1118",
+        "Group": null,
+        "Description": "Url reputation work for pdf, excelx, wordx, visiox",
+        "Status": 1,
+        "TimeCreated": "2019-08-22T15:20:21.8516542+03:00",
+        "TimeLastOpened": "2019-08-22T15:20:21.8516577+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-22T15:20:28.1736893+03:00"
+      }
+    },
+    "ID": "1111",
+    "GroupName": "bugs-91"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1121": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1121",
+        "Group": null,
+        "Description": "7z ut failure",
+        "Status": 1,
+        "TimeCreated": "2019-08-25T13:25:05.1011244+03:00",
+        "TimeLastOpened": "2019-08-25T13:25:05.1011287+03:00",
+        "TimeLastOnWork": "2019-08-25T13:25:13.1401496+03:00",
+        "TimeClosed": "2019-08-25T17:57:53.894571+03:00"
+      },
+      "1122": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1122",
+        "Group": null,
+        "Description": "move to vot1 cluster",
+        "Status": 1,
+        "TimeCreated": "2019-08-25T17:59:06.0034565+03:00",
+        "TimeLastOpened": "2019-08-25T17:59:06.0034604+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-08-25T17:59:17.9055696+03:00"
+      },
+      "1123": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1123"
+        },
+        "ID": "1123",
+        "Group": null,
+        "Description": "eml with links internal error 47405",
+        "Status": 1,
+        "TimeCreated": "2019-08-25T18:00:01.7723785+03:00",
+        "TimeLastOpened": "2019-08-25T18:00:01.7723855+03:00",
+        "TimeLastOnWork": "2019-08-25T18:00:09.682999+03:00",
+        "TimeClosed": "2019-08-25T19:32:09.3584807+03:00"
+      },
+      "1124": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1124",
+        "Group": null,
+        "Description": "bug 47406 Safe browsing serialization exception when url handling",
+        "Status": 1,
+        "TimeCreated": "2019-08-25T19:31:59.4533899+03:00",
+        "TimeLastOpened": "2019-08-25T19:31:59.4533933+03:00",
+        "TimeLastOnWork": "2019-08-26T09:54:59.1608599+03:00",
+        "TimeClosed": "2019-08-26T20:26:32.1321392+03:00"
+      },
+      "1125": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1125",
+        "Group": null,
+        "Description": "image in eml is not sanitized",
+        "Status": 1,
+        "TimeCreated": "2019-08-26T11:51:00.8345881+03:00",
+        "TimeLastOpened": "2019-08-26T11:51:00.8345966+03:00",
+        "TimeLastOnWork": "2019-08-26T11:51:12.2081694+03:00",
+        "TimeClosed": "2019-08-26T19:35:41.9389321+03:00"
+      },
+      "1128": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1128",
+        "Group": null,
+        "Description": "OLEDumpOutputParser - changset 24167 is missing",
+        "Status": 1,
+        "TimeCreated": "2019-08-27T15:41:02.2869854+03:00",
+        "TimeLastOpened": "2019-08-27T15:41:02.2869886+03:00",
+        "TimeLastOnWork": "2019-08-28T11:05:13.7413014+03:00",
+        "TimeClosed": "2019-08-28T17:45:03.4206269+03:00"
+      },
+      "1129": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1129",
+        "Group": null,
+        "Description": "Pdf upgrade dll - Status on flatten and multimedia",
+        "Status": 1,
+        "TimeCreated": "2019-08-28T17:46:02.8654014+03:00",
+        "TimeLastOpened": "2019-08-28T17:46:02.8654056+03:00",
+        "TimeLastOnWork": "2019-08-28T17:46:13.2524099+03:00",
+        "TimeClosed": "2019-08-29T09:31:26.6708897+03:00"
+      },
+      "1130": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1130"
+        },
+        "ID": "1130",
+        "Group": null,
+        "Description": "fix connector deisplay = None",
+        "Status": 1,
+        "TimeCreated": "2019-08-29T12:03:26.7999645+03:00",
+        "TimeLastOpened": "2019-09-01T16:13:39.7126121+03:00",
+        "TimeLastOnWork": "2019-08-29T12:03:33.7130604+03:00",
+        "TimeClosed": "2019-09-08T10:18:18.2865376+03:00"
+      },
+      "1131": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1131",
+        "Group": null,
+        "Description": "Eml Url handling null exception",
+        "Status": 1,
+        "TimeCreated": "2019-09-01T14:07:52.1742772+03:00",
+        "TimeLastOpened": "2019-09-01T14:07:52.1742812+03:00",
+        "TimeLastOnWork": "2019-09-01T14:07:58.9969252+03:00",
+        "TimeClosed": "2019-09-01T16:13:11.0135873+03:00"
+      }
+    },
+    "ID": "1120",
+    "GroupName": "bugs-92"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1133": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1133",
+        "Group": null,
+        "Description": "Fix Correlation and Item ID for Reporter and Correlator",
+        "Status": 1,
+        "TimeCreated": "2019-09-02T10:46:47.4393555+03:00",
+        "TimeLastOpened": "2019-09-02T10:46:47.4393641+03:00",
+        "TimeLastOnWork": "2019-09-02T10:46:53.8641733+03:00",
+        "TimeClosed": "2019-09-02T17:54:40.2365924+03:00"
+      },
+      "1134": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1134"
+        },
+        "ID": "1134",
+        "Group": null,
+        "Description": "archive with non-english item name desappears ",
+        "Status": 1,
+        "TimeCreated": "2019-09-02T12:11:58.9496867+03:00",
+        "TimeLastOpened": "2019-09-02T12:11:58.9496981+03:00",
+        "TimeLastOnWork": "2019-09-02T14:39:51.1987065+03:00",
+        "TimeClosed": "2019-09-03T11:35:07.57273+03:00"
+      },
+      "1135": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1135"
+        },
+        "ID": "1135",
+        "Group": null,
+        "Description": "add locales to dockerfiles",
+        "Status": 1,
+        "TimeCreated": "2019-09-03T10:33:46.8571176+03:00",
+        "TimeLastOpened": "2019-09-03T10:33:46.8571209+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-09-03T11:35:02.5865033+03:00"
+      },
+      "1136": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1136",
+        "Group": null,
+        "Description": "ics invalid number of files",
+        "Status": 1,
+        "TimeCreated": "2019-09-03T11:36:07.954888+03:00",
+        "TimeLastOpened": "2019-09-03T11:36:07.9548914+03:00",
+        "TimeLastOnWork": "2019-09-03T12:55:03.4888105+03:00",
+        "TimeClosed": "2019-09-03T13:07:43.1954736+03:00"
+      },
+      "1137": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1137",
+        "Group": null,
+        "Description": "DDE in EML and MSG",
+        "Status": 1,
+        "TimeCreated": "2019-09-03T13:09:06.6076044+03:00",
+        "TimeLastOpened": "2019-09-03T13:09:06.6076077+03:00",
+        "TimeLastOnWork": "2019-09-03T13:09:11.1228208+03:00",
+        "TimeClosed": "2019-09-03T14:04:18.3130859+03:00"
+      },
+      "1138": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1138",
+        "Group": null,
+        "Description": "Check 47392 after develop merged to integration",
+        "Status": 1,
+        "TimeCreated": "2019-09-04T09:44:03.7731094+03:00",
+        "TimeLastOpened": "2019-09-04T09:44:03.7731132+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-09-09T09:54:48.9543824+03:00"
+      },
+      "1139": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1139",
+        "Group": null,
+        "Description": "Check 47593 after develop merged to integration",
+        "Status": 1,
+        "TimeCreated": "2019-09-04T09:44:17.4889067+03:00",
+        "TimeLastOpened": "2019-09-04T09:44:17.4889111+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-09-04T11:30:32.9107126+03:00"
+      },
+      "1140": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1140"
+        },
+        "ID": "1140",
+        "Group": null,
+        "Description": "Open 3rd parties for Fuji",
+        "Status": 1,
+        "TimeCreated": "2019-09-04T09:45:13.5384978+03:00",
+        "TimeLastOpened": "2019-09-04T09:45:13.5385022+03:00",
+        "TimeLastOnWork": "2019-09-04T09:45:23.4415449+03:00",
+        "TimeClosed": "2019-09-05T17:51:48.60871+03:00"
+      }
+    },
+    "ID": "1132",
+    "GroupName": "bugs-93"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1142": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1142",
+        "Group": null,
+        "Description": "Aspose fuji cases replies",
+        "Status": 1,
+        "TimeCreated": "2019-09-08T10:18:59.3759023+03:00",
+        "TimeLastOpened": "2019-09-08T10:18:59.3759056+03:00",
+        "TimeLastOnWork": "2019-09-08T10:19:04.1101849+03:00",
+        "TimeClosed": "2019-09-08T10:49:56.3423885+03:00"
+      },
+      "1143": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1143",
+        "Group": null,
+        "Description": "eml convert to plain text with url",
+        "Status": 1,
+        "TimeCreated": "2019-09-08T10:42:50.1014358+03:00",
+        "TimeLastOpened": "2019-09-08T10:42:50.1014401+03:00",
+        "TimeLastOnWork": "2019-09-08T10:50:04.2326045+03:00",
+        "TimeClosed": "2019-09-08T12:10:34.8654615+03:00"
+      },
+      "1144": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1144",
+        "Group": null,
+        "Description": "create wdp project sample + test on Linux",
+        "Status": 1,
+        "TimeCreated": "2019-09-08T11:37:36.5078279+03:00",
+        "TimeLastOpened": "2019-09-08T11:37:36.5078321+03:00",
+        "TimeLastOnWork": "2019-09-08T12:04:53.3931459+03:00",
+        "TimeClosed": "2019-09-08T12:46:26.4047094+03:00"
+      },
+      "1145": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1145"
+        },
+        "ID": "1145",
+        "Group": null,
+        "Description": "pdftron replies",
+        "Status": 1,
+        "TimeCreated": "2019-09-08T11:38:00.8031717+03:00",
+        "TimeLastOpened": "2019-09-08T11:38:00.8031759+03:00",
+        "TimeLastOnWork": "2019-09-08T13:38:26.2713622+03:00",
+        "TimeClosed": "2019-09-11T11:41:35.6122493+03:00"
+      },
+      "1146": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1146",
+        "Group": null,
+        "Description": "queue performance investigate by logging",
+        "Status": 1,
+        "TimeCreated": "2019-09-08T14:39:44.941559+03:00",
+        "TimeLastOpened": "2019-09-08T14:39:44.9415628+03:00",
+        "TimeLastOnWork": "2019-09-08T14:39:56.474899+03:00",
+        "TimeClosed": "2019-09-09T13:51:03.0923118+03:00"
+      },
+      "1147": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1147"
+        },
+        "ID": "1147",
+        "Group": null,
+        "Description": "logo in pdf changed with two white lines",
+        "Status": 1,
+        "TimeCreated": "2019-09-09T16:15:06.0944421+03:00",
+        "TimeLastOpened": "2019-09-09T16:15:06.0944462+03:00",
+        "TimeLastOnWork": "2019-09-09T16:16:25.8445484+03:00",
+        "TimeClosed": "2019-09-12T16:41:31.8756078+03:00"
+      },
+      "1148": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1148"
+        },
+        "ID": "1148",
+        "Group": null,
+        "Description": "Core dump in pdfdotnetcore Version 7.0172235",
+        "Status": 1,
+        "TimeCreated": "2019-09-10T16:06:19.3291027+03:00",
+        "TimeLastOpened": "2019-09-10T16:06:19.3291066+03:00",
+        "TimeLastOnWork": "2019-09-10T16:06:26.0945243+03:00",
+        "TimeClosed": "2019-09-10T17:14:50.5591921+03:00"
+      },
+      "1149": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1149",
+        "Group": null,
+        "Description": "Create confluence page on Pdf flatten retro",
+        "Status": 1,
+        "TimeCreated": "2019-09-11T12:25:16.9190964+03:00",
+        "TimeLastOpened": "2019-09-11T12:25:16.9191003+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-09-11T12:25:26.3910887+03:00"
+      },
+      "1150": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1150"
+        },
+        "ID": "1150",
+        "Group": null,
+        "Description": "Zip bomb attack file is not blocked",
+        "Status": 1,
+        "TimeCreated": "2019-09-11T12:26:21.3487879+03:00",
+        "TimeLastOpened": "2019-09-11T12:26:21.3487921+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-09-11T16:29:26.2503552+03:00"
+      },
+      "1152": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1152",
+        "Group": null,
+        "Description": "bug-46782 ppt fails to load",
+        "Status": 1,
+        "TimeCreated": "2019-09-11T16:30:30.9637148+03:00",
+        "TimeLastOpened": "2019-09-11T16:30:30.9637212+03:00",
+        "TimeLastOnWork": "2019-09-11T16:30:40.3677039+03:00",
+        "TimeClosed": "2019-09-11T17:41:56.4070566+03:00"
+      },
+      "1153": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1153",
+        "Group": null,
+        "Description": "bug-46758 header in ppt becomes bold",
+        "Status": 1,
+        "TimeCreated": "2019-09-11T17:46:12.3825411+03:00",
+        "TimeLastOpened": "2019-09-11T17:46:12.3825451+03:00",
+        "TimeLastOnWork": "2019-09-11T17:46:17.9499008+03:00",
+        "TimeClosed": "2019-09-11T19:29:28.7425457+03:00"
+      },
+      "1154": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1154"
+        },
+        "ID": "1154",
+        "Group": null,
+        "Description": "47276-some-string-become-bold-and-italic",
+        "Status": 1,
+        "TimeCreated": "2019-09-12T10:03:25.6469689+03:00",
+        "TimeLastOpened": "2019-09-12T14:35:22.5699119+03:00",
+        "TimeLastOnWork": "2019-09-12T10:03:30.3426889+03:00",
+        "TimeClosed": "2019-09-12T14:50:35.6232723+03:00"
+      }
+    },
+    "ID": "1141",
+    "GroupName": "bugs-94"
+  },
+  {
+    "mLogger": {
+      "ShouldLogInformation": false
+    },
+    "mTasksChildren": {
+      "1157": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1157",
+        "Group": null,
+        "Description": "ics blocked with Aspose.Email.MailAddress exception",
+        "Status": 1,
+        "TimeCreated": "2019-09-22T17:21:11.8288396+03:00",
+        "TimeLastOpened": "2019-09-23T13:02:54.174744+03:00",
+        "TimeLastOnWork": "2019-09-23T17:57:59.7095844+03:00",
+        "TimeClosed": "2019-09-23T18:11:32.0206207+03:00"
+      },
+      "1158": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1158",
+        "Group": null,
+        "Description": "fix log passwort protected false printed twice",
+        "Status": 1,
+        "TimeCreated": "2019-09-23T11:51:50.667249+03:00",
+        "TimeLastOpened": "2019-09-23T11:51:50.667253+03:00",
+        "TimeLastOnWork": "2019-09-23T14:09:03.3005839+03:00",
+        "TimeClosed": "2019-09-23T16:12:06.9768844+03:00"
+      },
+      "1159": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1159",
+        "Group": null,
+        "Description": "fuji bugs brief",
+        "Status": 1,
+        "TimeCreated": "2019-09-23T11:52:23.3956078+03:00",
+        "TimeLastOpened": "2019-09-23T11:52:23.3956124+03:00",
+        "TimeLastOnWork": "2019-09-23T11:52:30.3612169+03:00",
+        "TimeClosed": "2019-09-23T14:08:55.8813194+03:00"
+      },
+      "1160": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": {
+          "mNoteDirecoryPath": "C:\\Dor\\MyProjects\\TasksManager\\TaskManager\\Repository\\Database.JsonService\\database\\notes",
+          "mNoteName": "1160"
+        },
+        "ID": "1160",
+        "Group": null,
+        "Description": "file descriptor refactoring",
+        "Status": 2,
+        "TimeCreated": "2019-09-23T16:13:19.0766729+03:00",
+        "TimeLastOpened": "2019-09-23T16:13:19.0766768+03:00",
+        "TimeLastOnWork": "2019-09-23T17:57:19.6107712+03:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1161": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1161",
+        "Group": null,
+        "Description": "Upgrade vintasoft license",
+        "Status": 0,
+        "TimeCreated": "2019-09-23T17:57:44.3650229+03:00",
+        "TimeLastOpened": "2019-09-23T17:57:44.3650272+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "0001-01-01T00:00:00"
+      },
+      "1163": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1163",
+        "Group": null,
+        "Description": "merge bug/46758-header-become-italic-and-bold into ppt develop",
+        "Status": 1,
+        "TimeCreated": "2019-09-25T11:55:40.1266764+03:00",
+        "TimeLastOpened": "2019-09-25T11:55:40.1266809+03:00",
+        "TimeLastOnWork": "2019-09-25T13:05:08.2979604+03:00",
+        "TimeClosed": "2019-09-25T13:05:12.738644+03:00"
+      },
+      "1164": {
+        "mLogger": {
+          "ShouldLogInformation": false
+        },
+        "mNote": null,
+        "ID": "1164",
+        "Group": null,
+        "Description": "Test pptx with ReplaceBlockedOleObjectFiles",
+        "Status": 1,
+        "TimeCreated": "2019-09-25T15:01:18.6189814+03:00",
+        "TimeLastOpened": "2019-09-25T15:01:18.6189855+03:00",
+        "TimeLastOnWork": "0001-01-01T00:00:00",
+        "TimeClosed": "2019-09-25T16:48:06.5664185+03:00"
+      }
+    },
+    "ID": "1156",
+    "GroupName": "bugs-96"
   }
 ]
