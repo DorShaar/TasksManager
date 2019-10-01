@@ -62,39 +62,39 @@ namespace TaskData
         {
             if (Status == Status.Closed)
             {
-                mLogger?.Log($"Task {ID} is already closed");
+                mLogger?.Log($"Task {ID}, {Description} is already closed");
                 return;
             }
 
             Status = Status.Closed;
             TimeClosed = DateTime.Now;
-            mLogger?.Log($"Task {ID} closed at {TimeClosed}");
+            mLogger?.Log($"Task {ID}, {Description} closed at {TimeClosed}");
         }
 
         public void ReOpenTask()
         {
             if (Status == Status.Open)
             {
-                mLogger?.Log($"Task {ID} is already open");
+                mLogger?.Log($"Task {ID}, {Description} is already open");
                 return;
             }
 
             Status = Status.Open;
             TimeLastOpened = DateTime.Now;
-            mLogger?.Log($"Task {ID} re-opened at {TimeLastOpened}");
+            mLogger?.Log($"Task {ID}, {Description} re-opened at {TimeLastOpened}");
         }
 
         public void MarkTaskOnWork()
         {
             if (Status == Status.OnWork)
             {
-                mLogger?.Log($"Task {ID} is already on work");
+                mLogger?.Log($"Task {ID}, {Description} is already on work");
                 return;
             }
 
             Status = Status.OnWork;
             TimeLastOnWork = DateTime.Now;
-            mLogger?.Log($"Task {ID} marked on work at {TimeLastOnWork}");
+            mLogger?.Log($"Task {ID}, {Description} marked on work at {TimeLastOnWork}");
         }
 
         public void CreateNote(string noteDirectoryPath, string content)
@@ -113,7 +113,7 @@ namespace TaskData
         {
             if (mNote == null)
             {
-                mLogger.LogInformation($"Task id {ID} has no note");
+                mLogger.LogInformation($"Task id {ID}, {Description} has no note");
                 return;
             }
 
@@ -124,7 +124,7 @@ namespace TaskData
         {
             if (mNote == null)
             {
-                mLogger.LogInformation($"Task id {ID} has no note");
+                mLogger.LogInformation($"Task id {ID}, {Description} has no note");
                 return string.Empty;
             }
 

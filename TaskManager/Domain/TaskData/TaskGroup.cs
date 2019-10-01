@@ -68,13 +68,13 @@ namespace TaskData
         {
             if (mTasksChildren.ContainsKey(task.ID))
             {
-                mLogger?.Log($"Task id {task.ID} is already found in group {GroupName}");
+                mLogger?.Log($"Task {task.ID}, {task.Description} is already found in group {GroupName}");
                 return;
             }
 
             task.Group = GroupName;
             mTasksChildren.Add(task.ID, task);
-            mLogger?.Log($"Task id {task.ID} added to group {GroupName}");
+            mLogger?.Log($"Task {task.ID}, {task.Description} added to group {GroupName}");
         }
 
         public void RemoveTask(string id)
@@ -106,7 +106,7 @@ namespace TaskData
             }
 
             mTasksChildren[task.ID] = task;
-            mLogger?.LogError($"Task id {task.ID} updated in group {GroupName}. Update failed");
+            mLogger?.LogError($"Task {task.ID}, {task.Description} updated in group {GroupName}. Update success");
         }
     }
 }

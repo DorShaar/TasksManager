@@ -430,11 +430,5 @@ namespace ConsoleUI
                  mTaskManager.GetAllTasks((ITask task) => task.ID == options.TaskId).First());
             return 0;
         }
-
-        private static int SetDatabasePath(ConfigOptions.SetDatabasePathOptions options)
-        {
-            mTaskManager.ChangeDatabasePath(options.NewDatabasePath);
-            return 0;
-        }
     }
 }
