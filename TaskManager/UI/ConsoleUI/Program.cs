@@ -40,7 +40,7 @@ namespace ConsoleUI
                 CommandLineOptions.MoveTaskOptions,
                 CommandLineOptions.ReOpenTaskOptions,
                 CommandLineOptions.OnWorkTaskOptions,
-                CommandLineOptions.GetInformationTaskOptions
+                CommandLineOptions.GetInformationTaskOptions,
                 CommandLineOptions.OpenNoteOptions>(args).MapResult(
                     (CommandLineOptions.GetOptions options) => GetObject(options),
                     (CommandLineOptions.CreateOptions options) => CreateObject(options),
@@ -51,8 +51,7 @@ namespace ConsoleUI
                     (CommandLineOptions.OnWorkTaskOptions options) => MarkTaskAsOnWork(options),
                     (CommandLineOptions.GetInformationTaskOptions options) => GetTaskInformation(options),
                     (CommandLineOptions.OpenNoteOptions options) => OpenNote(options),
-                     //(ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
-                     (parserErrors) => 1
+                    (parserErrors) => 1
                 );
             }
 

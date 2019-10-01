@@ -2105,11 +2105,11 @@
         "ID": "1161",
         "Group": null,
         "Description": "Upgrade vintasoft license",
-        "Status": 0,
+        "Status": 1,
         "TimeCreated": "2019-09-23T17:57:44.3650229+03:00",
         "TimeLastOpened": "2019-09-23T17:57:44.3650272+03:00",
         "TimeLastOnWork": "0001-01-01T00:00:00",
-        "TimeClosed": "0001-01-01T00:00:00"
+        "TimeClosed": "2019-10-01T22:21:16.2110117+03:00"
       },
       "1163": {
         "mLogger": {
