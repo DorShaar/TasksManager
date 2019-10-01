@@ -72,6 +72,7 @@ namespace TaskData
                 return;
             }
 
+            task.Group = GroupName;
             mTasksChildren.Add(task.ID, task);
             mLogger?.Log($"Task id {task.ID} added to group {GroupName}");
         }

@@ -15,7 +15,7 @@ namespace TaskData
 
         public string ID { get; }
 
-        public string Group { get; }
+        public string Group { get; set; }
 
         public string Description { get; set; } = string.Empty;
 
