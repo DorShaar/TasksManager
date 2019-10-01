@@ -52,32 +52,6 @@ namespace TaskData
             mLogger?.Log($"Task id {ID} restored");
         }
 
-        //[JsonConstructor]
-        //internal Task(ILogger logger, string id, string group, string description, Status status, INote note,
-        //               DateTime timeCreated, DateTime timeLastOpened, DateTime timeLastOnWork, DateTime timeClosed, ITaskStatusHistory taskStatusHistory)
-        //{
-        //    mLogger = logger;
-        //    mNote = note;
-
-        //    ID = id;
-        //    Group = group;
-        //    Description = description;
-
-        //    TaskStatusHistory = taskStatusHistory;
-        //    List<StatusData> statusDataList = new List<StatusData>
-        //    {
-        //        new StatusData(timeCreated, Status.Open, "Created")
-        //    };
-        //    if (timeLastOnWork != default)
-        //        statusDataList.Add(new StatusData(timeLastOnWork, Status.OnWork, "Start working"));
-
-        //    if (timeClosed != default)
-        //        statusDataList.Add(new StatusData(timeLastOnWork, Status.Closed, "Done working"));
-
-        //    TaskStatusHistory = new TaskStatusHistory(statusDataList);
-        //    mLogger?.Log($"Task id {ID} restored");
-        //}
-
         public void CloseTask(string reason)
         {
             if (Status == Status.Closed)

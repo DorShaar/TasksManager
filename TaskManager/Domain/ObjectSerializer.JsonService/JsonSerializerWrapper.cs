@@ -24,7 +24,6 @@ namespace Database.JsonService
             settings.Converters.Add(new TaskConverter());
             settings.Converters.Add(new LoggerConverter());
             settings.Converters.Add(new NoteConverter());
-            //settings.Converters.Add(new StatusDataConverter());
             settings.Converters.Add(new TaskStatusHistoryConverter());
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(databasePath), settings);
         }
@@ -98,24 +97,6 @@ namespace Database.JsonService
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
                 serializer.Serialize(writer, value, typeof(Note));
-            }
-        }
-
-        private class StatusDataConverter : JsonConverter
-        {
-            public override bool CanConvert(Type objectType)
-            {
-                return objectType == typeof(StatusData);
-            }
-
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-            {
-                return serializer.Deserialize(reader, typeof(StatusData));
-            }
-
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-            {
-                serializer.Serialize(writer, value, typeof(StatusData));
             }
         }
 
