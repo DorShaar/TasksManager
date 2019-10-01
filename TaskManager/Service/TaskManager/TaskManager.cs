@@ -149,14 +149,14 @@ namespace TaskManager
             return null;
         }
 
-        public void CloseTask(string taskId)
+        public void CloseTask(string taskId, string reason)
         {
             foreach (ITaskGroup group in mDatabase.GetAll())
             {
                 ITask task = group.GetTask(taskId);
                 if (task != null)
                 {
-                    task.CloseTask();
+                    task.CloseTask(reason);
                     mDatabase.Update(group);
                     return;
                 }
@@ -165,14 +165,14 @@ namespace TaskManager
             mLogger.LogError($"Task id {taskId} was not found");
         }
 
-        public void ReOpenTask(string taskId)
+        public void ReOpenTask(string taskId, string reason)
         {
             foreach (ITaskGroup group in mDatabase.GetAll())
             {
                 ITask task = group.GetTask(taskId);
                 if (task != null)
                 {
-                    task.ReOpenTask();
+                    task.ReOpenTask(reason);
                     mDatabase.Update(group);
                     return;
                 }
@@ -181,14 +181,14 @@ namespace TaskManager
             mLogger.LogError($"Task id {taskId} was not found");
         }
 
-        public void MarkTaskOnWork(string taskId)
+        public void MarkTaskOnWork(string taskId, string reason)
         {
             foreach (ITaskGroup group in mDatabase.GetAll())
             {
                 ITask task = group.GetTask(taskId);
                 if (task != null)
                 {
-                    task.MarkTaskOnWork();
+                    task.MarkTaskOnWork(reason);
                     mDatabase.Update(group);
                     return;
                 }

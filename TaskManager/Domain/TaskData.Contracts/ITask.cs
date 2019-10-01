@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TaskData.Contracts
+﻿namespace TaskData.Contracts
 {
     public interface ITask
     {
@@ -10,14 +8,11 @@ namespace TaskData.Contracts
         bool IsFinished { get; }
         Status Status { get; }
 
-        DateTime TimeCreated { get; }
-        DateTime TimeLastOpened { get; }
-        DateTime TimeLastOnWork { get; }
-        DateTime TimeClosed { get; }
+        ITaskStatusHistory TaskStatusHistory { get; }
 
-        void CloseTask();
-        void ReOpenTask();
-        void MarkTaskOnWork();
+        void CloseTask(string reason);
+        void ReOpenTask(string reason);
+        void MarkTaskOnWork(string reason);
 
         // Private Notes.
         void CreateNote(string noteDirectoryPath, string content);

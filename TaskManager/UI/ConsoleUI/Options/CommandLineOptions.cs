@@ -63,6 +63,9 @@ namespace ConsoleUI.Options
 
             [Value(1, HelpText = "Id of task to close")]
             public string ObjectId { get; set; }
+
+            [Option('m', "reason", HelpText = "Reason for closing the object")]
+            public string Reason { get; set; }
         }
 
         [Verb("move", HelpText = "Moves a task to a given group")]
@@ -80,6 +83,9 @@ namespace ConsoleUI.Options
         {
             [Value(0, HelpText = "Task id to open again")]
             public string TaskId { get; set; }
+
+            [Option('m', "reason", HelpText = "Reason for reopening the task")]
+            public string Reason { get; set; }
         }
 
         [Verb("work", HelpText = "Mark task as on work")]
@@ -87,6 +93,9 @@ namespace ConsoleUI.Options
         {
             [Value(0, HelpText = "Task id to mark as on work")]
             public string TaskId { get; set; }
+
+            [Option('m', "reason", HelpText = "Reason for working the task")]
+            public string Reason { get; set; }
         }
 
         [Verb("info", HelpText = "Get task information")]

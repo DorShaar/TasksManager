@@ -17,9 +17,9 @@ namespace TaskManager.Contracts
         IEnumerable<ITask> GetAllTasks();
         IEnumerable<ITask> GetAllTasks(Func<ITaskGroup, bool> action);
         IEnumerable<ITask> GetAllTasks(Func<ITask, bool> action);
-        void CloseTask(string taskId);
-        void ReOpenTask(string taskId);
-        void MarkTaskOnWork(string taskId);
+        void CloseTask(string taskId, string reason);
+        void ReOpenTask(string taskId, string reason);
+        void MarkTaskOnWork(string taskId, string reason);
         void RemoveTask(string taskId);
         void MoveTaskToGroup(string taskId, string taskGroup);
 

@@ -20,7 +20,7 @@ namespace TaskData.Tests
           public void CreateNewTask_TimeCreatedIsNow()
           {
                Task task = new Task(DummyGroupName, DummyDescription, mLogger);
-               Assert.IsTrue(IsTimesAlmostTheSame(task.TimeCreated, DateTime.Now));
+               Assert.IsTrue(IsTimesAlmostTheSame(task.TaskStatusHistory.TimeCreated, DateTime.Now));
           }
 
           [TestMethod]
@@ -28,7 +28,7 @@ namespace TaskData.Tests
           {
                Task task = new Task(DummyGroupName, DummyDescription, mLogger);
                Assert.IsFalse(task.IsFinished);
-               task.CloseTask();
+               task.CloseTask(string.Empty);
                Assert.IsTrue(task.IsFinished);
           }
 
@@ -36,46 +36,46 @@ namespace TaskData.Tests
           public void CloseTask_TimeCloseIsNow()
           {
                Task task = new Task(DummyGroupName, DummyDescription, mLogger);
-               task.CloseTask();
-               Assert.IsTrue(IsTimesAlmostTheSame(task.TimeClosed, DateTime.Now));
+               task.CloseTask(string.Empty);
+               Assert.IsTrue(IsTimesAlmostTheSame(task.TaskStatusHistory.TimeClosed, DateTime.Now));
           }
 
           [TestMethod]
           public void CloseTask_ClosedTask_NoChange()
           {
                Task task = new Task(DummyGroupName, DummyDescription, mLogger);
-               task.CloseTask();
-               DateTime closeTime = task.TimeClosed;
-               task.CloseTask();
-               Assert.AreEqual(task.TimeClosed, closeTime);
+               task.CloseTask(string.Empty);
+               DateTime closeTime = task.TaskStatusHistory.TimeClosed;
+               task.CloseTask(string.Empty);
+               Assert.AreEqual(task.TaskStatusHistory.TimeClosed, closeTime);
           }
 
           [TestMethod]
           public void ReOpenTask_TimeLastOpenIsNow()
           {
                Task task = new Task(DummyGroupName, DummyDescription, mLogger);
-               task.CloseTask();
+               task.CloseTask(string.Empty);
                Thread.Sleep(SleepTimeInMs);
-               task.ReOpenTask();
-               Assert.IsTrue(IsTimesAlmostTheSame(task.TimeLastOpened, DateTime.Now));
+               task.ReOpenTask(string.Empty);
+               Assert.IsTrue(IsTimesAlmostTheSame(task.TaskStatusHistory.TimeLastOpened, DateTime.Now));
           }
 
           [TestMethod]
           public void ReOpenTask_TimCreated_NoChange()
           {
                Task task = new Task(DummyGroupName, DummyDescription, mLogger);
-               DateTime createdTime = task.TimeCreated;
-               task.CloseTask();
-               task.ReOpenTask();
-               Assert.AreEqual(task.TimeCreated, createdTime);
+               DateTime createdTime = task.TaskStatusHistory.TimeCreated;
+               task.CloseTask(string.Empty);
+               task.ReOpenTask(string.Empty);
+               Assert.AreEqual(task.TaskStatusHistory.TimeCreated, createdTime);
           }
 
           [TestMethod]
           public void ReOpenTask_IsFinished_False()
           {
                Task task = new Task(DummyGroupName, DummyDescription, mLogger);
-               task.CloseTask();
-               task.ReOpenTask();
+               task.CloseTask(string.Empty);
+               task.ReOpenTask(string.Empty);
                Assert.IsFalse(task.IsFinished);
           }
 
@@ -83,9 +83,9 @@ namespace TaskData.Tests
           public void ReOpeneTask_OpenedTask_NoChange()
           {
                Task task = new Task(DummyGroupName, DummyDescription, mLogger);
-               DateTime createdTime = task.TimeLastOpened;
-               task.ReOpenTask();
-               Assert.AreEqual(task.TimeLastOpened, createdTime);
+               DateTime createdTime = task.TaskStatusHistory.TimeLastOpened;
+               task.ReOpenTask(string.Empty);
+               Assert.AreEqual(task.TaskStatusHistory.TimeLastOpened, createdTime);
           }
 
           [TestMethod]

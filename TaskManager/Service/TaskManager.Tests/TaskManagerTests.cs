@@ -45,16 +45,16 @@ namespace TaskManager.Integration.Tests
             ITaskGroup taskGroupA = mTaskGroupBuilder.Create("A", mLogger);
             ITask task1 = mTaskManager.CreateNewTask(taskGroupA, "A1");
             ITask task2 = mTaskManager.CreateNewTask(taskGroupA, "A2");
-            mTaskManager.CloseTask(task1.ID);
+            mTaskManager.CloseTask(task1.ID, string.Empty);
 
             ITaskGroup taskGroupB = mTaskGroupBuilder.Create("B", mLogger);
             ITask task3 = mTaskManager.CreateNewTask(taskGroupB, "B1");
             ITask task4 = mTaskManager.CreateNewTask(taskGroupB, "B2");
-            mTaskManager.CloseTask(task4.ID);
+            mTaskManager.CloseTask(task4.ID, string.Empty);
 
             ITaskGroup taskGroupC = mTaskGroupBuilder.Create("C", mLogger);
             ITask task5 = mTaskManager.CreateNewTask(taskGroupC, "C1");
-            mTaskManager.CloseTask(task5.ID);
+            mTaskManager.CloseTask(task5.ID, string.Empty);
 
             Assert.AreEqual(mTaskManager.GetAllTasks((ITask task) => task.IsFinished == true).Count(), 3);
         }

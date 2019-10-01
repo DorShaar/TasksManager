@@ -88,7 +88,7 @@ namespace ConsoleUI
 
         /// <summary>
         /// Get all un-closed tasks.
-        /// In case user chose print all option, all tasks will be printed.
+        /// In case user choose to print all option, all tasks will be printed.
         /// </summary>
         private static int GetAllTasks(string taskGroup, string status, bool shouldPrintAll, int hours, int days, bool isDetailed)
         {
@@ -109,17 +109,17 @@ namespace ConsoleUI
 
             if (hours != 0)
                 tasksToPrint = tasksToPrint
-                    .Where(task => task.TimeCreated.AddHours(hours) >= DateTime.Now ||
-                                   task.TimeClosed.AddHours(hours) >= DateTime.Now ||
-                                   task.TimeLastOnWork.AddHours(hours) >= DateTime.Now ||
-                                   task.TimeLastOpened.AddHours(hours) >= DateTime.Now);
+                    .Where(task => task.TaskStatusHistory.TimeCreated.AddHours(hours) >= DateTime.Now ||
+                                   task.TaskStatusHistory.TimeClosed.AddHours(hours) >= DateTime.Now ||
+                                   task.TaskStatusHistory.TimeLastOnWork.AddHours(hours) >= DateTime.Now ||
+                                   task.TaskStatusHistory.TimeLastOpened.AddHours(hours) >= DateTime.Now);
 
             if (days != 0)
                 tasksToPrint = tasksToPrint
-                    .Where(task => task.TimeCreated.AddDays(days) >= DateTime.Now ||
-                                   task.TimeClosed.AddDays(days) >= DateTime.Now ||
-                                   task.TimeLastOnWork.AddDays(days) >= DateTime.Now ||
-                                   task.TimeLastOpened.AddDays(days) >= DateTime.Now);
+                    .Where(task => task.TaskStatusHistory.TimeCreated.AddDays(days) >= DateTime.Now ||
+                                   task.TaskStatusHistory.TimeClosed.AddDays(days) >= DateTime.Now ||
+                                   task.TaskStatusHistory.TimeLastOnWork.AddDays(days) >= DateTime.Now ||
+                                   task.TaskStatusHistory.TimeLastOpened.AddDays(days) >= DateTime.Now);
 
             mConsolePrinter.PrintTasks(tasksToPrint, isDetailed);
             return 0;
@@ -344,14 +344,14 @@ namespace ConsoleUI
             {
                 case "task":
                 case "tasks":
-                    return CloseTask(options.ObjectId);
+                    return CloseTask(options.ObjectId, options.Reason);
 
                 default:
                     return 1;
             }
         }
 
-        private static int CloseTask(string taskId)
+        private static int CloseTask(string taskId, string reason)
         {
             if (string.IsNullOrEmpty(taskId))
             {
@@ -359,7 +359,7 @@ namespace ConsoleUI
                 return 1;
             }
 
-            mTaskManager.CloseTask(taskId);
+            mTaskManager.CloseTask(taskId, reason ?? string.Empty);
             return 0;
         }
 
@@ -402,7 +402,7 @@ namespace ConsoleUI
                 return 1;
             }
 
-            mTaskManager.ReOpenTask(options.TaskId);
+            mTaskManager.ReOpenTask(options.TaskId, options.Reason ?? string.Empty);
             return 0;
         }
 
@@ -414,7 +414,7 @@ namespace ConsoleUI
                 return 1;
             }
 
-            mTaskManager.MarkTaskOnWork(options.TaskId);
+            mTaskManager.MarkTaskOnWork(options.TaskId, options.Reason ?? string.Empty);
             return 0;
         }
 

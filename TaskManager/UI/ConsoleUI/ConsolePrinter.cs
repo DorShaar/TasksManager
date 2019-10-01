@@ -49,10 +49,10 @@ namespace ConsoleUI
                                         task.Group,
                                         task.Description,
                                         GetStringStatus(task.Status),
-                                        task.TimeCreated.ToString(),
-                                        task.TimeLastOpened.ToString(),
-                                        task.TimeLastOnWork.ToString(),
-                                        task.TimeClosed.ToString()
+                                        task.TaskStatusHistory.TimeCreated.ToString(),
+                                        task.TaskStatusHistory.TimeLastOpened.ToString(),
+                                        task.TaskStatusHistory.TimeLastOnWork.ToString(),
+                                        task.TaskStatusHistory.TimeClosed.ToString()
                               },
                               new int[] { -5, -20, -80, -10, -25, -25, -25, -25 }));
                 else
@@ -116,9 +116,9 @@ namespace ConsoleUI
             stringBuilder.AppendLine($"Task ID: {task.ID}");
             stringBuilder.AppendLine($"Description: {task.Description}");
             stringBuilder.AppendLine($"Status: { GetStringStatus(task.Status)}");
-            stringBuilder.AppendLine($"Time created: {task.TimeCreated}");
-            stringBuilder.AppendLine($"Last opened time: {task.TimeLastOpened}");
-            stringBuilder.AppendLine($"Closed time: {task.TimeClosed}");
+            stringBuilder.AppendLine($"Time created: {task.TaskStatusHistory.TimeCreated}");
+            stringBuilder.AppendLine($"Last opened time: {task.TaskStatusHistory.TimeLastOpened}");
+            stringBuilder.AppendLine($"Closed time: {task.TaskStatusHistory.TimeClosed}");
             stringBuilder.AppendLine($"Note: {task.GetNote()}");
 
             Console.WriteLine(stringBuilder.ToString());

@@ -30,8 +30,8 @@ namespace TaskData.Tests
             ITask task2 = taskGroup.CreateTask("2");
             ITask task3 = taskGroup.CreateTask("3");
 
-            task2.CloseTask();
-            task3.CloseTask();
+            task2.CloseTask(string.Empty);
+            task3.CloseTask(string.Empty);
 
             Assert.IsFalse(taskGroup.IsFinished);
         }
@@ -44,9 +44,9 @@ namespace TaskData.Tests
             ITask task2 = taskGroup.CreateTask("2");
             ITask task3 = taskGroup.CreateTask("3");
 
-            task1.CloseTask();
-            task2.CloseTask();
-            task3.CloseTask();
+            task1.CloseTask(string.Empty);
+            task2.CloseTask(string.Empty);
+            task3.CloseTask(string.Empty);
 
             Assert.IsTrue(taskGroup.IsFinished);
         }

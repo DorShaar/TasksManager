@@ -1,6 +1,7 @@
 ﻿using Logger.Contracts;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using TaskData.Contracts;
 
 namespace TaskData
@@ -22,12 +23,11 @@ namespace TaskData
         [JsonIgnore]
         public bool IsFinished { get => Status == Status.Closed ? true : false ; }
 
-        public Status Status { get; private set; } = Status.Open;
+        [JsonIgnore]
+        public Status Status => TaskStatusHistory.CurrentStatus;
 
-        public DateTime TimeCreated { get; } = DateTime.Now;
-        public DateTime TimeLastOpened { get; private set; } = DateTime.Now;
-        public DateTime TimeLastOnWork { get; private set; }
-        public DateTime TimeClosed { get; private set; }
+        [JsonProperty]
+        public ITaskStatusHistory TaskStatusHistory { get; }
 
         public Task(string group, string description, ILogger logger)
         {
@@ -39,8 +39,7 @@ namespace TaskData
         }
 
         [JsonConstructor]
-        internal Task(ILogger logger, string id, string group, string description, Status status, INote note,
-                       DateTime timeCreated, DateTime timeLastOpened, DateTime timeLastOnWork, DateTime timeClosed)
+        internal Task(ILogger logger, string id, string group, string description, INote note, ITaskStatusHistory taskStatusHistory)
         {
             mLogger = logger;
             mNote = note;
@@ -48,17 +47,38 @@ namespace TaskData
             ID = id;
             Group = group;
             Description = description;
-            Status = status;
-
-            TimeCreated = timeCreated;
-            TimeLastOpened = timeLastOpened;
-            TimeLastOnWork = timeLastOnWork;
-            TimeClosed = timeClosed;
+            TaskStatusHistory = taskStatusHistory;
 
             mLogger?.Log($"Task id {ID} restored");
         }
 
-        public void CloseTask()
+        //[JsonConstructor]
+        //internal Task(ILogger logger, string id, string group, string description, Status status, INote note,
+        //               DateTime timeCreated, DateTime timeLastOpened, DateTime timeLastOnWork, DateTime timeClosed, ITaskStatusHistory taskStatusHistory)
+        //{
+        //    mLogger = logger;
+        //    mNote = note;
+
+        //    ID = id;
+        //    Group = group;
+        //    Description = description;
+
+        //    TaskStatusHistory = taskStatusHistory;
+        //    List<StatusData> statusDataList = new List<StatusData>
+        //    {
+        //        new StatusData(timeCreated, Status.Open, "Created")
+        //    };
+        //    if (timeLastOnWork != default)
+        //        statusDataList.Add(new StatusData(timeLastOnWork, Status.OnWork, "Start working"));
+
+        //    if (timeClosed != default)
+        //        statusDataList.Add(new StatusData(timeLastOnWork, Status.Closed, "Done working"));
+
+        //    TaskStatusHistory = new TaskStatusHistory(statusDataList);
+        //    mLogger?.Log($"Task id {ID} restored");
+        //}
+
+        public void CloseTask(string reason)
         {
             if (Status == Status.Closed)
             {
@@ -66,12 +86,11 @@ namespace TaskData
                 return;
             }
 
-            Status = Status.Closed;
-            TimeClosed = DateTime.Now;
-            mLogger?.Log($"Task {ID}, {Description} closed at {TimeClosed}");
+            TaskStatusHistory.AddHistory(DateTime.Now, Status.Closed, reason);
+            mLogger?.Log($"Task {ID}, {Description} closed at {TaskStatusHistory.TimeClosed}");
         }
 
-        public void ReOpenTask()
+        public void ReOpenTask(string reason)
         {
             if (Status == Status.Open)
             {
@@ -79,12 +98,11 @@ namespace TaskData
                 return;
             }
 
-            Status = Status.Open;
-            TimeLastOpened = DateTime.Now;
-            mLogger?.Log($"Task {ID}, {Description} re-opened at {TimeLastOpened}");
+            TaskStatusHistory.AddHistory(DateTime.Now, Status.Open, reason);
+            mLogger?.Log($"Task {ID}, {Description} re-opened at {TaskStatusHistory.TimeLastOpened}");
         }
 
-        public void MarkTaskOnWork()
+        public void MarkTaskOnWork(string reason)
         {
             if (Status == Status.OnWork)
             {
@@ -92,9 +110,8 @@ namespace TaskData
                 return;
             }
 
-            Status = Status.OnWork;
-            TimeLastOnWork = DateTime.Now;
-            mLogger?.Log($"Task {ID}, {Description} marked on work at {TimeLastOnWork}");
+            TaskStatusHistory.AddHistory(DateTime.Now, Status.OnWork, reason);
+            mLogger?.Log($"Task {ID}, {Description} marked on work at {TaskStatusHistory.TimeLastOnWork}");
         }
 
         public void CreateNote(string noteDirectoryPath, string content)
