@@ -28,46 +28,29 @@ namespace ConsoleUI
             {
                 if (args.Length == 0)
                 {
-                    parser.ParseArguments<TaskOptions>(new[] { "--help" });
+                    parser.ParseArguments<CommandLineOptions>(new[] { "--help" });
                     return;
                 }
 
                 exitCode = parser.ParseArguments<
-                TaskGroupOptions.CreateNewTaskGroupOptions,
-                TaskGroupOptions.GatAllTaskGroupOptions,
-                TaskGroupOptions.RemoveTaskGroupOptions,
-
-                TaskOptions.CreateNewTaskOptions,
-                TaskOptions.GetAllTasksOptions,
-                TaskOptions.CloseTasksOptions,
-                TaskOptions.RemoveTaskOptions,
-                TaskOptions.MoveTaskOptions,
-                TaskOptions.ReOpenTaskOptions,
-                TaskOptions.OnWorkTaskOptions,
-                TaskOptions.GetInformationTaskOptions,
-
-                NotesOptions.CreateNoteOptions,
-                NotesOptions.CreateGeneralNoteOptions,
-                NotesOptions.GetNotesOptions,
-                //NotesOptions.OpenNoteOptions,
-                //NotesOptions.GetNoteOptions,
-
-                ConfigOptions.GetDatabasePathOptions
-                /*ConfigOptions.SetDatabasePathOptions*/>(args).MapResult(
+                CommandLineOptions.GetOptions,
+                CommandLineOptions.CreateOptions,
+                CommandLineOptions.RemoveOptions,
+                CommandLineOptions.CloseOptions,
+                CommandLineOptions.MoveTaskOptions,
+                CommandLineOptions.ReOpenTaskOptions,
+                CommandLineOptions.OnWorkTaskOptions,
+                CommandLineOptions.GetInformationTaskOptions
+                CommandLineOptions.OpenNoteOptions>(args).MapResult(
                     (CommandLineOptions.GetOptions options) => GetObject(options),
                     (CommandLineOptions.CreateOptions options) => CreateObject(options),
                     (CommandLineOptions.RemoveOptions options) => RemoveObject(options),
                     (CommandLineOptions.CloseOptions options) => CloseTask(options),
-
-                    (CommandLineOptions.OpenOptions options) => OpenNote(options),
-
-
-
-                     (TaskOptions.MoveTaskOptions options) => MoveTask(mTaskManager, options),
-                     (TaskOptions.ReOpenTaskOptions options) => ReOpenTask(mTaskManager, options),
-                     (TaskOptions.OnWorkTaskOptions options) => MarkTaskAsOnWork(mTaskManager, options),
-                     (TaskOptions.GetInformationTaskOptions options) => GetTaskInformation(mTaskManager, options),
-
+                    (CommandLineOptions.MoveTaskOptions options) => MoveTask(options),
+                    (CommandLineOptions.ReOpenTaskOptions options) => ReOpenTask(options),
+                    (CommandLineOptions.OnWorkTaskOptions options) => MarkTaskAsOnWork(options),
+                    (CommandLineOptions.GetInformationTaskOptions options) => GetTaskInformation(options),
+                    (CommandLineOptions.OpenNoteOptions options) => OpenNote(options),
                      //(ConfigOptions.SetDatabasePathOptions options) => SetDatabasePath(taskManager, options),
                      (parserErrors) => 1
                 );
@@ -381,7 +364,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int OpenNote(CommandLineOptions.OpenOptions options)
+        private static int OpenNote(CommandLineOptions.OpenNoteOptions options)
         {
             if (string.IsNullOrEmpty(options.NoteName))
             {
@@ -393,49 +376,7 @@ namespace ConsoleUI
             return 0;
         }
 
-
-
-
-
-
-        private static int ReOpenTask(ITaskManager taskManager, TaskOptions.ReOpenTaskOptions options)
-        {
-            if (string.IsNullOrEmpty(options.TaskId))
-            {
-                mLogger.LogError($"No task id given");
-                return 1;
-            }
-
-            taskManager.ReOpenTask(options.TaskId);
-            return 0;
-        }
-
-        private static int MarkTaskAsOnWork(ITaskManager taskManager, TaskOptions.OnWorkTaskOptions options)
-        {
-            if (string.IsNullOrEmpty(options.TaskId))
-            {
-                mLogger.LogError($"No task id given");
-                return 1;
-            }
-
-            taskManager.MarkTaskOnWork(options.TaskId);
-            return 0;
-        }
-
-        private static int GetTaskInformation(ITaskManager taskManager, TaskOptions.GetInformationTaskOptions options)
-        {
-            if (string.IsNullOrEmpty(options.TaskId))
-            {
-                mLogger.LogError($"No task id given to create note");
-                return 1;
-            }
-
-            mConsolePrinter.PrintTaskInformation(
-                 taskManager.GetAllTasks((ITask task) => task.ID == options.TaskId).First());
-            return 0;
-        }
-
-        private static int MoveTask(ITaskManager taskManager, TaskOptions.MoveTaskOptions options)
+        private static int MoveTask(CommandLineOptions.MoveTaskOptions options)
         {
             if (string.IsNullOrEmpty(options.TaskId))
             {
@@ -444,7 +385,7 @@ namespace ConsoleUI
             }
 
             if (!string.IsNullOrEmpty(options.TaskGroup))
-                taskManager.MoveTaskToGroup(options.TaskId, options.TaskGroup);
+                mTaskManager.MoveTaskToGroup(options.TaskId, options.TaskGroup);
             else
             {
                 mLogger.LogError($"No group name or group id given");
@@ -454,9 +395,46 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int SetDatabasePath(ITaskManager taskManager, ConfigOptions.SetDatabasePathOptions options)
+        private static int ReOpenTask(CommandLineOptions.ReOpenTaskOptions options)
         {
-            taskManager.ChangeDatabasePath(options.NewDatabasePath);
+            if (string.IsNullOrEmpty(options.TaskId))
+            {
+                mLogger.LogError($"No task id given");
+                return 1;
+            }
+
+            mTaskManager.ReOpenTask(options.TaskId);
+            return 0;
+        }
+
+        private static int MarkTaskAsOnWork(CommandLineOptions.OnWorkTaskOptions options)
+        {
+            if (string.IsNullOrEmpty(options.TaskId))
+            {
+                mLogger.LogError($"No task id given");
+                return 1;
+            }
+
+            mTaskManager.MarkTaskOnWork(options.TaskId);
+            return 0;
+        }
+
+        private static int GetTaskInformation(CommandLineOptions.GetInformationTaskOptions options)
+        {
+            if (string.IsNullOrEmpty(options.TaskId))
+            {
+                mLogger.LogError($"No task id given to create note");
+                return 1;
+            }
+
+            mConsolePrinter.PrintTaskInformation(
+                 mTaskManager.GetAllTasks((ITask task) => task.ID == options.TaskId).First());
+            return 0;
+        }
+
+        private static int SetDatabasePath(ConfigOptions.SetDatabasePathOptions options)
+        {
+            mTaskManager.ChangeDatabasePath(options.NewDatabasePath);
             return 0;
         }
     }

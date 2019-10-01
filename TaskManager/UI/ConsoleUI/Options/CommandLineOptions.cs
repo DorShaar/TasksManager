@@ -65,8 +65,39 @@ namespace ConsoleUI.Options
             public string ObjectId { get; set; }
         }
 
+        [Verb("move", HelpText = "Moves a task to a given group")]
+        public class MoveTaskOptions
+        {
+            [Value(0, HelpText = "Task id to move")]
+            public string TaskId { get; set; }
+
+            [Value(1, HelpText = "Task group to move the task to")]
+            public string TaskGroup { get; set; }
+        }
+
+        [Verb("reopen", HelpText = "Reopen a closed task")]
+        public class ReOpenTaskOptions
+        {
+            [Value(0, HelpText = "Task id to open again")]
+            public string TaskId { get; set; }
+        }
+
+        [Verb("work", HelpText = "Mark task as on work")]
+        public class OnWorkTaskOptions
+        {
+            [Value(0, HelpText = "Task id to mark as on work")]
+            public string TaskId { get; set; }
+        }
+
+        [Verb("info", HelpText = "Get task information")]
+        public class GetInformationTaskOptions
+        {
+            [Value(0, HelpText = "Task id to get information")]
+            public string TaskId { get; set; }
+        }
+
         [Verb("open", HelpText = "Open note with the default text editor")]
-        public class OpenOptions
+        public class OpenNoteOptions
         {
             [Value(0, HelpText = "Note subject or task id to open the note")]
             public string NoteName { get; set; }
