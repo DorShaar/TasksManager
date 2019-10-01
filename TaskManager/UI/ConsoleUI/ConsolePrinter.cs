@@ -1,5 +1,4 @@
-﻿using ConsoleUI.Options;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using TaskData.Contracts;
@@ -8,14 +7,14 @@ namespace ConsoleUI
 {
     internal class ConsolePrinter
     {
-        public void PrintTasksGroup(IEnumerable<ITaskGroup> groups, TaskGroupOptions.GatAllTaskGroupOptions options)
+        public void PrintTasksGroup(IEnumerable<ITaskGroup> groups, bool isDetailed)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine(GetTaskGroupHeader(options.IsDetailed));
+            stringBuilder.AppendLine(GetTaskGroupHeader(isDetailed));
             foreach (ITaskGroup group in groups)
             {
-                if (options.IsDetailed)
+                if (isDetailed)
                     stringBuilder.AppendLine(
                          StringFormatHelper(new string[] { group.ID, group.GroupName, group.Size.ToString() }, new int[] { -5, -25, -10 }));
                 else
@@ -34,14 +33,14 @@ namespace ConsoleUI
                 return StringFormatHelper(new string[] { "ID", "GROUP NAME" }, new int[] { -5, -25 });
         }
 
-        public void PrintTasks(IEnumerable<ITask> tasks, TaskOptions.GetAllTasksOptions options)
+        public void PrintTasks(IEnumerable<ITask> tasks, bool isDetailed)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine(GetTasksHeader(options.IsDetailed));
+            stringBuilder.AppendLine(GetTasksHeader(isDetailed));
             foreach (ITask task in tasks)
             {
-                if (options.IsDetailed)
+                if (isDetailed)
                     stringBuilder.AppendLine(
                          StringFormatHelper(
                               new string[]
