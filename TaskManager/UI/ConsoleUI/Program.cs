@@ -82,6 +82,7 @@ namespace ConsoleUI
                     return GetDatabasePath();
 
                 default:
+                    mLogger.LogError("No valid object type given (task, group, note, db)");
                     return 1;
             }
         }
@@ -206,6 +207,7 @@ namespace ConsoleUI
                     return CreateGeneralNote(options.ObjectName, options.Description);
 
                 default:
+                    mLogger.LogError("No valid object type given (task, group, note, general)");
                     return 1;
             }
         }
@@ -299,6 +301,7 @@ namespace ConsoleUI
                     return RemoveTaskGroup(options.ObjectId, options.ShouldHardDelete);
 
                 default:
+                    mLogger.LogError("No valid object type given (task, group)");
                     return 1;
             }
         }
@@ -347,6 +350,7 @@ namespace ConsoleUI
                     return CloseTask(options.ObjectId, options.Reason);
 
                 default:
+                    mLogger.LogError("No valid object type given (task)");
                     return 1;
             }
         }
