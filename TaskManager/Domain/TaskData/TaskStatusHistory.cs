@@ -8,7 +8,7 @@ namespace TaskData
 {
     public class TaskStatusHistory : ITaskStatusHistory
     {
-        public List<StatusData> StatusHistory { get; } = new List<StatusData>();
+        public List<StatusData> StatusHistory { get; }
 
         [JsonIgnore]
         public DateTime TimeCreated => StatusHistory[0].DateTime;
@@ -25,10 +25,12 @@ namespace TaskData
         [JsonIgnore]
         public Status CurrentStatus => StatusHistory.Last().Status;
 
-        [JsonConstructor]
-        public TaskStatusHistory(List<StatusData> statusHistory)
+        public TaskStatusHistory()
         {
-            StatusHistory = statusHistory;
+            StatusHistory = new List<StatusData>
+            {
+                new StatusData(DateTime.Now, Status.Open, "Created")
+            };
         }
 
         private DateTime FindLastStatus(Status status)
