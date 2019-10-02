@@ -35,7 +35,7 @@ namespace TaskData
             Group = group;
             Description = description;
             TaskStatusHistory = new TaskStatusHistory();
-            mLogger?.Log($"New task id {ID} created with description: {Description}");
+            mLogger?.Log($"New task id {ID} created with description: '{Description}'");
         }
 
         [JsonConstructor]
@@ -56,36 +56,36 @@ namespace TaskData
         {
             if (Status == Status.Closed)
             {
-                mLogger?.Log($"Task {ID}, {Description} is already closed");
+                mLogger?.Log($"Task {ID}, '{Description}' is already closed");
                 return;
             }
 
             TaskStatusHistory.AddHistory(DateTime.Now, Status.Closed, reason);
-            mLogger?.Log($"Task {ID}, {Description} closed at {TaskStatusHistory.TimeClosed}");
+            mLogger?.Log($"Task {ID}, '{Description}' closed at {TaskStatusHistory.TimeClosed}");
         }
 
         public void ReOpenTask(string reason)
         {
             if (Status == Status.Open)
             {
-                mLogger?.Log($"Task {ID}, {Description} is already open");
+                mLogger?.Log($"Task {ID}, '{Description}' is already open");
                 return;
             }
 
             TaskStatusHistory.AddHistory(DateTime.Now, Status.Open, reason);
-            mLogger?.Log($"Task {ID}, {Description} re-opened at {TaskStatusHistory.TimeLastOpened}");
+            mLogger?.Log($"Task {ID}, '{Description}' re-opened at {TaskStatusHistory.TimeLastOpened}");
         }
 
         public void MarkTaskOnWork(string reason)
         {
             if (Status == Status.OnWork)
             {
-                mLogger?.Log($"Task {ID}, {Description} is already on work");
+                mLogger?.Log($"Task {ID}, '{Description}' is already on work");
                 return;
             }
 
             TaskStatusHistory.AddHistory(DateTime.Now, Status.OnWork, reason);
-            mLogger?.Log($"Task {ID}, {Description} marked on work at {TaskStatusHistory.TimeLastOnWork}");
+            mLogger?.Log($"Task {ID}, '{Description}' marked on work at {TaskStatusHistory.TimeLastOnWork}");
         }
 
         public void CreateNote(string noteDirectoryPath, string content)
@@ -104,7 +104,7 @@ namespace TaskData
         {
             if (mNote == null)
             {
-                mLogger.LogInformation($"Task id {ID}, {Description} has no note");
+                mLogger.LogInformation($"Task id {ID}, '{Description}' has no note");
                 return;
             }
 
@@ -115,7 +115,7 @@ namespace TaskData
         {
             if (mNote == null)
             {
-                mLogger.LogInformation($"Task id {ID}, {Description} has no note");
+                mLogger.LogInformation($"Task id {ID}, '{Description}' has no note");
                 return string.Empty;
             }
 

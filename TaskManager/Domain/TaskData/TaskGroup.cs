@@ -68,13 +68,13 @@ namespace TaskData
         {
             if (mTasksChildren.ContainsKey(task.ID))
             {
-                mLogger?.Log($"Task {task.ID}, {task.Description} is already found in group {GroupName}");
+                mLogger?.Log($"Task {task.ID}, '{task.Description}' is already found in group {GroupName}");
                 return;
             }
 
             task.Group = GroupName;
             mTasksChildren.Add(task.ID, task);
-            mLogger?.Log($"Task {task.ID}, {task.Description} added to group {GroupName}");
+            mLogger?.Log($"Task {task.ID}, '{task.Description}' added to group {GroupName}");
         }
 
         public void RemoveTask(string id)
