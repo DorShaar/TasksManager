@@ -1,7 +1,6 @@
 ﻿using Logger.Contracts;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using TaskData.Contracts;
 
 namespace TaskData
