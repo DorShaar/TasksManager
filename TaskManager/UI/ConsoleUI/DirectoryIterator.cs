@@ -47,9 +47,9 @@ namespace ConsoleUI
         private void PrintSubjectAndNotes(INotesSubject notesDirectory)
         {
             mConsolePrinter.Print(notesDirectory.GetNotesSubjects().Select(
-                subject => Path.GetFileName(subject.NoteSubjectFullPath)), "Subjects");
+                subject => Path.GetFileName(subject.NoteSubjectFullPath)), "SUBJECTS");
             mConsolePrinter.Print(notesDirectory.GetNotes().Select(
-                note => Path.GetFileName(note.NotePath)), "Notes");
+                note => Path.GetFileName(note.NotePath)), "NOTES");
         }
 
         private INotesSubject GoBack(INotesSubject notesDirectory)

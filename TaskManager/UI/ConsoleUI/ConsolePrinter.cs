@@ -146,7 +146,7 @@ namespace ConsoleUI
             Console.WriteLine(header);
             foreach(string line in data)
             {
-                Console.WriteLine(line);
+                Console.WriteLine("\t" + line);
             }
         }
     }
