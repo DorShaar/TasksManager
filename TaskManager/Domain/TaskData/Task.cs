@@ -88,16 +88,18 @@ namespace TaskData
             mLogger?.Log($"Task {ID}, '{Description}' marked on work at {TaskStatusHistory.TimeLastOnWork}");
         }
 
-        public void CreateNote(string noteDirectoryPath, string content)
+        public string CreateNote(string noteDirectoryPath, string content)
         {
+            string noteName = string.Empty;
             if (mNote != null)
             {
                 mLogger.Log($"Cannot create note since note {mNote.NotePath} is already exist");
-                return;
+                return noteName;
             }
 
             mNote = new Note(noteDirectoryPath, $"{ID}-{Description}", content);
             OpenNote();
+            return mNote.NotePath;
         }
 
         public void OpenNote()

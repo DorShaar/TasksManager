@@ -15,7 +15,7 @@
         void MarkTaskOnWork(string reason);
 
         // Private Notes.
-        void CreateNote(string noteDirectoryPath, string content);
+        string CreateNote(string noteDirectoryPath, string content);
         void OpenNote();
         string GetNote();
     }

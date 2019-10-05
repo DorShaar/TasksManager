@@ -96,8 +96,7 @@ namespace TaskData.Tests
                try
                {
                     Task task = new Task(DummyGroupName, DummyDescription, mLogger);
-                    task.CreateNote(NotesDirectory, excpectedText);
-                    notePath = Path.Combine(NotesDirectory, task.ID + ".txt");
+                    notePath = task.CreateNote(NotesDirectory, excpectedText);
 
                     task.CreateNote(NotesDirectory, "another content");
 
@@ -106,7 +105,7 @@ namespace TaskData.Tests
                finally
                {
                     File.Delete(notePath);
-                    Directory.Delete(NotesDirectory);
+                    Directory.Delete(NotesDirectory, recursive: true);
                }
           }
 
