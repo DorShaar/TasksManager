@@ -34,6 +34,11 @@ namespace ConsoleUI
                     else if (File.Exists(fileOrDirectory))
                         note = GetNote(currentNotesDirectory, userInput);
                 }
+
+                if(note != null)
+                {
+                    PrintSubjectAndNotes(currentNotesDirectory);
+                }
             }
 
             return note;
@@ -41,8 +46,10 @@ namespace ConsoleUI
 
         private void PrintSubjectAndNotes(INotesSubject notesDirectory)
         {
-            mConsolePrinter.Print(notesDirectory.GetNotesSubjects().Select(subject => subject.NoteSubjectFullPath), "Subjects");
-            mConsolePrinter.Print(notesDirectory.GetNotes().Select(note => note.NotePath), "Notes");
+            mConsolePrinter.Print(notesDirectory.GetNotesSubjects().Select(
+                subject => Path.GetFileName(subject.NoteSubjectFullPath)), "Subjects");
+            mConsolePrinter.Print(notesDirectory.GetNotes().Select(
+                note => Path.GetFileName(note.NotePath)), "Notes");
         }
 
         private INotesSubject GoBack(INotesSubject notesDirectory)
