@@ -7,7 +7,10 @@ namespace TaskData
     {
         public INotesSubject Load(string notePath)
         {
-            return new NotesSubject(Path.GetDirectoryName(notePath), Path.GetFileNameWithoutExtension(notePath));
+            if (!File.Exists(notePath))
+                return null;
+            else
+                return new NotesSubject(Path.GetDirectoryName(notePath), Path.GetFileNameWithoutExtension(notePath));
         }
     }
 }
