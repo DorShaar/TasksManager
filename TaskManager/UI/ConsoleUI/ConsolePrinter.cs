@@ -140,5 +140,14 @@ namespace ConsoleUI
             Console.WriteLine(header);
             Console.WriteLine(data);
         }
+
+        public void Print(IEnumerable<string> data, string header)
+        {
+            Console.WriteLine(header);
+            foreach(string line in data)
+            {
+                Console.WriteLine(line);
+            }
+        }
     }
 }

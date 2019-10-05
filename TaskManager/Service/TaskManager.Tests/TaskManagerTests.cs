@@ -18,14 +18,16 @@ namespace TaskManager.Integration.Tests
         private static readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
         private static readonly ITaskGroupBuilder mTaskGroupBuilder = new TaskGroupBuilder();
         private static readonly INoteBuilder mNoteBuilder = new NoteBuilder();
+        private static readonly INotesSubjectBuilder mNotesSubjectBuilder = new NotesSubjectBuilder();
         private static IRepository<ITaskGroup> mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
-        private static TaskManager mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mNoteBuilder, mLogger);
+        private static TaskManager mTaskManager = 
+            new TaskManager(mDatabase, mTaskGroupBuilder, mNoteBuilder, mNotesSubjectBuilder, mLogger);
 
         [TestInitialize]
         public void Startup()
         {
             mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
-            mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mNoteBuilder, mLogger);
+            mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mNoteBuilder, mNotesSubjectBuilder, mLogger);
         }
 
         [TestMethod]
