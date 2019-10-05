@@ -33,8 +33,8 @@ namespace ConsoleUI
                     string fileOrDirectory = Path.Combine(currentNotesDirectory.NoteSubjectFullPath, userInput);
                     if (Directory.Exists(fileOrDirectory))
                         currentNotesDirectory = InsertDirectory(currentNotesDirectory, userInput);
-                    else if (File.Exists(fileOrDirectory))
-                        note = GetNote(currentNotesDirectory, userInput);
+
+                    note = GetNote(currentNotesDirectory, userInput);
                 }
             }
 
