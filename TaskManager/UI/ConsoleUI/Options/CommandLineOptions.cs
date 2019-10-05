@@ -110,6 +110,9 @@ namespace ConsoleUI.Options
         {
             [Value(0, HelpText = "Note subject or task id to open the note")]
             public string NoteName { get; set; }
+
+            [Value(1, HelpText = "Only in case NoteName = \"note\", Note subject or task id to open the note")]
+            public string NoteName2 { get; set; }
         }
     }
 }

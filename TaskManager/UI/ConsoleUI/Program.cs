@@ -375,7 +375,11 @@ namespace ConsoleUI
                 return 1;
             }
 
-            mTaskManager.OpenNote(options.NoteName);
+            string noteName = options.NoteName;
+            if (options.NoteName.ToLower().Equals("note"))
+                noteName = options.NoteName2;
+
+            mTaskManager.OpenNote(noteName);
             return 0;
         }
 
