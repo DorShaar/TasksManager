@@ -4,10 +4,12 @@ namespace TaskData.Contracts
 {
     public interface INotesSubject
     {
-        IEnumerable<INotesSubject> GetNotesSubjects();
-        IEnumerable<INote> GetNotes();
-        string NoteSubject { get; }
+        string NoteSubjectDirectory { get; }
+        string NoteSubjectName { get; }
+        string NoteSubjectFullPath { get; }
 
+        IEnumerable<INote> GetNotes();
+        IEnumerable<INotesSubject> GetNotesSubjects();
         void AddNoteSubject(string noteSubject);
         void AddNote(string directoryPath, string noteName, string content);
     }

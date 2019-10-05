@@ -21,6 +21,9 @@ namespace TaskData
         [JsonIgnore]
         public string Text => File.ReadAllText(NotePath);
 
+        /// <summary>
+        /// For creating Note object from existing file.
+        /// </summary>
         [JsonConstructor]
         public Note(string directoryPath, string noteName)
         {
@@ -29,6 +32,9 @@ namespace TaskData
             mNoteName = noteName;
         }
 
+        /// <summary>
+        /// For creating new Note object (<paramref name="directoryPath"/>\<paramref name="noteName"/> not exists).
+        /// /// </summary>
         internal Note(string directoryPath, string noteName, string content)
         {
             Extension = ".txt";
