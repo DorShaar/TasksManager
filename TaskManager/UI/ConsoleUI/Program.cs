@@ -180,12 +180,7 @@ namespace ConsoleUI
             IEnumerable<INote> allNotes = mTaskManager.GetAllNotes();
             IEnumerable<string> notesToPrint = allNotes.Select(note => Path.GetFileNameWithoutExtension(note.NotePath));
 
-            mLogger.Log("NOTES");
-            foreach (string noteName in notesToPrint)
-            {
-                mLogger.Log(noteName);
-            }
-
+            mConsolePrinter.Print(notesToPrint, "NOTES");
             return 0;
         }
 
