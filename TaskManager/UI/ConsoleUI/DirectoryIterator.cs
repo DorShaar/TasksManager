@@ -19,11 +19,13 @@ namespace ConsoleUI
         {
             INote note = null;
             INotesSubject currentNotesDirectory = mRootNotesDirectory;
-            PrintSubjectAndNotes(currentNotesDirectory);
 
-            string userInput = Console.ReadLine();
-            while (userInput.ToLower() != "exit" && userInput.ToLower() != "q" && note != null)
+            string userInput = string.Empty;
+            while (userInput.ToLower() != "exit" && userInput.ToLower() != "q" && note == null)
             {
+                PrintSubjectAndNotes(currentNotesDirectory);
+                userInput = Console.ReadLine();
+
                 if (userInput.ToLower().Equals(".."))
                     currentNotesDirectory = GoBack(currentNotesDirectory);
                 else
@@ -33,11 +35,6 @@ namespace ConsoleUI
                         currentNotesDirectory = InsertDirectory(currentNotesDirectory, userInput);
                     else if (File.Exists(fileOrDirectory))
                         note = GetNote(currentNotesDirectory, userInput);
-                }
-
-                if(note != null)
-                {
-                    PrintSubjectAndNotes(currentNotesDirectory);
                 }
             }
 
@@ -50,6 +47,7 @@ namespace ConsoleUI
                 subject => Path.GetFileName(subject.NoteSubjectFullPath)), "SUBJECTS");
             mConsolePrinter.Print(notesDirectory.GetNotes().Select(
                 note => Path.GetFileName(note.NotePath)), "NOTES");
+            mConsolePrinter.Print(string.Empty, string.Empty);
         }
 
         private INotesSubject GoBack(INotesSubject notesDirectory)
@@ -67,7 +65,7 @@ namespace ConsoleUI
         {
             foreach (INotesSubject notesSubject in notesDirectory.GetNotesSubjects())
             {
-                if (notesSubject.NoteSubjectName == directory)
+                if (notesSubject.NoteSubjectName.Equals(directory, StringComparison.OrdinalIgnoreCase))
                     return notesSubject;
             }
 
@@ -78,9 +76,9 @@ namespace ConsoleUI
         {
             foreach (INote note in notesDirectory.GetNotes())
             {
-                if (Path.GetFileName(note.NotePath).Equals(noteName))
+                if (Path.GetFileName(note.NotePath).Equals(noteName, StringComparison.OrdinalIgnoreCase))
                     return note;
-                if (Path.GetFileNameWithoutExtension(note.NotePath).Equals(noteName))
+                if (Path.GetFileNameWithoutExtension(note.NotePath).Equals(noteName, StringComparison.OrdinalIgnoreCase))
                     return note;
             }
 
