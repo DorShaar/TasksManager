@@ -5,12 +5,12 @@ namespace TaskData
 {
     public class NotesSubjectBuilder : INotesSubjectBuilder
     {
-        public INotesSubject Load(string notePath)
+        public INotesSubject Load(string noteSubjectPath)
         {
-            if (!File.Exists(notePath))
+            if (!Directory.Exists(noteSubjectPath))
                 return null;
             else
-                return new NotesSubject(Path.GetDirectoryName(notePath), Path.GetFileNameWithoutExtension(notePath));
+                return new NotesSubject(Path.GetDirectoryName(noteSubjectPath), Path.GetFileNameWithoutExtension(noteSubjectPath));
         }
     }
 }
