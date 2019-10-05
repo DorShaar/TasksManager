@@ -96,7 +96,7 @@ namespace TaskData
                 return;
             }
 
-            mNote = new Note(noteDirectoryPath, ID, content);
+            mNote = new Note(noteDirectoryPath, $"{ID}-{Description}", content);
             OpenNote();
         }
 

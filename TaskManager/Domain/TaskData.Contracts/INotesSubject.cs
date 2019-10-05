@@ -4,7 +4,6 @@ namespace TaskData.Contracts
 {
     public interface INotesSubject
     {
-        string NoteSubjectDirectory { get; }
         string NoteSubjectName { get; }
         string NoteSubjectFullPath { get; }
 

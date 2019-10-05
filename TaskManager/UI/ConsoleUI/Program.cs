@@ -74,7 +74,7 @@ namespace ConsoleUI
 
                 case "note":
                 case "notes":
-                    return GetNote(options.ObjectName);
+                    return GetNoteContent(options.ObjectName, options.ShouldPrintAll);
 
                 case "db":
                 case "data-base":
@@ -155,20 +155,29 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int GetNote(string noteName)
+        private static int GetNoteContent(string notePath, bool shouldPrintAll)
         {
-            // Prints all notes
-            if (string.IsNullOrEmpty(noteName))
-                return GetAllNotesNames();
+            if (string.IsNullOrEmpty(notePath))
+            {
+                if (shouldPrintAll)
+                    return GetAllNotesNames();
+                else
+                {
+                    mLogger.LogError($"No note path given to open");
+                    return 1;
+                }
+            }
 
-            // Prints specific note.
-            mLogger.Log(mTaskManager.GetNote(noteName));
+            INote note = GetNote(notePath);
+            if (note != null)
+                mLogger.Log(note.Text);
+
             return 0;
         }
 
         private static int GetAllNotesNames()
         {
-            IEnumerable<INote> allNotes = mTaskManager.GetNotes();
+            IEnumerable<INote> allNotes = mTaskManager.GetAllNotes();
             IEnumerable<string> notesToPrint = allNotes.Select(note => Path.GetFileNameWithoutExtension(note.NotePath));
 
             mLogger.Log("NOTES");
@@ -263,7 +272,7 @@ namespace ConsoleUI
             if (textToWrite == null)
                 textToWrite = string.Empty;
 
-            mTaskManager.CreateNote(taskId, textToWrite);
+            mTaskManager.CreateTaskNote(taskId, textToWrite);
             return 0;
         }
 
@@ -371,16 +380,25 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(options.NoteName))
             {
-                mLogger.LogError($"No task id given to open note");
+                mLogger.LogError($"No note path given to open");
                 return 1;
             }
 
-            string noteName = options.NoteName;
+            string notePath = options.NoteName;
             if (options.NoteName.ToLower().Equals("note"))
-                noteName = options.NoteName2;
+                notePath = options.NoteName2;
 
-            mTaskManager.OpenNote(noteName);
+            INote note = GetNote(notePath);
+            if (note != null)
+                note.Open();
+
             return 0;
+        }
+
+        private static INote GetNote(string notePath)
+        {
+            DirectoryIterator directoryIterator = new DirectoryIterator();
+            return directoryIterator.Iterate(notePath, mTaskManager.NotesRootDatabase);
         }
 
         private static int MoveTask(CommandLineOptions.MoveTaskOptions options)

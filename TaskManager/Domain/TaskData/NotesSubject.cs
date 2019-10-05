@@ -8,13 +8,13 @@ namespace TaskData
     {
         private readonly INoteBuilder mNoteBuilder = new NoteBuilder();
         private readonly List<string> mNotesExtensions = new List<string> { ".txt" };
-        public string NoteSubjectDirectory { get; private set; }
+        private readonly string mNoteSubjectDirectory;
         public string NoteSubjectName { get; private set; }
-        public string NoteSubjectFullPath => Path.Combine(NoteSubjectDirectory, NoteSubjectName);
+        public string NoteSubjectFullPath => Path.Combine(mNoteSubjectDirectory, NoteSubjectName);
 
         public NotesSubject(string directoryPath, string noteSubjectName)
         {
-            NoteSubjectDirectory = directoryPath;
+            mNoteSubjectDirectory = directoryPath;
             NoteSubjectName = noteSubjectName;
             Directory.CreateDirectory(NoteSubjectFullPath);
         }

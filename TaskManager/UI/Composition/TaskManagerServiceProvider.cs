@@ -45,6 +45,7 @@ namespace Composition
         private void RegisterTaskDataEntities(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<INoteBuilder, NoteBuilder>();
+            serviceCollection.AddSingleton<INotesSubjectBuilder, NotesSubjectBuilder>();
             serviceCollection.AddSingleton<ITask, Task>();
             serviceCollection.AddSingleton<ITaskGroup, TaskGroup>();
             serviceCollection.AddSingleton<ITaskGroupBuilder, TaskGroupBuilder>();

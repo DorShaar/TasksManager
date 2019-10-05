@@ -24,11 +24,10 @@ namespace TaskManager.Contracts
         void MoveTaskToGroup(string taskId, string taskGroup);
 
         // Notes.
-        void CreateNote(string taskId, string content);
+        INotesSubject NotesRootDatabase { get; }
+        IEnumerable<INote> GetAllNotes();
+        void CreateTaskNote(string taskId, string content);
         void CreateGeneralNote(string taskSubject, string content);
-        void OpenNote(string taskId);
-        IEnumerable<INote> GetNotes();
-        string GetNote(string taskId);
 
         // Database.
         string GetDatabasePath();
