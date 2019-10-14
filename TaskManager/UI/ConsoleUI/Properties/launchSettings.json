@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleUI": {
       "commandName": "Project",
-      "commandLineArgs": "open note abcd"
+      "commandLineArgs": "open general cs-study\\linux\\Linux"
     }
   }
 }
