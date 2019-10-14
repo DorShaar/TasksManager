@@ -170,7 +170,9 @@ namespace ConsoleUI
         private static int GetAllNotesNames()
         {
             IEnumerable<INote> allNotes = mTaskManager.GetAllNotes();
-            IEnumerable<string> notesToPrint = allNotes.Select(note => Path.GetFileNameWithoutExtension(note.NotePath));
+            IEnumerable<string> notesToPrint = allNotes
+                .Where(note => Path.GetExtension(note.NotePath).Equals(note.Extension))
+                .Select(note => Path.GetFileNameWithoutExtension(note.NotePath));
 
             mConsolePrinter.Print(notesToPrint, "NOTES");
             return 0;
