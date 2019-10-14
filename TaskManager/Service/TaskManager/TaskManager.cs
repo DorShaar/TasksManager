@@ -22,11 +22,11 @@ namespace TaskManager
         private readonly INotesSubjectBuilder mNoteSubjectBuilder;
         private readonly ITaskGroupBuilder mTaskGroupBuilder;
 
-        private readonly ILocalReposetory<ITaskGroup> mTasksDatabase;
+        private readonly ILocalRepository<ITaskGroup> mTasksDatabase;
         public INotesSubject NotesRootDatabase { get; }
 
         public TaskManager(
-            ILocalReposetory<ITaskGroup> tasksDatabase, 
+            ILocalRepository<ITaskGroup> tasksDatabase, 
             ITaskGroupBuilder taskGroupBuilder,
             INoteBuilder noteBuilder,
             INotesSubjectBuilder notesSubjectBuilder,

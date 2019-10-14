@@ -9,7 +9,7 @@ using TaskData.Contracts;
 
 namespace Database
 {
-    public class Database<T> : ILocalReposetory<T> where T : ITaskGroup
+    public class Database<T> : ILocalRepository<T> where T : ITaskGroup
     {
         private const string DatabaseName = "tasks.db";
         private const string NextIdHolderName = "id_producer.db";
