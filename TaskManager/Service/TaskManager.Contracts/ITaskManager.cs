@@ -25,6 +25,7 @@ namespace TaskManager.Contracts
 
         // Notes.
         INotesSubject NotesRootDatabase { get; }
+        INotesSubject NotesTasksDatabase { get; }
         IEnumerable<INote> GetAllNotes();
         void CreateTaskNote(string taskId, string content);
         void CreateGeneralNote(string taskSubject, string content);

@@ -4,5 +4,6 @@
     {
         string DatabasePath { get; }
         string NotesDatabaseDirectoryPath { get; }
+        string NotesTasksDatabaseDirectoryPath { get; }
     }
 }

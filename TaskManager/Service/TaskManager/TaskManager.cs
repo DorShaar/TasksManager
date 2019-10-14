@@ -24,9 +24,10 @@ namespace TaskManager
 
         private readonly ILocalRepository<ITaskGroup> mTasksDatabase;
         public INotesSubject NotesRootDatabase { get; }
+        public INotesSubject NotesTasksDatabase { get; }
 
         public TaskManager(
-            ILocalRepository<ITaskGroup> tasksDatabase, 
+            ILocalRepository<ITaskGroup> tasksDatabase,
             ITaskGroupBuilder taskGroupBuilder,
             INoteBuilder noteBuilder,
             INotesSubjectBuilder notesSubjectBuilder,
@@ -40,6 +41,7 @@ namespace TaskManager
 
             mTasksDatabase = tasksDatabase;
             NotesRootDatabase = mNoteSubjectBuilder.Load(mTasksDatabase.NotesDatabaseDirectoryPath);
+            NotesTasksDatabase = mNoteSubjectBuilder.Load(mTasksDatabase.NotesTasksDatabaseDirectoryPath);
 
             InitializeFreeTasksGroup();
         }
@@ -274,7 +276,7 @@ namespace TaskManager
 
         public IEnumerable<INote> GetAllNotes()
         {
-            foreach (string filePath in 
+            foreach (string filePath in
                 Directory.EnumerateFiles(NotesRootDatabase.NoteSubjectFullPath, "*", SearchOption.AllDirectories))
             {
                 yield return mNoteBuilder.Load(filePath);

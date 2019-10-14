@@ -76,6 +76,9 @@ namespace ConsoleUI
                 case "notes":
                     return GetNoteContent(options.ObjectName, options.ShouldPrintAll);
 
+                case "general":
+                    return GetGeneralNoteContent(options.ObjectName);
+
                 case "db":
                 case "data-base":
                 case "database":
@@ -160,6 +163,15 @@ namespace ConsoleUI
             if (shouldPrintAll)
                 return GetAllNotesNames();
 
+            INote note = GetNote(Path.Combine(mTaskManager.NotesTasksDatabase.NoteSubjectFullPath, notePath));
+            if (note != null)
+                mLogger.Log(note.Text);
+
+            return 0;
+        }
+
+        private static int GetGeneralNoteContent(string notePath)
+        {
             INote note = GetNote(notePath);
             if (note != null)
                 mLogger.Log(note.Text);

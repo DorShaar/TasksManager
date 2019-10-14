@@ -27,6 +27,7 @@ namespace Database
         /// That is the path to the directory of all the notes.
         /// </summary>
         public string NotesDatabaseDirectoryPath { get => mConfiguration.NotesDirectoryPath; }
+        public string NotesTasksDatabaseDirectoryPath { get => mConfiguration.NotesTasksDirectoryPath; }
 
         public Database(IConfiguration configuration, IObjectSerializer serializer, ILogger logger)
         {
