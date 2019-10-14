@@ -7,13 +7,14 @@ namespace TaskData
 {
     public class Note : INote
     {
-        private readonly string Extension;
-
         [JsonProperty]
         private readonly string mNoteDirecoryPath;
 
         [JsonProperty]
         private readonly string mNoteName;
+
+        [JsonIgnore]
+        public string Extension { get; } = ".txt";
 
         [JsonIgnore]
         public string NotePath => Path.Combine(mNoteDirecoryPath, mNoteName + Extension);
@@ -27,7 +28,6 @@ namespace TaskData
         [JsonConstructor]
         public Note(string directoryPath, string noteName)
         {
-            Extension = ".txt";
             mNoteDirecoryPath = directoryPath;
             mNoteName = noteName;
         }
@@ -37,7 +37,6 @@ namespace TaskData
         /// /// </summary>
         internal Note(string directoryPath, string noteName, string content)
         {
-            Extension = ".txt";
             mNoteDirecoryPath = directoryPath;
             mNoteName = noteName;
 
