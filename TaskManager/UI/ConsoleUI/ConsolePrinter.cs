@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TaskData.Contracts;
 
@@ -143,6 +144,9 @@ namespace ConsoleUI
 
         public void Print(IEnumerable<string> data, string header)
         {
+            if (!data.Any())
+                return;
+
             Console.WriteLine(header);
             foreach(string line in data)
             {
