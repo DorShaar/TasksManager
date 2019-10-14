@@ -108,11 +108,11 @@ namespace ConsoleUI.Options
         [Verb("open", HelpText = "Open note with the default text editor")]
         public class OpenNoteOptions
         {
+            [Value(0, HelpText = "Object to open (note, general path)")]
+            public string ObjectType { get; set; }
+
             [Value(0, HelpText = "Note subject or task id to open the note")]
             public string NoteName { get; set; }
-
-            [Value(1, HelpText = "Only in case NoteName = \"note\", Note subject or task id to open the note")]
-            public string NoteName2 { get; set; }
         }
     }
 }

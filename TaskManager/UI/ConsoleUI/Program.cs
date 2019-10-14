@@ -85,7 +85,7 @@ namespace ConsoleUI
                     return GetDatabasePath();
 
                 default:
-                    mLogger.LogError("No valid object type given (task, group, note, db)");
+                    mLogger.LogError("No valid object type given (task, group, note, general, db)");
                     return 1;
             }
         }
@@ -163,7 +163,7 @@ namespace ConsoleUI
             if (shouldPrintAll)
                 return GetAllNotesNames();
 
-            INote note = GetNote(Path.Combine(mTaskManager.NotesTasksDatabase.NoteSubjectFullPath, notePath));
+            INote note = GetNote(mTaskManager.NotesTasksDatabase, notePath);
             if (note != null)
                 mLogger.Log(note.Text);
 
@@ -172,7 +172,7 @@ namespace ConsoleUI
 
         private static int GetGeneralNoteContent(string notePath)
         {
-            INote note = GetNote(notePath);
+            INote note = GetNote(mTaskManager.NotesRootDatabase, notePath);
             if (note != null)
                 mLogger.Log(note.Text);
 
@@ -379,20 +379,42 @@ namespace ConsoleUI
 
         private static int OpenNote(CommandLineOptions.OpenNoteOptions options)
         {
-            string notePath = options.NoteName;
-            if (options.NoteName.ToLower().Equals("note"))
-                notePath = options.NoteName2;
+            switch (options.ObjectType.ToLower())
+            {
+                case "note":
+                case "notes":
+                    return OpenNote(options.NoteName);
 
-            INote note = GetNote(notePath);
+                case "general":
+                    return OpenGeneralNote(options.NoteName);
+
+                default:
+                    mLogger.LogError("No valid object type given (note, general)");
+                    return 1;
+            }
+        }
+
+        private static int OpenNote(string noteName)
+        {
+            INote note = GetNote(mTaskManager.NotesTasksDatabase, noteName);
             if (note != null)
                 note.Open();
 
             return 0;
         }
 
-        private static INote GetNote(string notePath)
+        private static int OpenGeneralNote(string noteName)
         {
-            DirectoryIterator directoryIterator = new DirectoryIterator(mTaskManager.NotesRootDatabase);
+            INote note = GetNote(mTaskManager.NotesRootDatabase, noteName);
+            if (note != null)
+                note.Open();
+
+            return 0;
+        }
+
+        private static INote GetNote(INotesSubject notesSubject, string notePath)
+        {
+            DirectoryIterator directoryIterator = new DirectoryIterator(notesSubject);
             return directoryIterator.Iterate(notePath);
         }
 
