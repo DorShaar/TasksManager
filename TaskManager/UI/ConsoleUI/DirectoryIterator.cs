@@ -30,11 +30,14 @@ namespace ConsoleUI
                     currentNotesDirectory = GoBack(currentNotesDirectory);
                 else
                 {
+                    if (userInput.ToLower().StartsWith("cd "))
+                        userInput = userInput.Substring("cd ".Length);
+
                     string fileOrDirectory = Path.Combine(currentNotesDirectory.NoteSubjectFullPath, userInput);
                     if (Directory.Exists(fileOrDirectory))
                         currentNotesDirectory = InsertDirectory(currentNotesDirectory, userInput);
-
-                    note = GetNote(currentNotesDirectory, userInput);
+                    else
+                        note = GetNote(currentNotesDirectory, userInput);
                 }
             }
 
