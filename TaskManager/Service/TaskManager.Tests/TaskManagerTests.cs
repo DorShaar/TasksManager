@@ -19,7 +19,7 @@ namespace TaskManager.Integration.Tests
         private static readonly ITaskGroupBuilder mTaskGroupBuilder = new TaskGroupBuilder();
         private static readonly INoteBuilder mNoteBuilder = new NoteBuilder();
         private static readonly INotesSubjectBuilder mNotesSubjectBuilder = new NotesSubjectBuilder();
-        private static IRepository<ITaskGroup> mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
+        private static ILocalReposetory<ITaskGroup> mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
         private static TaskManager mTaskManager = 
             new TaskManager(mDatabase, mTaskGroupBuilder, mNoteBuilder, mNotesSubjectBuilder, mLogger);
 
