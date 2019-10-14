@@ -53,7 +53,7 @@ namespace Composition
 
         private void RegisterDatabaseEntities(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<IRepository<ITaskGroup>, Database<ITaskGroup>>();
+            serviceCollection.AddSingleton<ILocalRepository<ITaskGroup>, Database<ITaskGroup>>();
             serviceCollection.AddSingleton<IConfiguration, Configuration>();
         }
 
