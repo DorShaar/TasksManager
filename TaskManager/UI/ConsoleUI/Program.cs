@@ -157,16 +157,8 @@ namespace ConsoleUI
 
         private static int GetNoteContent(string notePath, bool shouldPrintAll)
         {
-            if (string.IsNullOrEmpty(notePath))
-            {
-                if (shouldPrintAll)
-                    return GetAllNotesNames();
-                else
-                {
-                    mLogger.LogError($"No note path given to open");
-                    return 1;
-                }
-            }
+            if (shouldPrintAll)
+                return GetAllNotesNames();
 
             INote note = GetNote(notePath);
             if (note != null)
@@ -373,12 +365,6 @@ namespace ConsoleUI
 
         private static int OpenNote(CommandLineOptions.OpenNoteOptions options)
         {
-            if (string.IsNullOrEmpty(options.NoteName))
-            {
-                mLogger.LogError($"No note path given to open");
-                return 1;
-            }
-
             string notePath = options.NoteName;
             if (options.NoteName.ToLower().Equals("note"))
                 notePath = options.NoteName2;
