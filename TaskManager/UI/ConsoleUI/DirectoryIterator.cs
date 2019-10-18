@@ -86,7 +86,10 @@ namespace ConsoleUI
                     return notesSubject;
             }
 
-            return null;
+            if (directory.Equals(".."))
+                return GoBack(notesDirectory);
+
+            return notesDirectory;
         }
 
         private INote GetNote(INotesSubject notesDirectory, string noteName)
