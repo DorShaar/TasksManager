@@ -21,14 +21,17 @@ namespace ConsoleUI
             INote note = null;
             INotesSubject currentNotesDirectory = mRootNotesDirectory;
 
-            string[] splitedNotePath = notePath.Split(Path.DirectorySeparatorChar);
-            foreach (string subPath in splitedNotePath)
+            if (notePath != null)
             {
-                string fileOrDirectory = Path.Combine(currentNotesDirectory.NoteSubjectFullPath, subPath);
-                if (Directory.Exists(fileOrDirectory))
-                    currentNotesDirectory = InsertDirectory(currentNotesDirectory, subPath);
-                else
-                    note = GetNote(currentNotesDirectory, subPath);
+                string[] splitedNotePath = notePath.Split(Path.DirectorySeparatorChar);
+                foreach (string subPath in splitedNotePath)
+                {
+                    string fileOrDirectory = Path.Combine(currentNotesDirectory.NoteSubjectFullPath, subPath);
+                    if (Directory.Exists(fileOrDirectory))
+                        currentNotesDirectory = InsertDirectory(currentNotesDirectory, subPath);
+                    else
+                        note = GetNote(currentNotesDirectory, subPath);
+                }
             }
 
             string userInput = string.Empty;

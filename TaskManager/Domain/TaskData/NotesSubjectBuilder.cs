@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using TaskData.Contracts;
 
 namespace TaskData
@@ -8,9 +9,9 @@ namespace TaskData
         public INotesSubject Load(string noteSubjectPath)
         {
             if (!Directory.Exists(noteSubjectPath))
-                return null;
-            else
-                return new NotesSubject(Path.GetDirectoryName(noteSubjectPath), Path.GetFileNameWithoutExtension(noteSubjectPath));
+                throw new Exception($"No note subject {noteSubjectPath} exist");
+
+            return new NotesSubject(Path.GetDirectoryName(noteSubjectPath), Path.GetFileNameWithoutExtension(noteSubjectPath));
         }
     }
 }
