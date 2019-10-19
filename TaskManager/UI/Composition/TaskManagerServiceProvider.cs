@@ -57,8 +57,7 @@ namespace Composition
         {
             serviceCollection.AddSingleton<ILocalRepository<ITaskGroup>, Database<ITaskGroup>>();
 
-            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory());
+            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
             // Adds YAML settings later
             configurationBuilder.AddYamlFile(@"config\Config.yaml", optional: false);
