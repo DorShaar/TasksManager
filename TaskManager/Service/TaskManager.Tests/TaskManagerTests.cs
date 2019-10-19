@@ -9,6 +9,7 @@ using TaskData.Contracts;
 using ObjectSerializer.Contracts;
 using Microsoft.Extensions.Options;
 using Database.Configuration;
+using System.IO;
 
 namespace TaskManager.Integration.Tests
 {
@@ -16,20 +17,26 @@ namespace TaskManager.Integration.Tests
     public class TaskManagerTests
     {
         private static readonly ILogger mLogger = A.Dummy<ILogger>();
-        private static readonly IOptions<DatabaseLocalConfigurtaion> mConfiguration = 
-            A.Dummy<IOptions<DatabaseLocalConfigurtaion>>();
         private static readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
         private static readonly ITaskGroupBuilder mTaskGroupBuilder = new TaskGroupBuilder();
         private static readonly INoteBuilder mNoteBuilder = new NoteBuilder();
         private static readonly INotesSubjectBuilder mNotesSubjectBuilder = new NotesSubjectBuilder();
-        private static ILocalRepository<ITaskGroup> mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
-        private static TaskManager mTaskManager = 
-            new TaskManager(mDatabase, mTaskGroupBuilder, mNoteBuilder, mNotesSubjectBuilder, mLogger);
+        private static IOptions<DatabaseLocalConfigurtaion> mFakeConfiguration;
+        private static ILocalRepository<ITaskGroup> mDatabase;
+        private static TaskManager mTaskManager;
 
         [TestInitialize]
         public void Startup()
         {
-            mDatabase = new Database<ITaskGroup>(mConfiguration, mSerializer, mLogger);
+            DatabaseLocalConfigurtaion fakeLocalConfigurations = new DatabaseLocalConfigurtaion()
+            {
+                NotesTasksDirectoryPath = Directory.GetCurrentDirectory(),
+                DatabaseDirectoryPath = Directory.GetCurrentDirectory(),
+                NotesDirectoryPath = Directory.GetCurrentDirectory()
+            };
+            mFakeConfiguration = Options.Create(fakeLocalConfigurations);
+
+            mDatabase = new Database<ITaskGroup>(mFakeConfiguration, mSerializer, mLogger);
             mTaskManager = new TaskManager(mDatabase, mTaskGroupBuilder, mNoteBuilder, mNotesSubjectBuilder, mLogger);
         }
 
