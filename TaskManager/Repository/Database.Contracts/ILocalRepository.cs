@@ -1,9 +1,6 @@
 ﻿namespace Database.Contracts
 {
-    public interface ILocalRepository<T> : IRepository<T>
+    public interface ILocalRepository<T> : IRepository<T>, IDatabaseLocalConfiguration
     {
-        string DatabasePath { get; }
-        string NotesDatabaseDirectoryPath { get; }
-        string NotesTasksDatabaseDirectoryPath { get; }
     }
 }

@@ -13,7 +13,7 @@ namespace Database.Configuration.Tests
           [TestMethod]
           public void GetDatabasePath_NoException()
           {
-               Configuration configuration = new Configuration(mFakeLogger)
+               DatabaseLocalConfigurtaion configuration = new DatabaseLocalConfigurtaion(mFakeLogger)
                {
                     ConfigurationYamlFilePath = TestDatabasePath
                };
@@ -23,7 +23,7 @@ namespace Database.Configuration.Tests
           [TestMethod]
           public void SetDatabasePath_Success()
           {
-               Configuration configuration = new Configuration(mFakeLogger)
+               DatabaseLocalConfigurtaion configuration = new DatabaseLocalConfigurtaion(mFakeLogger)
                {
                     ConfigurationYamlFilePath = TestDatabasePath
                };
@@ -37,7 +37,7 @@ namespace Database.Configuration.Tests
           [TestMethod]
           public void GetNotesPath_NoException()
           {
-               Configuration configuration = new Configuration(mFakeLogger)
+               DatabaseLocalConfigurtaion configuration = new DatabaseLocalConfigurtaion(mFakeLogger)
                {
                     ConfigurationYamlFilePath = TestDatabasePath
                };
@@ -47,7 +47,7 @@ namespace Database.Configuration.Tests
           [TestMethod]
           public void SetNotesPath_Success()
           {
-               Configuration configuration = new Configuration(mFakeLogger)
+               DatabaseLocalConfigurtaion configuration = new DatabaseLocalConfigurtaion(mFakeLogger)
                {
                     ConfigurationYamlFilePath = TestDatabasePath
                };

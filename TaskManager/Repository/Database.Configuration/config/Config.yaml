@@ -1,4 +1,4 @@
 database:
-     directory_path: C:\Users\dor.shaar\TaskManagerApp\database
-     notes_path: C:\Users\dor.shaar\OneDrive - Votiro\Dor\Notes
-     tasks_notes_path: C:\Users\dor.shaar\OneDrive - Votiro\Dor\Notes\tasks
+     DatabaseDirectoryPath: C:\Users\dor.shaar\TaskManagerApp\database
+     NotesDirectoryPath: C:\Users\dor.shaar\OneDrive - Votiro\Dor\Notes
+     NotesTasksDirectoryPath: C:\Users\dor.shaar\OneDrive - Votiro\Dor\Notes\tasks

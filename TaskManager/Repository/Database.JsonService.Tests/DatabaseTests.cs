@@ -1,6 +1,8 @@
+using Database.Configuration;
 using Database.Contracts;
 using FakeItEasy;
 using Logger.Contracts;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectSerializer.Contracts;
 using System.Linq;
@@ -13,7 +15,8 @@ namespace Database.Tests
     public class DatabaseTests
     {
         private readonly ILogger mLogger = A.Dummy<ILogger>();
-        private readonly IConfiguration mConfiguration = A.Dummy<IConfiguration>();
+        private readonly IOptions<DatabaseLocalConfigurtaion> mConfiguration = 
+            A.Dummy<IOptions<DatabaseLocalConfigurtaion>>();
         private readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
         private readonly ITaskGroupBuilder mTaskGroupBuilder = new TaskGroupBuilder();
 

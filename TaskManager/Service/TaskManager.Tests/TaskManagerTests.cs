@@ -7,6 +7,8 @@ using System.Linq;
 using TaskData;
 using TaskData.Contracts;
 using ObjectSerializer.Contracts;
+using Microsoft.Extensions.Options;
+using Database.Configuration;
 
 namespace TaskManager.Integration.Tests
 {
@@ -14,7 +16,8 @@ namespace TaskManager.Integration.Tests
     public class TaskManagerTests
     {
         private static readonly ILogger mLogger = A.Dummy<ILogger>();
-        private static readonly IConfiguration mConfiguration = A.Dummy<IConfiguration>();
+        private static readonly IOptions<DatabaseLocalConfigurtaion> mConfiguration = 
+            A.Dummy<IOptions<DatabaseLocalConfigurtaion>>();
         private static readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
         private static readonly ITaskGroupBuilder mTaskGroupBuilder = new TaskGroupBuilder();
         private static readonly INoteBuilder mNoteBuilder = new NoteBuilder();

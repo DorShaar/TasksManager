@@ -40,8 +40,8 @@ namespace TaskManager
             mNoteSubjectBuilder = notesSubjectBuilder;
 
             mTasksDatabase = tasksDatabase;
-            NotesRootDatabase = mNoteSubjectBuilder.Load(mTasksDatabase.NotesDatabaseDirectoryPath);
-            NotesTasksDatabase = mNoteSubjectBuilder.Load(mTasksDatabase.NotesTasksDatabaseDirectoryPath);
+            NotesRootDatabase = mNoteSubjectBuilder.Load(mTasksDatabase.NotesDirectoryPath);
+            NotesTasksDatabase = mNoteSubjectBuilder.Load(mTasksDatabase.NotesTasksDirectoryPath);
 
             InitializeFreeTasksGroup();
         }
@@ -285,12 +285,7 @@ namespace TaskManager
 
         public string GetDatabasePath()
         {
-            return mTasksDatabase.DatabasePath;
-        }
-
-        public void ChangeDatabasePath(string newDatabasePath)
-        {
-            mTasksDatabase.SetDatabasePath(newDatabasePath);
+            return mTasksDatabase.DatabaseDirectoryPath;
         }
     }
 }

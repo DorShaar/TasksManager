@@ -1,5 +1,7 @@
-﻿using Database.Contracts;
+﻿using Database.Configuration;
+using Database.Contracts;
 using Logger.Contracts;
+using Microsoft.Extensions.Options;
 using ObjectSerializer.Contracts;
 using System;
 using System.Collections.Generic;
@@ -9,40 +11,40 @@ using TaskData.Contracts;
 
 namespace Database
 {
-    public class Database<T> : ILocalRepository<T> where T : ITaskGroup
+    public class Database<T> : ILocalRepository<T> where T : ITaskGroup   
     {
         private const string DatabaseName = "tasks.db";
         private const string NextIdHolderName = "id_producer.db";
 
         private readonly ILogger mLogger;
-        private readonly IConfiguration mConfiguration;
         private readonly IObjectSerializer mSerializer;
+        private readonly IOptions<DatabaseLocalConfigurtaion> mConfiguration;
 
         private List<T> mEntities = new List<T>();
 
         private readonly string NextIdPath;
-        public string DatabasePath { get; }
+        public string DatabaseDirectoryPath { get; }
 
         /// <summary>
         /// That is the path to the directory of all the notes.
         /// </summary>
-        public string NotesDatabaseDirectoryPath { get => mConfiguration.NotesDirectoryPath; }
-        public string NotesTasksDatabaseDirectoryPath { get => mConfiguration.NotesTasksDirectoryPath; }
+        public string NotesDirectoryPath { get => mConfiguration.Value.NotesDirectoryPath; }
+        public string NotesTasksDirectoryPath { get => mConfiguration.Value.NotesTasksDirectoryPath; }
 
-        public Database(IConfiguration configuration, IObjectSerializer serializer, ILogger logger)
+        public Database(IOptions<DatabaseLocalConfigurtaion> configuration, IObjectSerializer serializer, ILogger logger)
         {
             mLogger = logger;
             mConfiguration = configuration;
             mSerializer = serializer;
 
-            if (!Directory.Exists(mConfiguration.DatabaseDirectoryPath))
+            if (!Directory.Exists(mConfiguration.Value.DatabaseDirectoryPath))
             {
-                mLogger.LogError($"No database directory found in path {mConfiguration.DatabaseDirectoryPath}");
+                mLogger.LogError($"No database directory found in path {mConfiguration.Value.DatabaseDirectoryPath}");
                 return;
             }
 
-            DatabasePath = Path.Combine(mConfiguration.DatabaseDirectoryPath, DatabaseName);
-            NextIdPath = Path.Combine(mConfiguration.DatabaseDirectoryPath, NextIdHolderName);
+            DatabaseDirectoryPath = Path.Combine(mConfiguration.Value.DatabaseDirectoryPath, DatabaseName);
+            NextIdPath = Path.Combine(mConfiguration.Value.DatabaseDirectoryPath, NextIdHolderName);
             LoadInformation();
         }
 
@@ -62,14 +64,14 @@ namespace Database
 
         private void LoadDatabase()
         {
-            if (!File.Exists(DatabasePath))
+            if (!File.Exists(DatabaseDirectoryPath))
             {
-                mLogger.LogError($"Database file {DatabasePath} does not exists");
-                throw new FileNotFoundException("Database does not exists", DatabasePath);
+                mLogger.LogError($"Database file {DatabaseDirectoryPath} does not exists");
+                throw new FileNotFoundException("Database does not exists", DatabaseDirectoryPath);
             }
 
-            mLogger.LogInformation($"Going to load database from {DatabasePath}");
-            mEntities = mSerializer.Deserialize<List<T>>(DatabasePath);
+            mLogger.LogInformation($"Going to load database from {DatabaseDirectoryPath}");
+            mEntities = mSerializer.Deserialize<List<T>>(DatabaseDirectoryPath);
         }
 
         private void LoadNextIdToProduce()
@@ -172,7 +174,7 @@ namespace Database
 
         private void SaveToFile()
         {
-            if (string.IsNullOrEmpty(DatabasePath))
+            if (string.IsNullOrEmpty(DatabaseDirectoryPath))
             {
                 mLogger.LogError("No database path was given");
                 return;
@@ -186,18 +188,13 @@ namespace Database
 
             try
             {
-                mSerializer.Serialize(mEntities, DatabasePath);
+                mSerializer.Serialize(mEntities, DatabaseDirectoryPath);
                 mSerializer.Serialize(IDProducer.IDProducer.PeekForNextId(), NextIdPath);
             }
             catch (Exception ex)
             {
-                mLogger.LogError($"Unable to serialize database in {mConfiguration.DatabaseDirectoryPath}", ex);
+                mLogger.LogError($"Unable to serialize database in {mConfiguration.Value.DatabaseDirectoryPath}", ex);
             }
-        }
-
-        public void SetDatabasePath(string newDatabasePathDirectory)
-        {
-            mConfiguration.SetDatabaseDirectoryPath(newDatabasePathDirectory);
         }
     }
 }

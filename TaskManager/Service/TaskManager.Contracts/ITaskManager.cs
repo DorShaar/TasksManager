@@ -32,6 +32,5 @@ namespace TaskManager.Contracts
 
         // Database.
         string GetDatabasePath();
-        void ChangeDatabasePath(string newDatabasePath);
     }
 }

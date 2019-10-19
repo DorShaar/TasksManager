@@ -10,7 +10,5 @@ namespace Database.Contracts
         void Update(T entity);
         void AddOrUpdate(T entity);
         void Remove(T entity);
-
-        void SetDatabasePath(string newDatabasePath);
     }
 }

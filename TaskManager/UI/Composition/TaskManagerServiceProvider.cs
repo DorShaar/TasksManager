@@ -10,6 +10,8 @@ using TaskData.Contracts;
 using TaskManager.Contracts;
 using ObjectSerializer.Contracts;
 using Database.JsonService;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Composition
 {
@@ -54,7 +56,18 @@ namespace Composition
         private void RegisterDatabaseEntities(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<ILocalRepository<ITaskGroup>, Database<ITaskGroup>>();
-            serviceCollection.AddSingleton<IConfiguration, Configuration>();
+
+            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory());
+
+            // Adds YAML settings later
+            configurationBuilder.AddYamlFile(@"config\Config.yaml", optional: false);
+
+            IConfiguration configuration = configurationBuilder.Build();
+
+            // Binds between IConfiguration to DatabaseLocalConfigurtaion.
+            serviceCollection.Configure<DatabaseLocalConfigurtaion>(configuration);
+            serviceCollection.AddOptions();
         }
 
         public ITaskManager GetTaskManagerService()
