@@ -35,7 +35,16 @@ namespace ConsoleUI
                     return;
                 }
 
-                exitCode = parser.ParseArguments<
+                exitCode = ParseArgument(parser, args);
+            }
+
+            if (exitCode != 0)
+                Console.WriteLine($"Finished executing with exit code: {exitCode}");
+        }
+
+        private static int ParseArgument(Parser parser, string[] args)
+        {
+            return parser.ParseArguments<
                 CommandLineOptions.GetOptions,
                 CommandLineOptions.CreateOptions,
                 CommandLineOptions.RemoveOptions,
@@ -56,14 +65,16 @@ namespace ConsoleUI
                     (CommandLineOptions.OpenNoteOptions options) => OpenNote(options),
                     (parserErrors) => 1
                 );
-            }
-
-            if (exitCode != 0)
-                Console.WriteLine($"Finished executing with exit code: {exitCode}");
         }
 
         private static int GetObject(CommandLineOptions.GetOptions options)
         {
+            if(options.ObjectType == null)
+            {
+                mLogger.LogError("No valid object type given (task, group, note, general, db)");
+                return 1;
+            }
+
             switch (options.ObjectType.ToLower())
             {
                 case "task":
@@ -210,6 +221,12 @@ namespace ConsoleUI
 
         private static int CreateObject(CommandLineOptions.CreateOptions options)
         {
+            if (options.ObjectType == null)
+            {
+                mLogger.LogError("No valid object type given (task, group, note, general)");
+                return 1;
+            }
+
             switch (options.ObjectType.ToLower())
             {
                 case "task":
@@ -312,6 +329,12 @@ namespace ConsoleUI
 
         private static int RemoveObject(CommandLineOptions.RemoveOptions options)
         {
+            if (options.ObjectType == null)
+            {
+                mLogger.LogError("No valid object type given (task, group)");
+                return 1;
+            }
+
             switch (options.ObjectType.ToLower())
             {
                 case "task":
@@ -365,6 +388,12 @@ namespace ConsoleUI
 
         private static int CloseTask(CommandLineOptions.CloseOptions options)
         {
+            if (options.ObjectType == null)
+            {
+                mLogger.LogError("No valid object type given (task)");
+                return 1;
+            }
+
             switch (options.ObjectType.ToLower())
             {
                 case "task":
@@ -391,6 +420,12 @@ namespace ConsoleUI
 
         private static int OpenNote(CommandLineOptions.OpenNoteOptions options)
         {
+            if (options.ObjectType == null)
+            {
+                mLogger.LogError("No valid object type given (note, general)");
+                return 1;
+            }
+
             switch (options.ObjectType.ToLower())
             {
                 case "note":
