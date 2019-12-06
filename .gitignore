@@ -267,3 +267,4 @@ __pycache__/
 #Not wanted folders
 .database/
 Properties/
+Database.JsonService/

@@ -9,91 +9,86 @@ namespace ConsoleUI
     {
         private readonly ConsolePrinter mConsolePrinter = new ConsolePrinter();
         private readonly INotesSubject mRootNotesDirectory;
+        private INotesSubject mCurrentNotesDirectory;
 
         public DirectoryIterator(INotesSubject rootNotesDirectory)
         {
             mRootNotesDirectory = rootNotesDirectory;
+            mCurrentNotesDirectory = rootNotesDirectory;
         }
 
         public INote Iterate(string notePath)
         {
-            INote note = null;
-            INotesSubject currentNotesDirectory = mRootNotesDirectory;
-
-            if (notePath != null)
-            {
-                string[] splitedNotePath = notePath.Split(Path.DirectorySeparatorChar);
-                foreach (string subPath in splitedNotePath)
-                {
-                    string fileOrDirectory = Path.Combine(currentNotesDirectory.NoteSubjectFullPath, subPath);
-                    if (Directory.Exists(fileOrDirectory))
-                        currentNotesDirectory = GoIntoDirectory(currentNotesDirectory, subPath);
-                    else
-                        note = GetNote(currentNotesDirectory, subPath);
-                }
-            }
+            INote note = GetNoteFromPath(notePath);
 
             string userInput = string.Empty;
             while (userInput.ToLower() != "exit" && userInput.ToLower() != "q" && note == null)
             {
-                PrintSubjectAndNotes(currentNotesDirectory);
+                PrintSubjectAndNotes();
                 userInput = Console.ReadLine();
 
                 if (userInput.ToLower().Equals(".."))
-                    currentNotesDirectory = GoBack(currentNotesDirectory);
+                    GoBack();
                 else
                 {
                     if (userInput.ToLower().StartsWith("cd "))
                         userInput = userInput.Substring("cd ".Length);
 
-                    string fileOrDirectory = Path.Combine(currentNotesDirectory.NoteSubjectFullPath, userInput);
+                    string fileOrDirectory = Path.Combine(mCurrentNotesDirectory.NoteSubjectFullPath, userInput);
                     if (Directory.Exists(fileOrDirectory))
-                        currentNotesDirectory = GoIntoDirectory(currentNotesDirectory, userInput);
+                        GoIntoDirectory(userInput);
                     else
-                        note = GetNote(currentNotesDirectory, userInput);
+                        note = GetNote(userInput);
                 }
             }
 
             return note;
         }
 
-        private void PrintSubjectAndNotes(INotesSubject notesDirectory)
+        private INote GetNoteFromPath(string path)
         {
-            mConsolePrinter.Print(notesDirectory.GetNotesSubjects().Select(
+            if (path != null)
+            {
+                string[] splitedNotePath = path.Split(Path.DirectorySeparatorChar);
+                foreach (string subPath in splitedNotePath)
+                {
+                    string fileOrDirectory = Path.Combine(mCurrentNotesDirectory.NoteSubjectFullPath, subPath);
+                    if (Directory.Exists(fileOrDirectory))
+                        GoIntoDirectory(subPath);
+                    else
+                        return GetNote(subPath);
+                }
+            }
+
+            return null;
+        }
+
+        private void PrintSubjectAndNotes()
+        {
+            mConsolePrinter.Print(mCurrentNotesDirectory.GetNotesSubjects().Select(
                 subject => Path.GetFileName(subject.NoteSubjectFullPath)), "SUBJECTS");
-            mConsolePrinter.Print(notesDirectory.GetNotes().Select(
+            mConsolePrinter.Print(mCurrentNotesDirectory.GetNotes().Select(
                 note => Path.GetFileName(note.NotePath)), "NOTES");
             mConsolePrinter.Print(string.Empty, string.Empty);
         }
 
-        private INotesSubject GoBack(INotesSubject notesDirectory)
+        private void GoBack()
         {
-            //string topDirectoryPath = mRootNotesDirectory.NoteSubjectFullPath;
-            //string directoryPath = Path.GetDirectoryName(notesDirectory.NoteSubjectFullPath);
-
-            //if (topDirectoryPath.Equals(directoryPath))
-            //    return mRootNotesDirectory;
-            //else
-            return mRootNotesDirectory;
+            mCurrentNotesDirectory = mRootNotesDirectory;
         }
 
-        private INotesSubject GoIntoDirectory(INotesSubject notesDirectory, string directory)
+        private void GoIntoDirectory(string directory)
         {
-            foreach (INotesSubject notesSubject in notesDirectory.GetNotesSubjects())
+            foreach (INotesSubject notesSubject in mCurrentNotesDirectory.GetNotesSubjects())
             {
                 if (notesSubject.NoteSubjectName.Equals(directory, StringComparison.OrdinalIgnoreCase))
-                    return notesSubject;
+                    mCurrentNotesDirectory = notesSubject;
             }
-
-            if (directory.Equals(".."))
-                return GoBack(notesDirectory);
-
-            return notesDirectory;
         }
 
-        private INote GetNote(INotesSubject notesDirectory, string noteName)
+        private INote GetNote(string noteName)
         {
-            foreach (INote note in notesDirectory.GetNotes())
+            foreach (INote note in mCurrentNotesDirectory.GetNotes())
             {
                 if (Path.GetFileName(note.NotePath).Equals(noteName, StringComparison.OrdinalIgnoreCase))
                     return note;
