@@ -423,8 +423,8 @@ namespace ConsoleUI
 
         private static INote GetNote(INotesSubject notesSubject, string notePath)
         {
-            DirectoryIterator directoryIterator = new DirectoryIterator(notesSubject);
-            return directoryIterator.Iterate(notePath);
+            NotesDirectoryIterator directoryIterator = new NotesDirectoryIterator(notesSubject, mConsolePrinter);
+            return directoryIterator.GetNote(notePath);
         }
 
         private static int MoveTask(CommandLineOptions.MoveTaskOptions options)
