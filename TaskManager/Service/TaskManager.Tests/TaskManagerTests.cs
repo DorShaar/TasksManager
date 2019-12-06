@@ -93,7 +93,7 @@ namespace TaskManager.Integration.Tests
         }
 
         [TestMethod]
-        public void RemoveTask_ExistingGroup_Success()
+        public void RemoveTaskGroup_ExistingGroup_Success()
         {
             string taskGroupName = "New Task Group";
             mTaskManager.CreateNewTaskGroup(taskGroupName);
@@ -101,6 +101,42 @@ namespace TaskManager.Integration.Tests
 
             mTaskManager.RemoveTaskGroup(taskGroupName, false);
             Assert.IsNull(mTaskManager.GetAllTasks(taskGroup => taskGroup.GroupName == taskGroupName));
+        }
+
+        [TestMethod]
+        public void MoveTask_TaskInDestinationGroup_Fail()
+        {
+            string taskGroupName = "New Task Group";
+            mTaskManager.CreateNewTaskGroup(taskGroupName);
+            ITaskGroup taskGroup = mTaskManager.GetAllTasksGroups().Where(group => group.GroupName == taskGroupName).First();
+
+            string taskDescription = "new task";
+            mTaskManager.CreateNewTask(taskGroup, taskDescription);
+            Assert.AreEqual(1, taskGroup.Size);
+
+            ITask taskToMove = mTaskManager.GetAllTasks(task => task.Description == taskDescription).First();
+            mTaskManager.MoveTaskToGroup(taskToMove.ID, taskGroupName);
+            Assert.AreEqual(1, taskGroup.Size);
+        }
+
+        [TestMethod]
+        public void MoveTask_Success()
+        {
+            string taskGroupName = "New Task Group";
+            mTaskManager.CreateNewTaskGroup(taskGroupName);
+            ITaskGroup taskGroup = mTaskManager.GetAllTasksGroups().Where(group => group.GroupName == taskGroupName).First();
+            Assert.AreEqual(0, taskGroup.Size);
+
+            // Create new task in free task group.
+            string taskDescription = "new task";
+            mTaskManager.CreateNewTask(taskDescription);
+            Assert.AreEqual(1, mTaskManager.FreeTasksGroup.Size);
+
+            ITask taskToMove = mTaskManager.GetAllTasks(task => task.Description == taskDescription).First();
+            mTaskManager.MoveTaskToGroup(taskToMove.ID, taskGroupName);
+
+            Assert.AreEqual(1, taskGroup.Size);
+            Assert.AreEqual(0, mTaskManager.FreeTasksGroup.Size);
         }
     }
 }

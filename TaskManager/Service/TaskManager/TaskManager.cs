@@ -15,16 +15,17 @@ namespace TaskManager
     {
         private readonly ILogger mLogger;
 
-        private ITaskGroup mFreeTasksGroup;
-        internal static readonly string FreeTaskGroupName = "Free";
-
         private readonly INoteBuilder mNoteBuilder;
         private readonly INotesSubjectBuilder mNoteSubjectBuilder;
         private readonly ITaskGroupBuilder mTaskGroupBuilder;
 
         private readonly ILocalRepository<ITaskGroup> mTasksDatabase;
+
+        internal static readonly string FreeTaskGroupName = "Free";
+
         public INotesSubject NotesRootDatabase { get; }
         public INotesSubject NotesTasksDatabase { get; }
+        public ITaskGroup FreeTasksGroup { get; private set; }
         public string DefaultTaskGroupName => mTasksDatabase.DefaultTasksGroup;
 
         public TaskManager(
@@ -49,12 +50,12 @@ namespace TaskManager
 
         private void InitializeFreeTasksGroup()
         {
-            mFreeTasksGroup = mTasksDatabase.GetEntity(FreeTaskGroupName);
+            FreeTasksGroup = mTasksDatabase.GetEntity(FreeTaskGroupName);
 
-            if (mFreeTasksGroup == null)
+            if (FreeTasksGroup == null)
             {
-                mFreeTasksGroup = mTaskGroupBuilder.Create(FreeTaskGroupName, mLogger);
-                mTasksDatabase.Insert(mFreeTasksGroup);
+                FreeTasksGroup = mTaskGroupBuilder.Create(FreeTaskGroupName, mLogger);
+                mTasksDatabase.Insert(FreeTasksGroup);
             }
         }
 
@@ -75,7 +76,7 @@ namespace TaskManager
                 return;
             }
 
-            if (taskGroup == mFreeTasksGroup)
+            if (taskGroup == FreeTasksGroup)
             {
                 mLogger.LogError($"Cannot delete {FreeTaskGroupName} from database");
                 return;
@@ -87,7 +88,7 @@ namespace TaskManager
                 ITask[] tasksToMove = taskGroup.GetAllTasks().ToArray();
                 for (int i = 0; i < tasksToMove.Length; ++i)
                 {
-                    MoveTaskToGroup(tasksToMove[i].ID, mFreeTasksGroup);
+                    MoveTaskToGroup(tasksToMove[i].ID, FreeTasksGroup);
                 }
             }
 
@@ -116,12 +117,12 @@ namespace TaskManager
         }
 
         /// <summary>
-        /// Create new task into <see cref="mFreeTasksGroup"/>.
+        /// Create new task into <see cref="FreeTasksGroup"/>.
         /// </summary>
         public void CreateNewTask(string description)
         {
-            mFreeTasksGroup.CreateTask(description);
-            mTasksDatabase.Update(mFreeTasksGroup);
+            FreeTasksGroup.CreateTask(description);
+            mTasksDatabase.Update(FreeTasksGroup);
         }
 
         public IEnumerable<ITask> GetAllTasks()
@@ -234,19 +235,41 @@ namespace TaskManager
             MoveTaskToGroup(taskId, taskGroupDestination);
         }
 
-        private void MoveTaskToGroup(string taskId, ITaskGroup taskGroupDestination)
+        private void MoveTaskToGroup(string taskId, ITaskGroup destionationTaskGroup)
         {
+            if (destionationTaskGroup == null)
+            {
+                mLogger.LogError($"Destination task group was not found");
+                return;
+            }
+
             foreach (ITaskGroup sourceGroup in mTasksDatabase.GetAll())
             {
                 ITask task = sourceGroup.GetTask(taskId);
                 if (task != null)
                 {
-                    taskGroupDestination.AddTask(task);
-                    mTasksDatabase.Update(taskGroupDestination);
+                    ITaskGroup sourceTaskGroup = mTasksDatabase.GetEntity(task.Group);
 
-                    sourceGroup.RemoveTask(taskId);
-                    mTasksDatabase.Update(sourceGroup);
-                    return;
+                    if (sourceTaskGroup == null)
+                    {
+                        mLogger.LogError($"Moving task failed since source group is not given, unable checking moving to same group");
+                        return;
+                    }
+
+                    if (sourceTaskGroup != destionationTaskGroup)
+                    {
+                        destionationTaskGroup.AddTask(task);
+                        mTasksDatabase.Update(destionationTaskGroup);
+
+                        sourceGroup.RemoveTask(taskId);
+                        mTasksDatabase.Update(sourceGroup);
+                        return;
+                    }
+                    else
+                    {
+                        mLogger.LogError($"Moving task failed since Source group and destination group are the same");
+                        return;
+                    }
                 }
             }
 
