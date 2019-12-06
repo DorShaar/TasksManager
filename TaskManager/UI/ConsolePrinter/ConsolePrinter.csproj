@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Logger.Contracts\Logger.Contracts.csproj" />
+    <ProjectReference Include="..\..\Domain\TaskData.Contracts\TaskData.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

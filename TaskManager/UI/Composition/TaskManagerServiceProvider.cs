@@ -11,7 +11,7 @@ using TaskManager.Contracts;
 using ObjectSerializer.Contracts;
 using Database.JsonService;
 using Microsoft.Extensions.Configuration;
-using System.IO;
+using UI.ConsolePrinter;
 
 namespace Composition
 {
@@ -28,18 +28,17 @@ namespace Composition
         {
             ServiceCollection serviceCollection = new ServiceCollection();
 
-            // Register logger.
             serviceCollection.AddSingleton<ILogger, ConsoleLogger>();
 
-            // Register object serializer.
             serviceCollection.AddSingleton<IObjectSerializer, JsonSerializerWrapper>();
 
             RegisterTaskDataEntities(serviceCollection);
 
             RegisterDatabaseEntities(serviceCollection);
 
-            // Register TaskManager service.
             serviceCollection.AddSingleton<ITaskManager, TaskManager.TaskManager>();
+
+            serviceCollection.AddSingleton(typeof(ConsolePrinter));
 
             return serviceCollection.BuildServiceProvider();
         }
@@ -77,6 +76,11 @@ namespace Composition
         public ILogger GetLoggerService()
         {
             return mServiceProvider.GetService<ILogger>();
+        }
+
+        public ConsolePrinter GetConsolePrinterService()
+        {
+            return mServiceProvider.GetService<ConsolePrinter>();
         }
     }
 }

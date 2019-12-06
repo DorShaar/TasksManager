@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Composition\Composition.csproj" />
+    <ProjectReference Include="..\ConsolePrinter\ConsolePrinter.csproj" />
   </ItemGroup>
 
 </Project>

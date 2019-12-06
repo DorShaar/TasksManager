@@ -8,19 +8,22 @@ using System.IO;
 using System.Linq;
 using TaskData.Contracts;
 using TaskManager.Contracts;
+using UI.ConsolePrinter;
 
 namespace ConsoleUI
 {
     public class Program
     {
+        private const int DESCRIPTION_LENGTH_LIMIT = 70;
         private static ILogger mLogger;
         private static ITaskManager mTaskManager;
-        private static readonly ConsolePrinter mConsolePrinter = new ConsolePrinter();
+        private static ConsolePrinter mConsolePrinter;
 
         public static void Main(string[] args)
         {
             TaskManagerServiceProvider serviceProvider = new TaskManagerServiceProvider();
             mLogger = serviceProvider.GetLoggerService();
+            mConsolePrinter = serviceProvider.GetConsolePrinterService();
             mTaskManager = serviceProvider.GetTaskManagerService();
 
             int exitCode = 1;
@@ -105,11 +108,11 @@ namespace ConsoleUI
                 return 1;
             }
 
-            if (!shouldPrintNotOnlyDefaultGroup)
-                tasksToPrint = tasksToPrint.Where(task => AreNamesEquals(task.Group, mTaskManager.DefaultTaskGroupName));
-
             if (!shouldPrintAll)
                 tasksToPrint = tasksToPrint.Where(task => task.IsFinished == false);
+
+            if (!shouldPrintNotOnlyDefaultGroup)
+                tasksToPrint = tasksToPrint.Where(task => AreNamesEquals(task.Group, mTaskManager.DefaultTaskGroupName));
 
             if (!string.IsNullOrEmpty(status))
                 tasksToPrint = tasksToPrint.Where(task => AreNamesEquals(task.Status.ToString(), status));
@@ -239,6 +242,12 @@ namespace ConsoleUI
                 return -1;
             }
 
+            if(description.Length > 70)
+            {
+                mLogger.LogError($"Description too long. Description limitation is {DESCRIPTION_LENGTH_LIMIT} characters.");
+                return -1;
+            }
+
             if (!string.IsNullOrEmpty(taskGroupName))
             {
                 ITaskGroup taskGroup = mTaskManager.GetAllTasksGroups().Where(group => group.ID == taskGroupName).FirstOrDefault();
@@ -291,12 +300,6 @@ namespace ConsoleUI
             if (string.IsNullOrEmpty(noteSubject))
             {
                 mLogger.LogError($"No task subject given to create note");
-                return 1;
-            }
-
-            if (noteSubject.Length > 20)
-            {
-                mLogger.LogError($"Note subject {noteSubject} is too long. Must be 20 characters");
                 return 1;
             }
 

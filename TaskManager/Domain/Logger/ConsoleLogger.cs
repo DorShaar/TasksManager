@@ -27,13 +27,11 @@ namespace Logger
 
           public void LogError(string message, Exception ex)
           {
-               //Log(Separetor);
                Console.ForegroundColor = ConsoleColor.Red;
                Log(message);
                Log($"Exception Message: {ex.Message}");
                Log($"Exception Message: {ex.StackTrace}");
                Console.ResetColor();
-               //Log(Separetor);
           }
      }
 }
