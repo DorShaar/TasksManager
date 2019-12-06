@@ -66,7 +66,7 @@ namespace ConsoleUI
                 case "task":
                 case "tasks":
                     return GetAllTasks(
-                        options.ObjectName, options.Status, options.ShouldPrintAll, options.Hours, options.Days, options.IsDetailed);
+                        options.ObjectName, options.Status, options.ShouldPrintAll, options.ShouldPrintNotOnlyDefault, options.Days, options.IsDetailed);
 
                 case "group":
                 case "groups":
@@ -94,58 +94,67 @@ namespace ConsoleUI
         /// Get all un-closed tasks.
         /// In case user choose to print all option, all tasks will be printed.
         /// </summary>
-        private static int GetAllTasks(string taskGroup, string status, bool shouldPrintAll, int hours, int days, bool isDetailed)
+        private static int GetAllTasks(
+            string taskGroup, string status, bool shouldPrintAll, bool shouldPrintNotOnlyDefaultGroup, int days, bool isDetailed)
         {
-            IEnumerable<ITask> tasksToPrint = GetTasksToPrintByOptions(taskGroup);
-            if (tasksToPrint == null)
-                return 1;
+            IEnumerable<ITask> tasksToPrint = GetAllTasksOrTasksByGroupName(taskGroup);
 
-            if (!string.IsNullOrEmpty(status) && shouldPrintAll)
+            if (tasksToPrint == null)
             {
-                mLogger.LogError("Cannot quary all tasks with specific status quary");
+                mLogger.LogError($"No task group {taskGroup} exist");
                 return 1;
             }
 
-            if (!string.IsNullOrEmpty(status))
-                tasksToPrint = tasksToPrint.Where(task => task.Status.ToString().Equals(status, StringComparison.CurrentCultureIgnoreCase));
-            else if (!shouldPrintAll)
+            if (!shouldPrintNotOnlyDefaultGroup)
+                tasksToPrint = tasksToPrint.Where(task => AreNamesEquals(task.Group, mTaskManager.DefaultTaskGroupName));
+
+            if (!shouldPrintAll)
                 tasksToPrint = tasksToPrint.Where(task => task.IsFinished == false);
 
-            if (hours != 0)
-                tasksToPrint = tasksToPrint
-                    .Where(task => task.TaskStatusHistory.TimeCreated.AddHours(hours) >= DateTime.Now ||
-                                   task.TaskStatusHistory.TimeClosed.AddHours(hours) >= DateTime.Now ||
-                                   task.TaskStatusHistory.TimeLastOnWork.AddHours(hours) >= DateTime.Now ||
-                                   task.TaskStatusHistory.TimeLastOpened.AddHours(hours) >= DateTime.Now);
+            if (!string.IsNullOrEmpty(status))
+                tasksToPrint = tasksToPrint.Where(task => AreNamesEquals(task.Status.ToString(), status));
 
             if (days != 0)
-                tasksToPrint = tasksToPrint
-                    .Where(task => task.TaskStatusHistory.TimeCreated.AddDays(days) >= DateTime.Now ||
-                                   task.TaskStatusHistory.TimeClosed.AddDays(days) >= DateTime.Now ||
-                                   task.TaskStatusHistory.TimeLastOnWork.AddDays(days) >= DateTime.Now ||
-                                   task.TaskStatusHistory.TimeLastOpened.AddDays(days) >= DateTime.Now);
+                tasksToPrint = tasksToPrint.Where(task => IsTaskUpdateSince(task, days));
 
             mConsolePrinter.PrintTasks(tasksToPrint, isDetailed);
             return 0;
         }
 
-        private static IEnumerable<ITask> GetTasksToPrintByOptions(string taskGroup)
+        private static bool AreNamesEquals(string groupName1, string groupName2)
         {
-            IEnumerable<ITask> allTasks = null;
-
-            if (!string.IsNullOrEmpty(taskGroup))
-            {
-                allTasks = mTaskManager.GetAllTasks((ITaskGroup task) => task.ID == taskGroup);
-                if (allTasks == null)
-                    allTasks = mTaskManager.GetAllTasks((ITaskGroup task) => task.GroupName == taskGroup);
-
-                if (allTasks == null)
-                    mLogger.LogError($"No task group {taskGroup} exist");
-            }
+            if (string.IsNullOrEmpty(groupName1) || string.IsNullOrEmpty(groupName2))
+                return false;
             else
-                allTasks = mTaskManager.GetAllTasks();
+                return groupName1.Equals(groupName2, StringComparison.CurrentCultureIgnoreCase);
+        }
 
-            return allTasks;
+        private static IEnumerable<ITask> GetAllTasksOrTasksByGroupName(string taskGroup)
+        {
+            if (string.IsNullOrEmpty(taskGroup))
+                return mTaskManager.GetAllTasks();
+            else
+                return GetTasksByGroupName(taskGroup);
+        }
+
+        private static IEnumerable<ITask> GetTasksByGroupName(string taskGroup)
+        {
+            if (string.IsNullOrEmpty(taskGroup))
+                return null;
+
+            IEnumerable<ITask> tasks = mTaskManager.GetAllTasks((ITaskGroup task) => task.ID == taskGroup);
+            if (tasks == null)
+                tasks = mTaskManager.GetAllTasks((ITaskGroup task) => task.GroupName == taskGroup);
+
+            return tasks;
+        }
+
+        private static bool IsTaskUpdateSince(ITask task, int days)
+        {
+            return task.TaskStatusHistory.TimeCreated.AddDays(days) >= DateTime.Now ||
+                    task.TaskStatusHistory.TimeClosed.AddDays(days) >= DateTime.Now ||
+                    task.TaskStatusHistory.TimeLastOnWork.AddDays(days) >= DateTime.Now ||
+                    task.TaskStatusHistory.TimeLastOpened.AddDays(days) >= DateTime.Now;
         }
 
         private static int GatAllTaskGroup(bool shouldPrintAll, bool isDetailed)

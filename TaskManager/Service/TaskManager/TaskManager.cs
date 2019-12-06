@@ -25,6 +25,7 @@ namespace TaskManager
         private readonly ILocalRepository<ITaskGroup> mTasksDatabase;
         public INotesSubject NotesRootDatabase { get; }
         public INotesSubject NotesTasksDatabase { get; }
+        public string DefaultTaskGroupName => mTasksDatabase.DefaultTasksGroup;
 
         public TaskManager(
             ILocalRepository<ITaskGroup> tasksDatabase,

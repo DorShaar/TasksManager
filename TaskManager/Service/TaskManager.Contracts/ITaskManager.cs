@@ -10,6 +10,7 @@ namespace TaskManager.Contracts
         void CreateNewTaskGroup(string groupName);
         void RemoveTaskGroup(string taskGroup, bool shouldMoveInnerTasks);
         IEnumerable<ITaskGroup> GetAllTasksGroups();
+        string DefaultTaskGroupName { get; }
 
         // Tasks.
         ITask CreateNewTask(ITaskGroup tasksGroup, string description);

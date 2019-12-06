@@ -18,33 +18,36 @@ namespace Database
 
         private readonly ILogger mLogger;
         private readonly IObjectSerializer mSerializer;
-        private readonly IOptions<DatabaseLocalConfigurtaion> mConfiguration;
+        private readonly DatabaseLocalConfigurtaion mConfiguration;
 
         private List<T> mEntities = new List<T>();
 
         private readonly string NextIdPath;
         public string DatabaseDirectoryPath { get; }
+        public string DefaultTasksGroup { get; }
 
         /// <summary>
         /// That is the path to the directory of all the notes.
         /// </summary>
-        public string NotesDirectoryPath { get => mConfiguration.Value.NotesDirectoryPath; }
-        public string NotesTasksDirectoryPath { get => mConfiguration.Value.NotesTasksDirectoryPath; }
+        public string NotesDirectoryPath { get => mConfiguration.NotesDirectoryPath; }
+        public string NotesTasksDirectoryPath { get => mConfiguration.NotesTasksDirectoryPath; }
 
         public Database(IOptions<DatabaseLocalConfigurtaion> configuration, IObjectSerializer serializer, ILogger logger)
         {
             mLogger = logger;
-            mConfiguration = configuration;
+            mConfiguration = configuration.Value;
             mSerializer = serializer;
 
-            if (!Directory.Exists(mConfiguration.Value.DatabaseDirectoryPath))
+            if (!Directory.Exists(mConfiguration.DatabaseDirectoryPath))
             {
-                mLogger.LogError($"No database directory found in path {mConfiguration.Value.DatabaseDirectoryPath}");
+                mLogger.LogError($"No database directory found in path {mConfiguration.DatabaseDirectoryPath}");
                 return;
             }
 
-            DatabaseDirectoryPath = Path.Combine(mConfiguration.Value.DatabaseDirectoryPath, DatabaseName);
-            NextIdPath = Path.Combine(mConfiguration.Value.DatabaseDirectoryPath, NextIdHolderName);
+
+            DefaultTasksGroup = mConfiguration.DefaultTasksGroup;
+            DatabaseDirectoryPath = Path.Combine(mConfiguration.DatabaseDirectoryPath, DatabaseName);
+            NextIdPath = Path.Combine(mConfiguration.DatabaseDirectoryPath, NextIdHolderName);
             LoadInformation();
         }
 
@@ -193,7 +196,7 @@ namespace Database
             }
             catch (Exception ex)
             {
-                mLogger.LogError($"Unable to serialize database in {mConfiguration.Value.DatabaseDirectoryPath}", ex);
+                mLogger.LogError($"Unable to serialize database in {mConfiguration.DatabaseDirectoryPath}", ex);
             }
         }
     }

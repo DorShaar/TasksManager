@@ -16,16 +16,16 @@ namespace ConsoleUI.Options
             [Option('a', "all", HelpText = "Print all objects, even the closed ones")]
             public bool ShouldPrintAll { get; set; }
 
+            [Option('o', "open", HelpText = "Print all open objects, not only default")]
+            public bool ShouldPrintNotOnlyDefault { get; set; }
+
             [Option('d', "detail", HelpText = "Print more information about each object")]
             public bool IsDetailed { get; set; }
 
             [Option('s', "status", HelpText = "Print all tasks/groups in given status")]
             public string Status { get; set; }
 
-            [Option('h', "hours", HelpText = "Print all tasks from the last given hours")]
-            public int Hours { get; set; }
-
-            [Option('y', "days", HelpText = "Print all tasks from the last given days")]
+            [Option('t', "days", HelpText = "Print all tasks from the last given days")]
             public int Days { get; set; }
         }
 

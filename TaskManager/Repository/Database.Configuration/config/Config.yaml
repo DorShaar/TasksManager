@@ -1,3 +1,4 @@
-DatabaseDirectoryPath: C:\Users\Dor Shaar\TaskManagerApp\db
-NotesDirectoryPath: C:\Dor\My Computing Programs\DevWorld
-NotesTasksDirectoryPath: C:\Dor\My Computing Programs\DevWorld\Tasks
+DatabaseDirectoryPath: C:\Dor\MyProjects\TasksManager\TaskManager\Repository\Database.JsonService\database
+NotesDirectoryPath: C:\Dor\MyProjects\TasksManager\TaskManager\Repository\Database.JsonService\notes
+NotesTasksDirectoryPath: C:\Dor\MyProjects\TasksManager\TaskManager\Repository\Database.JsonService\tasks
+DefaultTasksGroup: Bugs-104

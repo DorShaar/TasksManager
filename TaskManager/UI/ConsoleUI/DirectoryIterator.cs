@@ -27,7 +27,7 @@ namespace ConsoleUI
                 {
                     string fileOrDirectory = Path.Combine(currentNotesDirectory.NoteSubjectFullPath, subPath);
                     if (Directory.Exists(fileOrDirectory))
-                        currentNotesDirectory = InsertDirectory(currentNotesDirectory, subPath);
+                        currentNotesDirectory = GoIntoDirectory(currentNotesDirectory, subPath);
                     else
                         note = GetNote(currentNotesDirectory, subPath);
                 }
@@ -48,7 +48,7 @@ namespace ConsoleUI
 
                     string fileOrDirectory = Path.Combine(currentNotesDirectory.NoteSubjectFullPath, userInput);
                     if (Directory.Exists(fileOrDirectory))
-                        currentNotesDirectory = InsertDirectory(currentNotesDirectory, userInput);
+                        currentNotesDirectory = GoIntoDirectory(currentNotesDirectory, userInput);
                     else
                         note = GetNote(currentNotesDirectory, userInput);
                 }
@@ -77,7 +77,7 @@ namespace ConsoleUI
             return mRootNotesDirectory;
         }
 
-        private INotesSubject InsertDirectory(INotesSubject notesDirectory, string directory)
+        private INotesSubject GoIntoDirectory(INotesSubject notesDirectory, string directory)
         {
             foreach (INotesSubject notesSubject in notesDirectory.GetNotesSubjects())
             {

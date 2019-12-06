@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "ConsoleUI": {
-      "commandName": "Project",
-      "commandLineArgs": "get notes"
-    }
-  }
-}
