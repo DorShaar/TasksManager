@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using TaskData.Contracts;
 using TaskManager.Contracts;
 using UI.ConsolePrinter;
@@ -69,9 +70,9 @@ namespace ConsoleUI
 
         private static int GetObject(CommandLineOptions.GetOptions options)
         {
-            if(options.ObjectType == null)
+            if (options.ObjectType == null)
             {
-                mLogger.LogError("No valid object type given (task, group, note, general, db)");
+                mLogger.LogError("No valid object type given (task, group, note, general, db, config)");
                 return 1;
             }
 
@@ -98,6 +99,10 @@ namespace ConsoleUI
                 case "database":
                     return GetDatabasePath();
 
+                case "config":
+                case "configuration":
+                    return GetConfigruationPath();
+
                 default:
                     mLogger.LogError("No valid object type given (task, group, note, general, db)");
                     return 1;
@@ -123,7 +128,11 @@ namespace ConsoleUI
                 tasksToPrint = tasksToPrint.Where(task => task.IsFinished == false);
 
             if (!shouldPrintNotOnlyDefaultGroup)
-                tasksToPrint = tasksToPrint.Where(task => AreNamesEquals(task.Group, mTaskManager.DefaultTaskGroupName));
+            {
+                if(mTaskManager.DefaultTaskGroupName != null)
+                    tasksToPrint = tasksToPrint.Where(task => 
+                    AreNamesEquals(task.Group, mTaskManager.DefaultTaskGroupName.GroupName));
+            }
 
             if (!string.IsNullOrEmpty(status))
                 tasksToPrint = tasksToPrint.Where(task => AreNamesEquals(task.Status.ToString(), status));
@@ -219,6 +228,20 @@ namespace ConsoleUI
             return 0;
         }
 
+        private static int GetConfigruationPath()
+        {
+            mConsolePrinter.Print(Path.Combine(GetAssemblyDirectory(), "Congif", "Config.yaml"), "Configuration path");
+            return 0;
+        }
+
+        private static string GetAssemblyDirectory()
+        {
+            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            UriBuilder uri = new UriBuilder(codeBase);
+            string path = Uri.UnescapeDataString(uri.Path);
+            return Path.GetDirectoryName(path);
+        }
+
         private static int CreateObject(CommandLineOptions.CreateOptions options)
         {
             if (options.ObjectType == null)
@@ -259,7 +282,7 @@ namespace ConsoleUI
                 return -1;
             }
 
-            if(description.Length > 70)
+            if (description.Length > 70)
             {
                 mLogger.LogError($"Description too long. Description limitation is {DESCRIPTION_LENGTH_LIMIT} characters.");
                 return -1;

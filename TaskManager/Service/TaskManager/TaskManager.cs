@@ -26,7 +26,7 @@ namespace TaskManager
         public INotesSubject NotesRootDatabase { get; }
         public INotesSubject NotesTasksDatabase { get; }
         public ITaskGroup FreeTasksGroup { get; private set; }
-        public string DefaultTaskGroupName => mTasksDatabase.DefaultTasksGroup;
+        public ITaskGroup DefaultTaskGroupName { get; }
 
         public TaskManager(
             ILocalRepository<ITaskGroup> tasksDatabase,
@@ -44,6 +44,7 @@ namespace TaskManager
             mTasksDatabase = tasksDatabase;
             NotesRootDatabase = mNoteSubjectBuilder.Load(mTasksDatabase.NotesDirectoryPath);
             NotesTasksDatabase = mNoteSubjectBuilder.Load(mTasksDatabase.NotesTasksDirectoryPath);
+            DefaultTaskGroupName = mTasksDatabase.GetEntity(mTasksDatabase.DefaultTasksGroup);
 
             InitializeFreeTasksGroup();
         }
