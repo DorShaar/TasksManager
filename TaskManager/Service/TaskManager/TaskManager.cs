@@ -284,7 +284,7 @@ namespace TaskManager
                 ITask task = taskGroup.GetTask(taskId);
                 if (task != null)
                 {
-                    task.CreateNote(NotesRootDatabase.NoteSubjectFullPath, content);
+                    task.CreateNote(NotesTasksDatabase.NoteSubjectFullPath, content);
                     mTasksDatabase.Update(taskGroup);
                     return;
                 }
