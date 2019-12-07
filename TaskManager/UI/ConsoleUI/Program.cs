@@ -467,44 +467,100 @@ namespace ConsoleUI
 
         private static int MoveTask(CommandLineOptions.MoveTaskOptions options)
         {
-            if (string.IsNullOrEmpty(options.TaskId))
+            if (options.ObjectType == null)
+            {
+                mLogger.LogError("No valid object type given (task)");
+                return 1;
+            }
+
+            switch (options.ObjectType.ToLower())
+            {
+                case "task":
+                    return MoveTask(options.TaskId, options.TaskGroup);
+
+                default:
+                    mLogger.LogError("No valid object type given (task)");
+                    return 1;
+            }
+        }
+
+        private static int MoveTask(string taskId, string taskGroup)
+        {
+            if (string.IsNullOrEmpty(taskId))
             {
                 mLogger.LogError($"No task id given to move");
                 return 1;
             }
 
-            if (!string.IsNullOrEmpty(options.TaskGroup))
-                mTaskManager.MoveTaskToGroup(options.TaskId, options.TaskGroup);
-            else
+            if (string.IsNullOrEmpty(taskGroup))
             {
                 mLogger.LogError($"No group name or group id given");
                 return 1;
             }
 
+            mTaskManager.MoveTaskToGroup(taskId, taskGroup);
             return 0;
         }
 
         private static int ReOpenTask(CommandLineOptions.ReOpenTaskOptions options)
         {
-            if (string.IsNullOrEmpty(options.TaskId))
+            if (options.ObjectType == null)
+            {
+                mLogger.LogError("No valid object type given (task)");
+                return 1;
+            }
+
+            switch (options.ObjectType.ToLower())
+            {
+                case "task":
+                    return ReOpenTask(options.TaskId, options.Reason);
+
+                default:
+                    mLogger.LogError("No valid object type given (task)");
+                    return 1;
+            }
+        }
+
+        private static int ReOpenTask(string taskId, string reason)
+        {
+            if (string.IsNullOrEmpty(taskId))
             {
                 mLogger.LogError($"No task id given");
                 return 1;
             }
 
-            mTaskManager.ReOpenTask(options.TaskId, options.Reason ?? string.Empty);
+            mTaskManager.ReOpenTask(taskId, reason ?? string.Empty);
             return 0;
         }
 
         private static int MarkTaskAsOnWork(CommandLineOptions.OnWorkTaskOptions options)
         {
-            if (string.IsNullOrEmpty(options.TaskId))
+            if (options.ObjectType == null)
+            {
+                mLogger.LogError("No valid object type given (task)");
+                return 1;
+            }
+
+            switch (options.ObjectType.ToLower())
+            {
+                case "task":
+                    return MarkTaskAsOnWork(options.TaskId, options.Reason);
+
+                default:
+                    mLogger.LogError("No valid object type given (task)");
+                    return 1;
+            }
+        }
+
+        private static int MarkTaskAsOnWork(string taskId, string reason)
+        {
+            if (string.IsNullOrEmpty(taskId))
             {
                 mLogger.LogError($"No task id given");
                 return 1;
             }
 
-            mTaskManager.MarkTaskOnWork(options.TaskId, options.Reason ?? string.Empty);
+            mTaskManager.MarkTaskOnWork(taskId, reason ?? string.Empty);
             return 0;
         }
 

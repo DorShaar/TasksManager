@@ -71,7 +71,10 @@ namespace ConsoleUI.Options
         [Verb("move", HelpText = "Moves a task to a given group")]
         public class MoveTaskOptions
         {
-            [Value(0, HelpText = "Task id to move")]
+            [Value(0, HelpText = "Object to move (task)")]
+            public string ObjectType { get; set; }
+
+            [Value(1, HelpText = "Task id to move")]
             public string TaskId { get; set; }
 
             [Value(1, HelpText = "Task group to move the task to")]
@@ -81,7 +84,10 @@ namespace ConsoleUI.Options
         [Verb("reopen", HelpText = "Reopen a closed task")]
         public class ReOpenTaskOptions
         {
-            [Value(0, HelpText = "Task id to open again")]
+            [Value(0, HelpText = "Object to re-open (task)")]
+            public string ObjectType { get; set; }
+
+            [Value(1, HelpText = "Task id to open again")]
             public string TaskId { get; set; }
 
             [Option('m', "reason", HelpText = "Reason for reopening the task")]
@@ -91,7 +97,10 @@ namespace ConsoleUI.Options
         [Verb("work", HelpText = "Mark task as on work")]
         public class OnWorkTaskOptions
         {
-            [Value(0, HelpText = "Task id to mark as on work")]
+            [Value(0, HelpText = "Object to set status on-work (task)")]
+            public string ObjectType { get; set; }
+
+            [Value(1, HelpText = "Task id to mark as on work")]
             public string TaskId { get; set; }
 
             [Option('m', "reason", HelpText = "Reason for working the task")]
@@ -108,7 +117,7 @@ namespace ConsoleUI.Options
         [Verb("open", HelpText = "Open note with the default text editor")]
         public class OpenNoteOptions
         {
-            [Value(0, HelpText = "Object to open (note, general path)")]
+            [Value(0, HelpText = "Object to open (note, general note)")]
             public string ObjectType { get; set; }
 
             [Value(0, HelpText = "Note subject or task id to open the note")]
