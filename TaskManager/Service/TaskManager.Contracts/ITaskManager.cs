@@ -33,8 +33,5 @@ namespace TaskManager.Contracts
 
         // Database.
         string GetDatabasePath();
-
-        // TODO DELETE
-        void Fix();
     }
 }
