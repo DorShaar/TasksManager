@@ -28,7 +28,7 @@ namespace TaskData
 
         private DateTime FindLastStatus(Status status)
         {
-            StatusData lastStatusData = StatusHistory.Find(statusData => statusData.Status == status);
+            StatusData lastStatusData = StatusHistory.FindLast(statusData => statusData.Status == status);
             if (lastStatusData != null)
                 return lastStatusData.DateTime;
 
