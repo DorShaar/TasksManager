@@ -6,7 +6,6 @@ namespace TaskData.Contracts
 {
     public interface ITaskStatusHistory
     {
-        List<StatusData> StatusHistory { get; }
         DateTime TimeCreated { get; }
         DateTime TimeLastOpened { get; }
         DateTime TimeLastOnWork { get; }

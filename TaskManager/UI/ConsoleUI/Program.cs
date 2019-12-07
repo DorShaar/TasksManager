@@ -26,6 +26,9 @@ namespace ConsoleUI
             mConsolePrinter = serviceProvider.GetConsolePrinterService();
             mTaskManager = serviceProvider.GetTaskManagerService();
 
+            //mTaskManager.Fix();
+            //return;
+
             int exitCode = 1;
             using (Parser parser = new Parser(config => config.HelpWriter = Console.Out))
             {

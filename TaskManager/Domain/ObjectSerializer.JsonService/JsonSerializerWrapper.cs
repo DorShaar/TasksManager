@@ -13,7 +13,7 @@ namespace Database.JsonService
     {
         public void Serialize<T>(T objectToSerialize, string databasePath)
         {
-            string jsonText = JsonConvert.SerializeObject(objectToSerialize, Formatting.Indented);
+            string jsonText = JsonConvert.SerializeObject(objectToSerialize, Formatting.Indented, new JsonSerializerSettings());
             File.WriteAllText(databasePath, jsonText);
         }
 

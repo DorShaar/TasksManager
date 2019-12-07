@@ -311,5 +311,31 @@ namespace TaskManager
         {
             return mTasksDatabase.DatabaseDirectoryPath;
         }
+
+        public void Fix()
+        {
+            //string toDelete = "Created";
+
+            //foreach (var group in mTasksDatabase.GetAll())
+            //{
+            //    foreach (var task in group.GetAllTasks())
+            //    {
+            //        StatusData x = task.TaskStatusHistory.StatusHistory.FindLast(status => status.Reason == toDelete);
+            //        StatusData backup = new StatusData(x.DateTime, x.Status, x.Reason);
+            //        for (int i = task.TaskStatusHistory.StatusHistory.Count - 1; i >= 0; i--)
+            //        {
+            //            if(task.TaskStatusHistory.StatusHistory[i].Reason == toDelete)
+            //                task.TaskStatusHistory.StatusHistory.RemoveAt(i);
+            //        }
+
+            //        task.TaskStatusHistory.StatusHistory.Insert(0, backup);
+            //    }
+            //}
+
+            //foreach (var group in mTasksDatabase.GetAll())
+            //{
+            //    mTasksDatabase.Update(group);
+            //}
+        }
     }
 }

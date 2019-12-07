@@ -193,6 +193,7 @@ namespace Database
             {
                 mSerializer.Serialize(mEntities, DatabaseDirectoryPath);
                 mSerializer.Serialize(IDProducer.IDProducer.PeekForNextId(), NextIdPath);
+
             }
             catch (Exception ex)
             {

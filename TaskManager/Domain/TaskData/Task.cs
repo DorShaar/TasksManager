@@ -34,7 +34,10 @@ namespace TaskData
             ID = IDProducer.IDProducer.ProduceID();
             Group = group;
             Description = description;
+
             TaskStatusHistory = new TaskStatusHistory();
+            TaskStatusHistory.AddHistory(DateTime.Now, Status.Open, "Created");
+
             mLogger?.Log($"New task id {ID} created with description: '{Description}'");
         }
 
