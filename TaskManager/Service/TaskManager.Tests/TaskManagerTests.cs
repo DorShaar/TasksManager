@@ -9,6 +9,7 @@ using ObjectSerializer.Contracts;
 using Microsoft.Extensions.Options;
 using Database.Configuration;
 using System.IO;
+using System.Collections.Generic;
 
 namespace TaskManager.Integration.Tests
 {
@@ -99,7 +100,8 @@ namespace TaskManager.Integration.Tests
             Assert.AreEqual(mTaskManager.GetAllTasks(taskGroup => taskGroup.GroupName == taskGroupName).Count(), 0);
 
             mTaskManager.RemoveTaskGroup(taskGroupName, false);
-            Assert.IsNull(mTaskManager.GetAllTasks(taskGroup => taskGroup.GroupName == taskGroupName));
+            IEnumerable<IWorkTask> workTasks = mTaskManager.GetAllTasks(taskGroup => taskGroup.GroupName == taskGroupName);
+            Assert.IsFalse(workTasks.Any());
         }
 
         [TestMethod]
