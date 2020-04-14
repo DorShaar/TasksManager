@@ -4,7 +4,7 @@ namespace Statistics
 {
      public class Statistics
      {
-          public int GetNumberOfTasks(ITaskGroup taskGroup)
+          public int GetNumberOfTasks(ITasksGroup taskGroup)
           {
                return taskGroup.Size;
           }

@@ -116,7 +116,7 @@ namespace ConsoleUI
         private static int GetAllTasks(
             string taskGroup, string status, bool shouldPrintAll, bool shouldPrintNotOnlyDefaultGroup, int days, bool isDetailed)
         {
-            IEnumerable<ITask> tasksToPrint = GetAllTasksOrTasksByGroupName(taskGroup);
+            IEnumerable<IWorkTask> tasksToPrint = GetAllTasksOrTasksByGroupName(taskGroup);
 
             if (tasksToPrint == null)
             {
@@ -131,7 +131,7 @@ namespace ConsoleUI
             {
                 if(mTaskManager.DefaultTaskGroupName != null)
                     tasksToPrint = tasksToPrint.Where(task => 
-                    AreNamesEquals(task.Group, mTaskManager.DefaultTaskGroupName.GroupName));
+                    AreNamesEquals(task.GroupName, mTaskManager.DefaultTaskGroupName.Name));
             }
 
             if (!string.IsNullOrEmpty(status))
@@ -152,7 +152,7 @@ namespace ConsoleUI
                 return groupName1.Equals(groupName2, StringComparison.CurrentCultureIgnoreCase);
         }
 
-        private static IEnumerable<ITask> GetAllTasksOrTasksByGroupName(string taskGroup)
+        private static IEnumerable<IWorkTask> GetAllTasksOrTasksByGroupName(string taskGroup)
         {
             if (string.IsNullOrEmpty(taskGroup))
                 return mTaskManager.GetAllTasks();
@@ -160,19 +160,19 @@ namespace ConsoleUI
                 return GetTasksByGroupName(taskGroup);
         }
 
-        private static IEnumerable<ITask> GetTasksByGroupName(string taskGroup)
+        private static IEnumerable<IWorkTask> GetTasksByGroupName(string taskGroup)
         {
             if (string.IsNullOrEmpty(taskGroup))
                 return null;
 
-            IEnumerable<ITask> tasks = mTaskManager.GetAllTasks((ITaskGroup task) => task.ID == taskGroup);
+            IEnumerable<IWorkTask> tasks = mTaskManager.GetAllTasks((ITasksGroup task) => task.ID == taskGroup);
             if (tasks == null)
-                tasks = mTaskManager.GetAllTasks((ITaskGroup task) => task.GroupName == taskGroup);
+                tasks = mTaskManager.GetAllTasks((ITasksGroup task) => task.Name == taskGroup);
 
             return tasks;
         }
 
-        private static bool IsTaskUpdateSince(ITask task, int days)
+        private static bool IsTaskUpdateSince(IWorkTask task, int days)
         {
             return task.TaskStatusHistory.TimeCreated.AddDays(days) >= DateTime.Now ||
                     task.TaskStatusHistory.TimeClosed.AddDays(days) >= DateTime.Now ||
@@ -182,9 +182,9 @@ namespace ConsoleUI
 
         private static int GatAllTaskGroup(bool shouldPrintAll, bool isDetailed)
         {
-            IEnumerable<ITaskGroup> groupsToPrint = mTaskManager.GetAllTasksGroups();
+            IEnumerable<ITasksGroup> groupsToPrint = mTaskManager.GetAllTasksGroups();
             if (!shouldPrintAll)
-                groupsToPrint = groupsToPrint.Where((ITaskGroup group) => (!group.IsFinished));
+                groupsToPrint = groupsToPrint.Where((ITasksGroup group) => (!group.IsFinished));
 
             mConsolePrinter.PrintTasksGroup(groupsToPrint, isDetailed);
             return 0;
@@ -290,9 +290,9 @@ namespace ConsoleUI
 
             if (!string.IsNullOrEmpty(taskGroupName))
             {
-                ITaskGroup taskGroup = mTaskManager.GetAllTasksGroups().Where(group => group.ID == taskGroupName).FirstOrDefault();
+                ITasksGroup taskGroup = mTaskManager.GetAllTasksGroups().Where(group => group.ID == taskGroupName).FirstOrDefault();
                 if (taskGroup == null)
-                    taskGroup = mTaskManager.GetAllTasksGroups().Where(group => group.GroupName == taskGroupName).FirstOrDefault();
+                    taskGroup = mTaskManager.GetAllTasksGroups().Where(group => group.Name == taskGroupName).FirstOrDefault();
 
                 if (taskGroup == null)
                 {
@@ -596,7 +596,7 @@ namespace ConsoleUI
             }
 
             mConsolePrinter.PrintTaskInformation(
-                 mTaskManager.GetAllTasks((ITask task) => task.ID == options.TaskId).First());
+                 mTaskManager.GetAllTasks((IWorkTask task) => task.ID == options.TaskId).First());
             return 0;
         }
     }

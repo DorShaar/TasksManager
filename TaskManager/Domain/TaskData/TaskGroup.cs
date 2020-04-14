@@ -8,15 +8,15 @@ using TaskData.Contracts;
 [assembly: InternalsVisibleTo("Statistics")]
 namespace TaskData
 {
-    public class TaskGroup : ITaskGroup
+    public class TaskGroup : ITasksGroup
     {
         [JsonProperty]
         private readonly ILogger mLogger;
         [JsonProperty]
-        internal readonly Dictionary<string, ITask> mTasksChildren = new Dictionary<string, ITask>();
+        internal readonly Dictionary<string, IWorkTask> mTasksChildren = new Dictionary<string, IWorkTask>();
 
         public string ID { get; }
-        public string GroupName { get; set; }
+        public string Name { get; set; }
 
         [JsonIgnore]
         public int Size => mTasksChildren.Count;
@@ -27,66 +27,66 @@ namespace TaskData
         internal TaskGroup(string groupName, ILogger logger)
         {
             mLogger = logger;
-            GroupName = groupName;
+            Name = groupName;
             ID = IDProducer.IDProducer.ProduceID();
 
-            mLogger?.Log($"New group id {ID} created with name: {GroupName}");
+            mLogger?.Log($"New group id {ID} created with name: {Name}");
         }
 
         [JsonConstructor]
-        internal TaskGroup(ILogger logger, Dictionary<string, ITask> taskChildren, string id, string groupName)
+        internal TaskGroup(ILogger logger, Dictionary<string, IWorkTask> taskChildren, string id, string groupName)
         {
             mLogger = logger;
             mTasksChildren = taskChildren;
             ID = id;
-            GroupName = groupName;
+            Name = groupName;
 
-            mLogger?.Log($"Group id {ID} restored with name: {GroupName}");
+            mLogger?.Log($"Group id {ID} restored with name: {Name}");
         }
 
-        public ITask CreateTask(string description)
+        public IWorkTask CreateTask(string description)
         {
-            Task createdTask = new Task(GroupName, description, mLogger);
+            Task createdTask = new Task(Name, description, mLogger);
             AddTask(createdTask);
             return createdTask;
         }
 
-        public IEnumerable<ITask> GetAllTasks()
+        public IEnumerable<IWorkTask> GetAllTasks()
         {
             return mTasksChildren.Values.AsEnumerable();
         }
 
-        public ITask GetTask(string id)
+        public IWorkTask GetTask(string id)
         {
-            if (!mTasksChildren.TryGetValue(id, out ITask task))
-                mLogger?.LogInformation($"Task id {id} was not found in group {GroupName}");
+            if (!mTasksChildren.TryGetValue(id, out IWorkTask task))
+                mLogger?.LogInformation($"Task id {id} was not found in group {Name}");
 
             return task;
         }
 
-        public void AddTask(ITask task)
+        public void AddTask(IWorkTask task)
         {
             if (mTasksChildren.ContainsKey(task.ID))
             {
-                mLogger?.Log($"Task {task.ID}, '{task.Description}' is already found in group {GroupName}");
+                mLogger?.Log($"Task {task.ID}, '{task.Description}' is already found in group {Name}");
                 return;
             }
 
-            task.Group = GroupName;
+            task.GroupName = Name;
             mTasksChildren.Add(task.ID, task);
-            mLogger?.Log($"Task {task.ID}, '{task.Description}' added to group {GroupName}");
+            mLogger?.Log($"Task {task.ID}, '{task.Description}' added to group {Name}");
         }
 
         public void RemoveTask(string id)
         {
             if (!mTasksChildren.ContainsKey(id))
             {
-                mLogger?.Log($"Task id {id} was not found in group {GroupName}");
+                mLogger?.Log($"Task id {id} was not found in group {Name}");
                 return;
             }
 
             mTasksChildren.Remove(id);
-            mLogger?.Log($"Task id {id} removed from group {GroupName}");
+            mLogger?.Log($"Task id {id} removed from group {Name}");
         }
 
         public void RemoveTask(params string[] ids)
@@ -97,16 +97,16 @@ namespace TaskData
             }
         }
 
-        public void UpdateTask(ITask task)
+        public void UpdateTask(IWorkTask task)
         {
             if (!mTasksChildren.ContainsKey(task.ID))
             {
-                mLogger?.LogError($"Task id {task.ID} is not in group {GroupName}. Update failed");
+                mLogger?.LogError($"Task id {task.ID} is not in group {Name}. Update failed");
                 return;
             }
 
             mTasksChildren[task.ID] = task;
-            mLogger?.LogError($"Task {task.ID}, {task.Description} updated in group {GroupName}. Update success");
+            mLogger?.LogError($"Task {task.ID}, {task.Description} updated in group {Name}. Update success");
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Database.JsonService
         {
             public override bool CanConvert(Type objectType)
             {
-                return objectType == typeof(ITask);
+                return objectType == typeof(IWorkTask);
             }
 
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -50,7 +50,7 @@ namespace Database.JsonService
         {
             public override bool CanConvert(Type objectType)
             {
-                return objectType == typeof(ITaskGroup);
+                return objectType == typeof(ITasksGroup);
             }
 
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

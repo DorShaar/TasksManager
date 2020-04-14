@@ -9,15 +9,15 @@ namespace TaskManager.Contracts
         // TasksGroups.
         void CreateNewTaskGroup(string groupName);
         void RemoveTaskGroup(string taskGroup, bool shouldMoveInnerTasks);
-        IEnumerable<ITaskGroup> GetAllTasksGroups();
-        ITaskGroup DefaultTaskGroupName { get; }
+        IEnumerable<ITasksGroup> GetAllTasksGroups();
+        ITasksGroup DefaultTaskGroupName { get; }
 
         // Tasks.
-        ITask CreateNewTask(ITaskGroup tasksGroup, string description);
+        IWorkTask CreateNewTask(ITasksGroup tasksGroup, string description);
         void CreateNewTask(string description);
-        IEnumerable<ITask> GetAllTasks();
-        IEnumerable<ITask> GetAllTasks(Func<ITaskGroup, bool> action);
-        IEnumerable<ITask> GetAllTasks(Func<ITask, bool> action);
+        IEnumerable<IWorkTask> GetAllTasks();
+        IEnumerable<IWorkTask> GetAllTasks(Func<ITasksGroup, bool> action);
+        IEnumerable<IWorkTask> GetAllTasks(Func<IWorkTask, bool> action);
         void CloseTask(string taskId, string reason);
         void ReOpenTask(string taskId, string reason);
         void MarkTaskOnWork(string taskId, string reason);

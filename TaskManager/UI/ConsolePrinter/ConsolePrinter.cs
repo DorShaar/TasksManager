@@ -15,7 +15,7 @@ namespace UI.ConsolePrinter
             mLogger = logger;
         }
 
-        public void PrintTasksGroup(IEnumerable<ITaskGroup> groups, bool isDetailed)
+        public void PrintTasksGroup(IEnumerable<ITasksGroup> groups, bool isDetailed)
         {
             TableDataStringBuilder tableDataStringBuilder;
             if (isDetailed)
@@ -23,18 +23,18 @@ namespace UI.ConsolePrinter
             else
                 tableDataStringBuilder = new TableDataStringBuilder(new string[] { "ID", "GROUP NAME"}, mLogger);
 
-            foreach (ITaskGroup group in groups)
+            foreach (ITasksGroup group in groups)
             {
                 if (isDetailed)
-                    tableDataStringBuilder.AppandRow(group.ID, group.GroupName, group.Size.ToString());
+                    tableDataStringBuilder.AppandRow(group.ID, group.Name, group.Size.ToString());
                 else
-                    tableDataStringBuilder.AppandRow(group.ID, group.GroupName);
+                    tableDataStringBuilder.AppandRow(group.ID, group.Name);
             }
 
             mLogger.Log(tableDataStringBuilder.Build());
         }
 
-        public void PrintTasks(IEnumerable<ITask> tasks, bool isDetailed)
+        public void PrintTasks(IEnumerable<IWorkTask> tasks, bool isDetailed)
         {
             TableDataStringBuilder tableDataStringBuilder;
             if (isDetailed)
@@ -52,13 +52,13 @@ namespace UI.ConsolePrinter
                     },
                     mLogger);
 
-            foreach (ITask task in tasks)
+            foreach (IWorkTask task in tasks)
             {
                 if (isDetailed)
                 {
                     tableDataStringBuilder.AppandRow(
                                         task.ID,
-                                        task.Group,
+                                        task.GroupName,
                                         task.Description,
                                         GetStringStatus(task.Status),
                                         task.TaskStatusHistory.TimeCreated.ToString(),
@@ -70,7 +70,7 @@ namespace UI.ConsolePrinter
                 {
                     tableDataStringBuilder.AppandRow(
                                         task.ID,
-                                        task.Group,
+                                        task.GroupName,
                                         task.Description,
                                         GetStringStatus(task.Status));
                 }
@@ -79,7 +79,7 @@ namespace UI.ConsolePrinter
             mLogger.Log(tableDataStringBuilder.Build());
         }
 
-        public void PrintTaskInformation(ITask task)
+        public void PrintTaskInformation(IWorkTask task)
         {
             StringBuilder stringBuilder = new StringBuilder();
 

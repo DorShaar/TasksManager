@@ -17,20 +17,20 @@ namespace TaskManager
 
         private readonly INoteBuilder mNoteBuilder;
         private readonly INotesSubjectBuilder mNoteSubjectBuilder;
-        private readonly ITaskGroupBuilder mTaskGroupBuilder;
+        private readonly ITasksGroupBuilder mTaskGroupBuilder;
 
-        private readonly ILocalRepository<ITaskGroup> mTasksDatabase;
+        private readonly ILocalRepository<ITasksGroup> mTasksDatabase;
 
         internal static readonly string FreeTaskGroupName = "Free";
 
         public INotesSubject NotesRootDatabase { get; }
         public INotesSubject NotesTasksDatabase { get; }
-        public ITaskGroup FreeTasksGroup { get; private set; }
-        public ITaskGroup DefaultTaskGroupName { get; }
+        public ITasksGroup FreeTasksGroup { get; private set; }
+        public ITasksGroup DefaultTaskGroupName { get; }
 
         public TaskManager(
-            ILocalRepository<ITaskGroup> tasksDatabase,
-            ITaskGroupBuilder taskGroupBuilder,
+            ILocalRepository<ITasksGroup> tasksDatabase,
+            ITasksGroupBuilder taskGroupBuilder,
             INoteBuilder noteBuilder,
             INotesSubjectBuilder notesSubjectBuilder,
             ILogger logger)
@@ -70,7 +70,7 @@ namespace TaskManager
 
         public void RemoveTaskGroup(string tasksGroup, bool shouldMoveInnerTasks)
         {
-            ITaskGroup taskGroup = mTasksDatabase.GetEntity(tasksGroup);
+            ITasksGroup taskGroup = mTasksDatabase.GetEntity(tasksGroup);
             if (taskGroup == null)
             {
                 mLogger.LogError($"Task group {tasksGroup} does not exists");
@@ -86,7 +86,7 @@ namespace TaskManager
             if (shouldMoveInnerTasks)
             {
                 // Should iterate with for and not for each because we are changing the size of the IEnumarable.
-                ITask[] tasksToMove = taskGroup.GetAllTasks().ToArray();
+                IWorkTask[] tasksToMove = taskGroup.GetAllTasks().ToArray();
                 for (int i = 0; i < tasksToMove.Length; ++i)
                 {
                     MoveTaskToGroup(tasksToMove[i].ID, FreeTasksGroup);
@@ -96,7 +96,7 @@ namespace TaskManager
             mTasksDatabase.Remove(taskGroup);
         }
 
-        public IEnumerable<ITaskGroup> GetAllTasksGroups()
+        public IEnumerable<ITasksGroup> GetAllTasksGroups()
         {
             return mTasksDatabase.GetAll();
         }
@@ -104,7 +104,7 @@ namespace TaskManager
         /// <summary>
         /// Create new task into <param name="tasksGroup"/>.
         /// </summary>
-        public ITask CreateNewTask(ITaskGroup tasksGroup, string description)
+        public IWorkTask CreateNewTask(ITasksGroup tasksGroup, string description)
         {
             if (tasksGroup == null)
             {
@@ -112,7 +112,7 @@ namespace TaskManager
                 return null;
             }
 
-            ITask task = tasksGroup.CreateTask(description);
+            IWorkTask task = tasksGroup.CreateTask(description);
             mTasksDatabase.AddOrUpdate(tasksGroup);
             return task;
         }
@@ -126,11 +126,11 @@ namespace TaskManager
             mTasksDatabase.Update(FreeTasksGroup);
         }
 
-        public IEnumerable<ITask> GetAllTasks()
+        public IEnumerable<IWorkTask> GetAllTasks()
         {
-            IEnumerable<ITask> allTasks = new List<ITask>();
+            IEnumerable<IWorkTask> allTasks = new List<IWorkTask>();
 
-            foreach (ITaskGroup taskGroup in GetAllTasksGroups())
+            foreach (ITasksGroup taskGroup in GetAllTasksGroups())
             {
                 allTasks = allTasks.Concat(taskGroup.GetAllTasks());
             }
@@ -138,18 +138,18 @@ namespace TaskManager
             return allTasks;
         }
 
-        public IEnumerable<ITask> GetAllTasks(Func<ITask, bool> action)
+        public IEnumerable<IWorkTask> GetAllTasks(Func<IWorkTask, bool> action)
         {
-            foreach (ITask task in GetAllTasks())
+            foreach (IWorkTask task in GetAllTasks())
             {
                 if (action(task))
                     yield return task;
             }
         }
 
-        public IEnumerable<ITask> GetAllTasks(Func<ITaskGroup, bool> action)
+        public IEnumerable<IWorkTask> GetAllTasks(Func<ITasksGroup, bool> action)
         {
-            foreach (ITaskGroup taskGroup in GetAllTasksGroups())
+            foreach (ITasksGroup taskGroup in GetAllTasksGroups())
             {
                 if (action(taskGroup))
                 {
@@ -162,9 +162,9 @@ namespace TaskManager
 
         public void CloseTask(string taskId, string reason)
         {
-            foreach (ITaskGroup group in mTasksDatabase.GetAll())
+            foreach (ITasksGroup group in mTasksDatabase.GetAll())
             {
-                ITask task = group.GetTask(taskId);
+                IWorkTask task = group.GetTask(taskId);
                 if (task != null)
                 {
                     task.CloseTask(reason);
@@ -178,9 +178,9 @@ namespace TaskManager
 
         public void ReOpenTask(string taskId, string reason)
         {
-            foreach (ITaskGroup group in mTasksDatabase.GetAll())
+            foreach (ITasksGroup group in mTasksDatabase.GetAll())
             {
-                ITask task = group.GetTask(taskId);
+                IWorkTask task = group.GetTask(taskId);
                 if (task != null)
                 {
                     task.ReOpenTask(reason);
@@ -194,9 +194,9 @@ namespace TaskManager
 
         public void MarkTaskOnWork(string taskId, string reason)
         {
-            foreach (ITaskGroup group in mTasksDatabase.GetAll())
+            foreach (ITasksGroup group in mTasksDatabase.GetAll())
             {
-                ITask task = group.GetTask(taskId);
+                IWorkTask task = group.GetTask(taskId);
                 if (task != null)
                 {
                     task.MarkTaskOnWork(reason);
@@ -210,9 +210,9 @@ namespace TaskManager
 
         public void RemoveTask(string taskId)
         {
-            foreach (ITaskGroup group in mTasksDatabase.GetAll())
+            foreach (ITasksGroup group in mTasksDatabase.GetAll())
             {
-                ITask task = group.GetTask(taskId);
+                IWorkTask task = group.GetTask(taskId);
                 if (task != null)
                 {
                     group.RemoveTask(taskId);
@@ -226,7 +226,7 @@ namespace TaskManager
 
         public void MoveTaskToGroup(string taskId, string taskGroup)
         {
-            ITaskGroup taskGroupDestination = mTasksDatabase.GetEntity(taskGroup);
+            ITasksGroup taskGroupDestination = mTasksDatabase.GetEntity(taskGroup);
             if (taskGroup == null)
             {
                 mLogger.LogError($"Task group {taskGroup} was not found");
@@ -236,7 +236,7 @@ namespace TaskManager
             MoveTaskToGroup(taskId, taskGroupDestination);
         }
 
-        private void MoveTaskToGroup(string taskId, ITaskGroup destionationTaskGroup)
+        private void MoveTaskToGroup(string taskId, ITasksGroup destionationTaskGroup)
         {
             if (destionationTaskGroup == null)
             {
@@ -244,12 +244,12 @@ namespace TaskManager
                 return;
             }
 
-            foreach (ITaskGroup sourceGroup in mTasksDatabase.GetAll())
+            foreach (ITasksGroup sourceGroup in mTasksDatabase.GetAll())
             {
-                ITask task = sourceGroup.GetTask(taskId);
+                IWorkTask task = sourceGroup.GetTask(taskId);
                 if (task != null)
                 {
-                    ITaskGroup sourceTaskGroup = mTasksDatabase.GetEntity(task.Group);
+                    ITasksGroup sourceTaskGroup = mTasksDatabase.GetEntity(task.GroupName);
 
                     if (sourceTaskGroup == null)
                     {
@@ -279,9 +279,9 @@ namespace TaskManager
 
         public void CreateTaskNote(string taskId, string content)
         {
-            foreach (ITaskGroup taskGroup in mTasksDatabase.GetAll())
+            foreach (ITasksGroup taskGroup in mTasksDatabase.GetAll())
             {
-                ITask task = taskGroup.GetTask(taskId);
+                IWorkTask task = taskGroup.GetTask(taskId);
                 if (task != null)
                 {
                     task.CreateNote(NotesTasksDatabase.NoteSubjectFullPath, content);

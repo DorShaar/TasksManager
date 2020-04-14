@@ -14,7 +14,7 @@ namespace TaskData.Tests
         [TestMethod]
         public void Size_NumberOfTasks3()
         {
-            ITaskGroup taskGroup = taskGroupBuilder.Create("TestGroup", mLogger);
+            ITasksGroup taskGroup = taskGroupBuilder.Create("TestGroup", mLogger);
             taskGroup.CreateTask("1");
             taskGroup.CreateTask("2");
             taskGroup.CreateTask("3");
@@ -25,10 +25,10 @@ namespace TaskData.Tests
         [TestMethod]
         public void IsFinished_HasOpenTasks_False()
         {
-            ITaskGroup taskGroup = taskGroupBuilder.Create("TestGroup", mLogger);
+            ITasksGroup taskGroup = taskGroupBuilder.Create("TestGroup", mLogger);
             taskGroup.CreateTask("1");
-            ITask task2 = taskGroup.CreateTask("2");
-            ITask task3 = taskGroup.CreateTask("3");
+            IWorkTask task2 = taskGroup.CreateTask("2");
+            IWorkTask task3 = taskGroup.CreateTask("3");
 
             task2.CloseTask(string.Empty);
             task3.CloseTask(string.Empty);
@@ -39,10 +39,10 @@ namespace TaskData.Tests
         [TestMethod]
         public void IsFinished_HasNoOpenTasks_True()
         {
-            ITaskGroup taskGroup = taskGroupBuilder.Create("TestGroup", mLogger);
-            ITask task1 = taskGroup.CreateTask("1");
-            ITask task2 = taskGroup.CreateTask("2");
-            ITask task3 = taskGroup.CreateTask("3");
+            ITasksGroup taskGroup = taskGroupBuilder.Create("TestGroup", mLogger);
+            IWorkTask task1 = taskGroup.CreateTask("1");
+            IWorkTask task2 = taskGroup.CreateTask("2");
+            IWorkTask task3 = taskGroup.CreateTask("3");
 
             task1.CloseTask(string.Empty);
             task2.CloseTask(string.Empty);

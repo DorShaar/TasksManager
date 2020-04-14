@@ -11,7 +11,7 @@ using TaskData.Contracts;
 
 namespace Database
 {
-    public class Database<T> : ILocalRepository<T> where T : ITaskGroup   
+    public class Database : ILocalRepository<ITasksGroup>
     {
         private const string DatabaseName = "tasks.db";
         private const string NextIdHolderName = "id_producer.db";
@@ -20,7 +20,7 @@ namespace Database
         private readonly IObjectSerializer mSerializer;
         private readonly DatabaseLocalConfigurtaion mConfiguration;
 
-        private List<T> mEntities = new List<T>();
+        private List<ITasksGroup> mEntities = new List<ITasksGroup>();
 
         private readonly string NextIdPath;
         public string DatabaseDirectoryPath { get; }
@@ -60,7 +60,7 @@ namespace Database
             }
             catch (Exception ex)
             {
-                mEntities = new List<T>();
+                mEntities = new List<ITasksGroup>();
                 mLogger.LogError($"Unable to deserialize whole information", ex);
             }
         }
@@ -74,7 +74,7 @@ namespace Database
             }
 
             mLogger.LogInformation($"Going to load database from {DatabaseDirectoryPath}");
-            mEntities = mSerializer.Deserialize<List<T>>(DatabaseDirectoryPath);
+            mEntities = mSerializer.Deserialize<List<ITasksGroup>>(DatabaseDirectoryPath);
         }
 
         private void LoadNextIdToProduce()
@@ -94,21 +94,21 @@ namespace Database
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public T GetEntity(string entityToFind)
+        public ITasksGroup GetEntity(string entityToFind)
         {
-            T entityFound = mEntities.Find(entity => entity.ID == entityToFind);
+            ITasksGroup entityFound = mEntities.Find(entity => entity.ID == entityToFind);
             if (entityFound == null)
-                entityFound = mEntities.Find(entity => entity.GroupName == entityToFind);
+                entityFound = mEntities.Find(entity => entity.Name == entityToFind);
 
             return entityFound;
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<ITasksGroup> GetAll()
         {
             return mEntities.AsEnumerable();
         }
 
-        public void Insert(T newEntity)
+        public void Insert(ITasksGroup newEntity)
         {
             if (mEntities.Contains(newEntity) ||
                (mEntities.Find(entity => entity.ID == newEntity.ID) != null))
@@ -117,9 +117,9 @@ namespace Database
                 return;
             }
 
-            if (mEntities.Find(entity => entity.GroupName == newEntity.GroupName) != null)
+            if (mEntities.Find(entity => entity.Name == newEntity.Name) != null)
             {
-                mLogger.LogError($"Group name: {newEntity.GroupName} is already found in database");
+                mLogger.LogError($"Group name: {newEntity.Name} is already found in database");
                 return;
             }
 
@@ -127,21 +127,21 @@ namespace Database
             SaveToFile();
         }
 
-        public void Remove(T entity)
+        public void Remove(ITasksGroup entity)
         {
             if (!mEntities.Contains(entity))
             {
-                mLogger.LogError($"Group ID: {entity.ID} Group name: {entity.GroupName} - No such entity was found in database");
+                mLogger.LogError($"Group ID: {entity.ID} Group name: {entity.Name} - No such entity was found in database");
                 return;
             }
 
-            foreach (ITask task in entity.GetAllTasks())
+            foreach (IWorkTask task in entity.GetAllTasks())
             {
                 mLogger.Log($"Removing inner task id {task.ID} description {task.Description}");
             }
 
             mEntities.Remove(entity);
-            mLogger.Log($"Task group id {entity.ID} group name {entity.GroupName} removed");
+            mLogger.Log($"Task group id {entity.ID} group name {entity.Name} removed");
             SaveToFile();
         }
 
@@ -149,13 +149,13 @@ namespace Database
         /// <param name="newEntity"/> will replace an existing identity with the same id in <see cref="mEntities"/>
         /// </summary>
         /// <param name="newEntity"></param>
-        public void Update(T newEntity)
+        public void Update(ITasksGroup newEntity)
         {
-            T entityToUpdate = mEntities.Find(entity => entity.ID == newEntity.ID);
+            ITasksGroup entityToUpdate = mEntities.Find(entity => entity.ID == newEntity.ID);
 
             if (entityToUpdate == null)
             {
-                mLogger.LogError($"Group ID: {newEntity.ID} Group name: {newEntity.GroupName} - No such entity was found in database");
+                mLogger.LogError($"Group ID: {newEntity.ID} Group name: {newEntity.Name} - No such entity was found in database");
                 return;
             }
 
@@ -163,9 +163,9 @@ namespace Database
             SaveToFile();
         }
 
-        public void AddOrUpdate(T addOrUpdateEntity)
+        public void AddOrUpdate(ITasksGroup addOrUpdateEntity)
         {
-            T entityToUpdate = mEntities.Find(entity => entity.ID == addOrUpdateEntity.ID);
+            ITasksGroup entityToUpdate = mEntities.Find(entity => entity.ID == addOrUpdateEntity.ID);
 
             if (entityToUpdate != null)
                 entityToUpdate = addOrUpdateEntity;

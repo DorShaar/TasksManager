@@ -3,9 +3,9 @@ using TaskData.Contracts;
 
 namespace TaskData
 {
-    public class TaskGroupBuilder : ITaskGroupBuilder
+    public class TaskGroupBuilder : ITasksGroupBuilder
     {
-        public ITaskGroup Create(string groupName, ILogger logger)
+        public ITasksGroup Create(string groupName, ILogger logger)
         {
             return new TaskGroup(groupName, logger);
         }

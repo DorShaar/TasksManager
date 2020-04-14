@@ -47,14 +47,14 @@ namespace Composition
         {
             serviceCollection.AddSingleton<INoteBuilder, NoteBuilder>();
             serviceCollection.AddSingleton<INotesSubjectBuilder, NotesSubjectBuilder>();
-            serviceCollection.AddSingleton<ITask, Task>();
-            serviceCollection.AddSingleton<ITaskGroup, TaskGroup>();
-            serviceCollection.AddSingleton<ITaskGroupBuilder, TaskGroupBuilder>();
+            serviceCollection.AddSingleton<IWorkTask, Task>();
+            serviceCollection.AddSingleton<ITasksGroup, TaskGroup>();
+            serviceCollection.AddSingleton<ITasksGroupBuilder, TaskGroupBuilder>();
         }
 
         private void RegisterDatabaseEntities(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<ILocalRepository<ITaskGroup>, Database<ITaskGroup>>();
+            serviceCollection.AddSingleton<ILocalRepository<ITasksGroup>, Database.Database>();
 
             IConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
