@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Tasker.Statistics</PackageId>
+    <Authors>DorShaar</Authors>
   </PropertyGroup>
 
   <ItemGroup>
