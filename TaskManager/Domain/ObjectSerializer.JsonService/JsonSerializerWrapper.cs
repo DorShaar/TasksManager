@@ -37,12 +37,12 @@ namespace Database.JsonService
 
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
-                return serializer.Deserialize(reader, typeof(Task));
+                return serializer.Deserialize(reader, typeof(WorkTask));
             }
 
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                serializer.Serialize(writer, value, typeof(Task));
+                serializer.Serialize(writer, value, typeof(WorkTask));
             }
         }
 

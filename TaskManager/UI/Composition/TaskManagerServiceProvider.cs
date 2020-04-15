@@ -47,7 +47,7 @@ namespace Composition
         {
             serviceCollection.AddSingleton<INoteBuilder, NoteBuilder>();
             serviceCollection.AddSingleton<INotesSubjectBuilder, NotesSubjectBuilder>();
-            serviceCollection.AddSingleton<IWorkTask, Task>();
+            serviceCollection.AddSingleton<IWorkTask, WorkTask>();
             serviceCollection.AddSingleton<ITasksGroup, TaskGroup>();
             serviceCollection.AddSingleton<ITasksGroupBuilder, TaskGroupBuilder>();
         }

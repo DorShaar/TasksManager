@@ -60,8 +60,8 @@ namespace Database.Tests
             ITasksGroup taskGroup = database.GetEntity("A");
             Assert.AreEqual(taskGroup.GetAllTasks().Count(), 0);
 
-            taskGroup.AddTask(new Task("some group", "todo A1", mLogger));
-            taskGroup.AddTask(new Task("some group", "todo A2", mLogger));
+            taskGroup.AddTask(new WorkTask("some group", "todo A1", mLogger));
+            taskGroup.AddTask(new WorkTask("some group", "todo A2", mLogger));
             database.Update(taskGroup);
             ITasksGroup updatedTaskGroup = database.GetEntity("A");
             Assert.AreEqual(updatedTaskGroup.GetAllTasks().Count(), 2);
@@ -74,8 +74,8 @@ namespace Database.Tests
             ITasksGroup taskGroup = database.GetEntity("A");
             Assert.AreEqual(taskGroup.GetAllTasks().Count(), 0);
 
-            taskGroup.AddTask(new Task("some group", "todo A1", mLogger));
-            taskGroup.AddTask(new Task("some group", "todo A2", mLogger));
+            taskGroup.AddTask(new WorkTask("some group", "todo A1", mLogger));
+            taskGroup.AddTask(new WorkTask("some group", "todo A2", mLogger));
             database.AddOrUpdate(taskGroup);
             ITasksGroup updatedTaskGroup = database.GetEntity("A");
             Assert.AreEqual(updatedTaskGroup.GetAllTasks().Count(), 2);

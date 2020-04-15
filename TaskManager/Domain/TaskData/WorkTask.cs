@@ -5,7 +5,7 @@ using TaskData.Contracts;
 
 namespace TaskData
 {
-    public class Task : IWorkTask
+    public class WorkTask : IWorkTask
     {
         [JsonProperty]
         private readonly ILogger mLogger;
@@ -28,7 +28,7 @@ namespace TaskData
         [JsonProperty]
         public ITaskStatusHistory TaskStatusHistory { get; }
 
-        public Task(string group, string description, ILogger logger)
+        public WorkTask(string group, string description, ILogger logger)
         {
             mLogger = logger;
             ID = IDProducer.IDProducer.ProduceID();
@@ -42,7 +42,7 @@ namespace TaskData
         }
 
         [JsonConstructor]
-        internal Task(ILogger logger, string id, string group, string description, INote note, ITaskStatusHistory taskStatusHistory)
+        internal WorkTask(ILogger logger, string id, string group, string description, INote note, ITaskStatusHistory taskStatusHistory)
         {
             mLogger = logger;
             mNote = note;

@@ -46,7 +46,7 @@ namespace TaskData
 
         public IWorkTask CreateTask(string description)
         {
-            Task createdTask = new Task(Name, description, mLogger);
+            WorkTask createdTask = new WorkTask(Name, description, mLogger);
             AddTask(createdTask);
             return createdTask;
         }
