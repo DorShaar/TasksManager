@@ -5,6 +5,7 @@
     <PackageId>Tasker.Logger</PackageId>
     <Authors>DorShaar</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/dorshaar/tasksmanager</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
