@@ -237,7 +237,7 @@ namespace ConsoleUI
 
         private static int GetConfigruationPath()
         {
-            mConsolePrinter.Print(Path.Combine(GetAssemblyDirectory(), "Config", "Config.yaml"), "Configuration path");
+            mConsolePrinter.Print(Path.Combine(GetAssemblyDirectory(), "config", "Config.yaml"), "Configuration path");
             return 0;
         }
 

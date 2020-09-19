@@ -69,7 +69,7 @@ namespace Composition
         private void RegisterLogger(ServiceCollection serviceCollection)
         {
             serviceCollection.AddLogging(builder =>
-                builder.AddConsole().SetMinimumLevel(LogLevel.Trace));
+                builder.AddConsole().SetMinimumLevel(LogLevel.Debug));
         }
 
         public object GetService(Type serviceType)
