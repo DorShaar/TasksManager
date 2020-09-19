@@ -2,10 +2,8 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using TaskData.Contracts;
 
-[assembly: InternalsVisibleTo("Statistics")]
 namespace TaskData
 {
     public class TaskGroup : ITasksGroup
@@ -22,7 +20,7 @@ namespace TaskData
         public int Size => mTasksChildren.Count;
 
         [JsonIgnore]
-        public bool IsFinished { get => mTasksChildren.Where(task => !task.Value.IsFinished).Count() > 0 ? false : true; }
+        public bool IsFinished { get => mTasksChildren.All(task => task.Value.IsFinished); }
 
         internal TaskGroup(string groupName, ILogger logger)
         {

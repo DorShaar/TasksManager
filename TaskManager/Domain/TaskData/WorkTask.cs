@@ -20,7 +20,7 @@ namespace TaskData
         public string Description { get; set; } = string.Empty;
 
         [JsonIgnore]
-        public bool IsFinished { get => Status == Status.Closed ? true : false ; }
+        public bool IsFinished { get => Status == Status.Closed; }
 
         [JsonIgnore]
         public Status Status => TaskStatusHistory.CurrentStatus;

@@ -44,7 +44,6 @@ namespace Database
                 return;
             }
 
-
             DefaultTasksGroup = mConfiguration.DefaultTasksGroup;
             DatabaseDirectoryPath = Path.Combine(mConfiguration.DatabaseDirectoryPath, DatabaseName);
             NextIdPath = Path.Combine(mConfiguration.DatabaseDirectoryPath, NextIdHolderName);
@@ -61,7 +60,7 @@ namespace Database
             catch (Exception ex)
             {
                 mEntities = new List<ITasksGroup>();
-                mLogger.LogError($"Unable to deserialize whole information", ex);
+                mLogger.LogError("Unable to deserialize whole information", ex);
             }
         }
 
@@ -96,9 +95,9 @@ namespace Database
         /// <returns></returns>
         public ITasksGroup GetEntity(string entityToFind)
         {
-            ITasksGroup entityFound = mEntities.Find(entity => entity.ID == entityToFind);
-            if (entityFound == null)
-                entityFound = mEntities.Find(entity => entity.Name == entityToFind);
+            ITasksGroup entityFound =
+                mEntities.Find(entity => entity.ID == entityToFind) ??
+                mEntities.Find(entity => entity.Name == entityToFind);
 
             return entityFound;
         }
@@ -193,7 +192,6 @@ namespace Database
             {
                 mSerializer.Serialize(mEntities, DatabaseDirectoryPath);
                 mSerializer.Serialize(IDProducer.IDProducer.PeekForNextId(), NextIdPath);
-
             }
             catch (Exception ex)
             {

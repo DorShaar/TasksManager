@@ -1,6 +1,6 @@
 ﻿namespace IDProducer
 {
-     public class IDProducer
+     public static class IDProducer
      {
           private static int mLastID = 1000;
 

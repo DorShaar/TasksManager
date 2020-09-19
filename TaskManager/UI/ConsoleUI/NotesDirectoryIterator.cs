@@ -28,7 +28,9 @@ namespace ConsoleUI
                 return note;
 
             string userInput = string.Empty;
-            while (userInput.ToLower() != "exit" && userInput.ToLower() != "q" && note == null)
+            while (!string.Equals(userInput, "exit", StringComparison.OrdinalIgnoreCase) &&
+                   !string.Equals(userInput, "q", StringComparison.OrdinalIgnoreCase) &&
+                   note == null)
             {
                 PrintSubjectAndNotes();
                 userInput = Console.ReadLine();
@@ -40,11 +42,13 @@ namespace ConsoleUI
 
         private INote IterateByUserInput(string userInput)
         {
-            if (userInput.ToLower().Equals(".."))
+            if (userInput.Equals("..", StringComparison.OrdinalIgnoreCase))
+            {
                 GoBack();
+            }
             else
             {
-                if (userInput.ToLower().StartsWith("cd "))
+                if (userInput.StartsWith("cd ", StringComparison.OrdinalIgnoreCase))
                     userInput = userInput.Substring("cd ".Length);
 
                 return GetNoteOrChangeDirectory(userInput);
@@ -71,17 +75,18 @@ namespace ConsoleUI
         {
             string fileOrDirectory = Path.Combine(mCurrentNotesDirectory.NoteSubjectFullPath, subPath);
             if (Directory.Exists(fileOrDirectory))
+            {
                 GoIntoDirectory(subPath);
+            }
             else
             {
                 IEnumerable<string> possibleNotes = Directory.EnumerateFiles(mCurrentNotesDirectory.NoteSubjectFullPath)
                     .Where(fileName => fileName.Contains(subPath));
 
-                if(possibleNotes.Count() == 1)
+                if (possibleNotes.Count() == 1)
                     return GetNoteByName(Path.GetFileName(possibleNotes.First()));
                 else
-                    mConsolePrinter.Print(possibleNotes.Select(
-                        noteFullPath => Path.GetFileName(noteFullPath)), "POSSIBLE NOTES");
+                    mConsolePrinter.Print(possibleNotes.Select(noteFullPath => Path.GetFileName(noteFullPath)), "POSSIBLE NOTES");
             }
 
             return null;

@@ -54,10 +54,8 @@ namespace TaskData
                 UseShellExecute = true
             };
 
-            using (Process process = new Process { StartInfo = startInfo })
-            {
-                process.Start();
-            }
+            using Process process = new Process { StartInfo = startInfo };
+            process.Start();
         }
     }
 }

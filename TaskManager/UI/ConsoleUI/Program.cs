@@ -13,7 +13,7 @@ using UI.ConsolePrinter;
 
 namespace ConsoleUI
 {
-    public class Program
+    public static class Program
     {
         private const int DESCRIPTION_LENGTH_LIMIT = 70;
         private static ILogger mLogger;
@@ -81,7 +81,12 @@ namespace ConsoleUI
                 case "task":
                 case "tasks":
                     return GetAllTasks(
-                        options.ObjectName, options.Status, options.ShouldPrintAll, options.ShouldPrintNotOnlyDefault, options.Days, options.IsDetailed);
+                        options.ObjectName,
+                        options.Status,
+                        options.ShouldPrintAll,
+                        options.ShouldPrintNotOnlyDefault,
+                        options.Days,
+                        options.IsDetailed);
 
                 case "group":
                 case "groups":
@@ -125,12 +130,11 @@ namespace ConsoleUI
             }
 
             if (!shouldPrintAll)
-                tasksToPrint = tasksToPrint.Where(task => task.IsFinished == false);
+                tasksToPrint = tasksToPrint.Where(task => !task.IsFinished);
 
-            if (!shouldPrintNotOnlyDefaultGroup)
+            if (!shouldPrintNotOnlyDefaultGroup && mTaskManager.DefaultTaskGroupName != null)
             {
-                if(mTaskManager.DefaultTaskGroupName != null)
-                    tasksToPrint = tasksToPrint.Where(task => 
+                tasksToPrint = tasksToPrint.Where(task =>
                     AreNamesEquals(task.GroupName, mTaskManager.DefaultTaskGroupName.Name));
             }
 
@@ -165,9 +169,9 @@ namespace ConsoleUI
             if (string.IsNullOrEmpty(taskGroup))
                 return null;
 
-            IEnumerable<IWorkTask> tasks = mTaskManager.GetAllTasks((ITasksGroup task) => task.ID == taskGroup);
-            if (tasks == null)
-                tasks = mTaskManager.GetAllTasks((ITasksGroup task) => task.Name == taskGroup);
+            IEnumerable<IWorkTask> tasks =
+                mTaskManager.GetAllTasks((ITasksGroup task) => task.ID == taskGroup) ??
+                mTaskManager.GetAllTasks((ITasksGroup task) => task.Name == taskGroup);
 
             return tasks;
         }
@@ -278,7 +282,7 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(description))
             {
-                mLogger.LogError($"Cannot create empty task. Use -d for adding a description");
+                mLogger.LogError("Cannot create empty task. Use -d for adding a description");
                 return -1;
             }
 
@@ -290,9 +294,9 @@ namespace ConsoleUI
 
             if (!string.IsNullOrEmpty(taskGroupName))
             {
-                ITasksGroup taskGroup = mTaskManager.GetAllTasksGroups().Where(group => group.ID == taskGroupName).FirstOrDefault();
-                if (taskGroup == null)
-                    taskGroup = mTaskManager.GetAllTasksGroups().Where(group => group.Name == taskGroupName).FirstOrDefault();
+                ITasksGroup taskGroup =
+                    mTaskManager.GetAllTasksGroups().FirstOrDefault(group => group.ID == taskGroupName) ??
+                    mTaskManager.GetAllTasksGroups().FirstOrDefault(group => group.Name == taskGroupName);
 
                 if (taskGroup == null)
                 {
@@ -303,7 +307,9 @@ namespace ConsoleUI
                 mTaskManager.CreateNewTask(taskGroup, description);
             }
             else
+            {
                 mTaskManager.CreateNewTask(description);
+            }
 
             return 0;
         }
@@ -324,7 +330,7 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(taskId))
             {
-                mLogger.LogError($"No task id given to create note");
+                mLogger.LogError("No task id given to create note");
                 return 1;
             }
 
@@ -339,7 +345,7 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(noteSubject))
             {
-                mLogger.LogError($"No task subject given to create note");
+                mLogger.LogError("No task subject given to create note");
                 return 1;
             }
 
@@ -378,7 +384,7 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(taskId))
             {
-                mLogger.LogError($"No task id given to remove");
+                mLogger.LogError("No task id given to remove");
                 return 1;
             }
 
@@ -390,19 +396,16 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(taskGroup))
             {
-                mLogger.LogError($"No group name or group id given");
+                mLogger.LogError("No group name or group id given");
                 return 1;
             }
 
-            if (shouldHardDelete)
+            mLogger.Log("Are you sure you want to delete that group with all of its inner tasks? If so, press y");
+            string userInput = Console.ReadLine();
+            if (!string.Equals(userInput, "y", StringComparison.OrdinalIgnoreCase))
             {
-                mLogger.Log("Are you sure you want to delete that group with all of its inner tasks? If so, press y");
-                string userInput = Console.ReadLine();
-                if (userInput.ToLower() != "y")
-                {
-                    mLogger.Log($"Group {taskGroup} was not deleted");
-                    return 0;
-                }
+                mLogger.Log($"Group {taskGroup} was not deleted");
+                return 0;
             }
 
             mTaskManager.RemoveTaskGroup(taskGroup, !shouldHardDelete);
@@ -433,7 +436,7 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(taskId))
             {
-                mLogger.LogError($"No task id given");
+                mLogger.LogError("No task id given");
                 return 1;
             }
 
@@ -467,8 +470,7 @@ namespace ConsoleUI
         private static int OpenNote(string noteName)
         {
             INote note = GetNote(mTaskManager.NotesTasksDatabase, noteName);
-            if (note != null)
-                note.Open();
+            note?.Open();
 
             return 0;
         }
@@ -476,8 +478,7 @@ namespace ConsoleUI
         private static int OpenGeneralNote(string noteName)
         {
             INote note = GetNote(mTaskManager.NotesRootDatabase, noteName);
-            if (note != null)
-                note.Open();
+            note?.Open();
 
             return 0;
         }
@@ -511,13 +512,13 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(taskId))
             {
-                mLogger.LogError($"No task id given to move");
+                mLogger.LogError("No task id given to move");
                 return 1;
             }
 
             if (string.IsNullOrEmpty(taskGroup))
             {
-                mLogger.LogError($"No group name or group id given");
+                mLogger.LogError("No group name or group id given");
                 return 1;
             }
 
@@ -548,7 +549,7 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(taskId))
             {
-                mLogger.LogError($"No task id given");
+                mLogger.LogError("No task id given");
                 return 1;
             }
 
@@ -579,7 +580,7 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(taskId))
             {
-                mLogger.LogError($"No task id given");
+                mLogger.LogError("No task id given");
                 return 1;
             }
 
@@ -591,7 +592,7 @@ namespace ConsoleUI
         {
             if (string.IsNullOrEmpty(options.TaskId))
             {
-                mLogger.LogError($"No task id given to create note");
+                mLogger.LogError("No task id given to create note");
                 return 1;
             }
 

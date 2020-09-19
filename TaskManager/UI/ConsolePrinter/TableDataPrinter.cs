@@ -31,9 +31,10 @@ namespace UI.ConsolePrinter
 
         public void AppandRow(params string[] rowData)
         {
-            if(rowData.Count() != mColumnsLengths.Length)
+            if(rowData.Length != mColumnsLengths.Length)
             {
-                mLogger.LogError($"Row columns number {rowData.Count()} is not the same as headers columns number {mColumnsLengths.Length}");
+                mLogger.LogError(
+                    $"Row columns number {rowData.Length} is not the same as headers columns number {mColumnsLengths.Length}");
                 return;
             }
 
@@ -55,7 +56,7 @@ namespace UI.ConsolePrinter
                 {
                     mDataToPrintCollector.Add(string.Empty);
                 }
-                
+
                 index++;
             }
         }

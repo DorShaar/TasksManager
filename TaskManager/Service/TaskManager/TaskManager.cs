@@ -108,7 +108,7 @@ namespace TaskManager
         {
             if (tasksGroup == null)
             {
-                mLogger.LogError($"Given task group is null");
+                mLogger.LogError("Given task group is null");
                 return null;
             }
 
@@ -240,7 +240,7 @@ namespace TaskManager
         {
             if (destionationTaskGroup == null)
             {
-                mLogger.LogError($"Destination task group was not found");
+                mLogger.LogError("Destination task group was not found");
                 return;
             }
 
@@ -253,7 +253,7 @@ namespace TaskManager
 
                     if (sourceTaskGroup == null)
                     {
-                        mLogger.LogError($"Moving task failed since source group is not given, unable checking moving to same group");
+                        mLogger.LogError("Moving task failed since source group is not given, unable checking moving to same group");
                         return;
                     }
 
@@ -268,7 +268,7 @@ namespace TaskManager
                     }
                     else
                     {
-                        mLogger.LogError($"Moving task failed since Source group and destination group are the same");
+                        mLogger.LogError("Moving task failed since Source group and destination group are the same");
                         return;
                     }
                 }

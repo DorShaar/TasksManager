@@ -38,19 +38,23 @@ namespace UI.ConsolePrinter
         {
             TableDataStringBuilder tableDataStringBuilder;
             if (isDetailed)
+            {
                 tableDataStringBuilder = new TableDataStringBuilder(
-                    new string[] 
-                    {
+                   new string[]
+                   {
                         "ID", "Parent", "DESCRIPTION", "STATUS", "TIME CREATED", "LAST OPENED TIME", "LAST WORK START TIME", "CLOSED TIME"
-                    }, 
-                    mLogger);
+                   },
+                   mLogger);
+            }
             else
+            {
                 tableDataStringBuilder = new TableDataStringBuilder(
-                    new string[]
-                    {
+                   new string[]
+                   {
                         "ID", "Parent", "DESCRIPTION", "STATUS"
-                    },
-                    mLogger);
+                   },
+                   mLogger);
+            }
 
             foreach (IWorkTask task in tasks)
             {
@@ -83,26 +87,20 @@ namespace UI.ConsolePrinter
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"Task ID: {task.ID}");
-            stringBuilder.AppendLine($"Description: {task.Description}");
-            stringBuilder.AppendLine($"Status: { GetStringStatus(task.Status)}");
-            stringBuilder.AppendLine($"Time created: {task.TaskStatusHistory.TimeCreated}");
-            stringBuilder.AppendLine($"Last opened time: {task.TaskStatusHistory.TimeLastOpened}");
-            stringBuilder.AppendLine($"Closed time: {task.TaskStatusHistory.TimeClosed}");
-            stringBuilder.AppendLine($"Note: {task.GetNote()}");
+            stringBuilder.Append("Task ID: ").AppendLine(task.ID)
+                .Append("Description: ").AppendLine(task.Description)
+                .Append("Status: ").AppendLine(GetStringStatus(task.Status))
+                .Append("Time created: ").Append(task.TaskStatusHistory.TimeCreated).AppendLine()
+                .Append("Last opened time: ").Append(task.TaskStatusHistory.TimeLastOpened).AppendLine()
+                .Append("Closed time: ").Append(task.TaskStatusHistory.TimeClosed).AppendLine()
+                .Append("Note: ").AppendLine(task.GetNote());
 
             mLogger.Log(stringBuilder.ToString());
         }
 
         private static string GetStringStatus(Status status)
         {
-            string statusStr;
-            if (status == Status.OnWork)
-                statusStr = "On-Work";
-            else
-                statusStr = status.ToString();
-
-            return statusStr;
+            return status == Status.OnWork ? "On-Work" : status.ToString();
         }
 
         public void Print(string data, string header)

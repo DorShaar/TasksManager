@@ -14,7 +14,7 @@ namespace Database.Tests
     public class DatabaseTests
     {
         private readonly ILogger mLogger = A.Dummy<ILogger>();
-        private readonly IOptions<DatabaseLocalConfigurtaion> mConfiguration = 
+        private readonly IOptions<DatabaseLocalConfigurtaion> mConfiguration =
             A.Dummy<IOptions<DatabaseLocalConfigurtaion>>();
         private readonly IObjectSerializer mSerializer = A.Dummy<IObjectSerializer>();
         private readonly ITasksGroupBuilder mTaskGroupBuilder = new TaskGroupBuilder();
@@ -86,7 +86,7 @@ namespace Database.Tests
         {
             Database database = CreateTestsDatabase();
 
-            string newTaskGroupName = "X";
+            const string newTaskGroupName = "X";
             database.Insert(mTaskGroupBuilder.Create(newTaskGroupName, mLogger));
             ITasksGroup taskGroup = database.GetEntity(newTaskGroupName);
             database.AddOrUpdate(taskGroup);
