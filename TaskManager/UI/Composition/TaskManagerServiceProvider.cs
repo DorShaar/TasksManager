@@ -1,7 +1,8 @@
 ﻿using Database.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System;
 using UI.ConsolePrinter;
 using ObjectSerializer.JsonService;
 using TaskData.Notes;
@@ -69,7 +70,7 @@ namespace Composition
 
         private void RegisterLogger(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddLogging();
+            serviceCollection.AddLogging(builder => builder.AddConsole());
         }
 
         public object GetService(Type serviceType)

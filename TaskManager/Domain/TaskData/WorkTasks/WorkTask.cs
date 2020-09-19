@@ -29,10 +29,10 @@ namespace TaskData.WorkTasks
         [JsonProperty]
         public ITaskStatusHistory TaskStatusHistory { get; }
 
-        internal WorkTask(string id, string group, string description)
+        internal WorkTask(string id, string groupName, string description)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
-            GroupName = group ?? throw new ArgumentNullException(nameof(group));
+            GroupName = groupName ?? throw new ArgumentNullException(nameof(groupName));
             Description = description ?? throw new ArgumentNullException(nameof(description));
 
             TaskStatusHistory = new TaskStatusHistory();
@@ -41,13 +41,13 @@ namespace TaskData.WorkTasks
 
         [JsonConstructor]
         internal WorkTask(string id,
-            string group,
+            string groupName,
             string description,
             INote note,
             ITaskStatusHistory taskStatusHistory)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
-            GroupName = group ?? throw new ArgumentNullException(nameof(group));
+            GroupName = groupName ?? throw new ArgumentNullException(nameof(groupName));
             Description = description ?? throw new ArgumentNullException(nameof(description));
             mNote = note;
             TaskStatusHistory = taskStatusHistory ?? throw new ArgumentNullException(nameof(taskStatusHistory));

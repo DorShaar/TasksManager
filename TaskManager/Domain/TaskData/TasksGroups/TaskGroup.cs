@@ -14,7 +14,7 @@ namespace TaskData.TasksGroups
     {
         [JsonIgnore]
         private readonly IWorkTaskFactory mWorkTaskFactory;
-        
+
         public readonly Dictionary<string, IWorkTask> TasksChildren = new Dictionary<string, IWorkTask>();
         public string ID { get; }
         public string Name { get; }
@@ -33,10 +33,10 @@ namespace TaskData.TasksGroups
         }
 
         [JsonConstructor]
-        internal TaskGroup(string id, string groupName, Dictionary<string, IWorkTask> tasksChildren)
+        internal TaskGroup(string id, string name, Dictionary<string, IWorkTask> tasksChildren)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
-            Name = groupName ?? throw new ArgumentNullException(nameof(groupName));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             TasksChildren = tasksChildren ?? throw new ArgumentNullException(nameof(tasksChildren));
         }
 

@@ -43,7 +43,7 @@ namespace ConsoleUI
             }
 
             if (exitCode != 0)
-                Console.WriteLine($"Finished executing with exit code: {exitCode}");
+                mLogger.LogInformation($"Finished executing with exit code: {exitCode}");
         }
 
         private static int ParseArgument(Parser parser, string[] args)

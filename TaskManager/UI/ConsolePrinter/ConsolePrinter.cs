@@ -26,7 +26,7 @@ namespace UI.ConsolePrinter
                     tableDataStringBuilder.AppandRow(group.ID, group.Name);
             }
 
-            System.Console.WriteLine(tableDataStringBuilder.Build());
+            Console.WriteLine(tableDataStringBuilder.Build());
         }
 
         public void PrintTasks(IEnumerable<IWorkTask> tasks, bool isDetailed)
