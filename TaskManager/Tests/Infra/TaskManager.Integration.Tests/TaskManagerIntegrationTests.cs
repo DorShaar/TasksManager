@@ -37,9 +37,7 @@ namespace TaskManager.Integration.Tests
 
             IDProducer idProducer = new IDProducer();
 
-            WorkTaskFactory workTaskFactory = new WorkTaskFactory(idProducer, NullLogger<WorkTaskFactory>.Instance);
-
-            mTaskGroupFactory = new TaskGroupFactory(idProducer, workTaskFactory, NullLogger<TaskGroupFactory>.Instance);
+            mTaskGroupFactory = new TaskGroupFactory(idProducer, NullLogger<TaskGroupFactory>.Instance);
 
             mDatabase = new Databases.Database(
                 mFakeConfiguration, mSerializer, idProducer, NullLogger<Databases.Database>.Instance);
@@ -51,7 +49,7 @@ namespace TaskManager.Integration.Tests
         [Fact]
         public void GetAllTasksByGroup_3Tasks_3TasksReturned()
         {
-            ITasksGroup taskGroup = mTaskGroupFactory.Create("A");
+            ITasksGroup taskGroup = mTaskGroupFactory.CreateGroup("A");
             IWorkTask task1 = mTaskManager.CreateNewTask(taskGroup, "1");
             IWorkTask task2 = mTaskManager.CreateNewTask(taskGroup, "2");
             IWorkTask task3 = mTaskManager.CreateNewTask(taskGroup, "3");
@@ -62,17 +60,17 @@ namespace TaskManager.Integration.Tests
         [Fact]
         public void GetAllTasksByTask_ClosedTasks_3TasksReturned()
         {
-            ITasksGroup taskGroupA = mTaskGroupFactory.Create("A");
+            ITasksGroup taskGroupA = mTaskGroupFactory.CreateGroup("A");
             IWorkTask task1 = mTaskManager.CreateNewTask(taskGroupA, "A1");
             IWorkTask task2 = mTaskManager.CreateNewTask(taskGroupA, "A2");
             mTaskManager.CloseTask(task1.ID, string.Empty);
 
-            ITasksGroup taskGroupB = mTaskGroupFactory.Create("B");
+            ITasksGroup taskGroupB = mTaskGroupFactory.CreateGroup("B");
             IWorkTask task3 = mTaskManager.CreateNewTask(taskGroupB, "B1");
             IWorkTask task4 = mTaskManager.CreateNewTask(taskGroupB, "B2");
             mTaskManager.CloseTask(task4.ID, string.Empty);
 
-            ITasksGroup taskGroupC = mTaskGroupFactory.Create("C");
+            ITasksGroup taskGroupC = mTaskGroupFactory.CreateGroup("C");
             IWorkTask task5 = mTaskManager.CreateNewTask(taskGroupC, "C1");
             mTaskManager.CloseTask(task5.ID, string.Empty);
 
@@ -88,7 +86,7 @@ namespace TaskManager.Integration.Tests
         [Fact]
         public void CreateNewTask_AddNewTaskToGroup_Success()
         {
-            ITasksGroup taskGroup = mTaskGroupFactory.Create("A");
+            ITasksGroup taskGroup = mTaskGroupFactory.CreateGroup("A");
             mTaskManager.CreateNewTask(taskGroup, "New Task Group");
             Assert.Equal(2, mTaskManager.GetAllTasksGroups().Count());
         }

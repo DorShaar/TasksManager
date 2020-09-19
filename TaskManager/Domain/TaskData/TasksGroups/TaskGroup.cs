@@ -12,9 +12,6 @@ namespace TaskData.TasksGroups
 {
     internal class TaskGroup : ITasksGroup
     {
-        [JsonIgnore]
-        private readonly IWorkTaskFactory mWorkTaskFactory;
-
         public readonly Dictionary<string, IWorkTask> TasksChildren = new Dictionary<string, IWorkTask>();
         public string ID { get; }
         public string Name { get; }
@@ -25,11 +22,10 @@ namespace TaskData.TasksGroups
         [JsonIgnore]
         public bool IsFinished { get => TasksChildren.All(task => task.Value.IsFinished); }
 
-        internal TaskGroup(string id, string groupName, IWorkTaskFactory workTaskFactory)
+        internal TaskGroup(string id, string groupName)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
             Name = groupName ?? throw new ArgumentNullException(nameof(groupName));
-            mWorkTaskFactory = workTaskFactory ?? throw new ArgumentNullException(nameof(workTaskFactory));
         }
 
         [JsonConstructor]
@@ -45,9 +41,9 @@ namespace TaskData.TasksGroups
             return TasksChildren.Values.AsEnumerable();
         }
 
-        public OperationResult<IWorkTask> CreateTask(string description)
+        public OperationResult<IWorkTask> CreateTask(string id, string description)
         {
-            IWorkTask createdTask = mWorkTaskFactory.Create(Name, description);
+            IWorkTask createdTask = new WorkTask(id, Name, description);
 
             OperationResult addTaskResult = AddTask(createdTask);
             if (!addTaskResult.Success)

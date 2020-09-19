@@ -6,7 +6,6 @@ using System;
 using UI.ConsolePrinter;
 using ObjectSerializer.JsonService;
 using TaskData.Notes;
-using TaskData.WorkTasks;
 using TaskData.TasksGroups;
 using Databases;
 using TaskManagers;
@@ -48,7 +47,6 @@ namespace Composition
             serviceCollection.AddSingleton<IIDProducer, IDProducer>();
             serviceCollection.AddSingleton<INoteFactory, NoteFactory>();
             serviceCollection.AddSingleton<ITasksGroupFactory, TaskGroupFactory>();
-            serviceCollection.AddSingleton<IWorkTaskFactory, WorkTaskFactory>();
             serviceCollection.AddSingleton<ITaskStatusHistory, TaskStatusHistory>();
         }
 
@@ -70,7 +68,8 @@ namespace Composition
 
         private void RegisterLogger(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddLogging(builder => builder.AddConsole());
+            serviceCollection.AddLogging(builder =>
+                builder.AddConsole().SetMinimumLevel(LogLevel.Trace));
         }
 
         public object GetService(Type serviceType)

@@ -16,14 +16,12 @@ namespace TaskManagers
 {
     internal class TaskManager : ITaskManager
     {
-        private readonly ILogger<TaskManager> mLogger;
+        internal const string FreeTaskGroupName = "Free";
 
+        private readonly ILogger<TaskManager> mLogger;
         private readonly INoteFactory mNoteFactory;
         private readonly ITasksGroupFactory mTaskGroupFactory;
-
         private readonly ILocalRepository<ITasksGroup> mTasksDatabase;
-
-        internal static readonly string FreeTaskGroupName = "Free";
 
         public INotesSubject NotesRootDatabase { get; }
         public INotesSubject NotesTasksDatabase { get; }
@@ -54,14 +52,14 @@ namespace TaskManagers
 
             if (FreeTasksGroup == null)
             {
-                FreeTasksGroup = mTaskGroupFactory.Create(FreeTaskGroupName);
+                FreeTasksGroup = mTaskGroupFactory.CreateGroup(FreeTaskGroupName);
                 mTasksDatabase.Insert(FreeTasksGroup);
             }
         }
 
         public void CreateNewTaskGroup(string groupName)
         {
-            mTasksDatabase.Insert(mTaskGroupFactory.Create(groupName));
+            mTasksDatabase.Insert(mTaskGroupFactory.CreateGroup(groupName));
         }
 
         public void RemoveTaskGroup(string tasksGroup, bool shouldMoveInnerTasks)
@@ -108,12 +106,11 @@ namespace TaskManagers
                 return null;
             }
 
-            OperationResult<IWorkTask> workTaskResult = tasksGroup.CreateTask(description);
-            workTaskResult.Log(mLogger);
+            IWorkTask workTask = mTaskGroupFactory.CreateTask(tasksGroup, description);
 
             mTasksDatabase.AddOrUpdate(tasksGroup);
 
-            return workTaskResult.Value;
+            return workTask;
         }
 
         /// <summary>
@@ -121,7 +118,7 @@ namespace TaskManagers
         /// </summary>
         public void CreateNewTask(string description)
         {
-            FreeTasksGroup.CreateTask(description);
+            mTaskGroupFactory.CreateTask(FreeTasksGroup, description);
             mTasksDatabase.Update(FreeTasksGroup);
         }
 

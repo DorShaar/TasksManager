@@ -86,7 +86,7 @@ namespace Databases
                 throw new FileNotFoundException("Database does not exists", DatabaseDirectoryPath);
             }
 
-            mLogger.LogInformation($"Going to load database from {DatabaseDirectoryPath}");
+            mLogger.LogTrace($"Going to load database from {DatabaseDirectoryPath}");
             mEntities = mSerializer.Deserialize<List<ITasksGroup>>(DatabaseDirectoryPath);
         }
 
@@ -98,7 +98,7 @@ namespace Databases
                 throw new FileNotFoundException("Database does not exists", NextIdPath);
             }
 
-            mLogger.LogInformation("Going to load next id");
+            mLogger.LogTrace("Going to load next id");
             mIdProducer.SetNextID(mSerializer.Deserialize<int>(NextIdPath));
         }
 
