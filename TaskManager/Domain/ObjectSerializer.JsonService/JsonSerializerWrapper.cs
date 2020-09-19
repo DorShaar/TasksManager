@@ -1,14 +1,16 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using TaskData.Notes;
 using TaskData.TasksGroups;
 using TaskData.TaskStatus;
 using TaskData.WorkTasks;
 
+[assembly: InternalsVisibleTo("Composition")]
 namespace ObjectSerializer.JsonService
 {
-    public class JsonSerializerWrapper : IObjectSerializer
+    internal class JsonSerializerWrapper : IObjectSerializer
     {
         public void Serialize<T>(T objectToSerialize, string databasePath)
         {

@@ -17,5 +17,6 @@ namespace TaskData.TasksGroups
         OperationResult AddTask(IWorkTask task);
         OperationResult RemoveTask(string id);
         OperationResult UpdateTask(IWorkTask task);
+        OperationResult SetGroupName(string newGroupName);
     }
 }

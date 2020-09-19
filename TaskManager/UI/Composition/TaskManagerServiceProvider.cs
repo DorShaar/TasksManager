@@ -5,12 +5,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using UI.ConsolePrinter;
 using ObjectSerializer.JsonService;
-using TaskData.Notes;
 using TaskData.TasksGroups;
 using Databases;
 using TaskManagers;
-using TaskData.IDsProducer;
-using TaskData.TaskStatus;
+using TaskData;
 
 namespace Composition
 {
@@ -27,27 +25,19 @@ namespace Composition
         {
             ServiceCollection serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddSingleton<IObjectSerializer, JsonSerializerWrapper>();
-
             serviceCollection.AddSingleton<ITaskManager, TaskManager>();
 
             serviceCollection.AddSingleton(typeof(ConsolePrinter));
 
-            RegisterTaskDataEntities(serviceCollection);
+            serviceCollection.UseJsonObjectSerializer();
+
+            serviceCollection.UseTaskerDataEntities();
 
             RegisterDatabaseEntities(serviceCollection);
 
             RegisterLogger(serviceCollection);
 
             return serviceCollection.BuildServiceProvider();
-        }
-
-        private void RegisterTaskDataEntities(ServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<IIDProducer, IDProducer>();
-            serviceCollection.AddSingleton<INoteFactory, NoteFactory>();
-            serviceCollection.AddSingleton<ITasksGroupFactory, TaskGroupFactory>();
-            serviceCollection.AddSingleton<ITaskStatusHistory, TaskStatusHistory>();
         }
 
         private void RegisterDatabaseEntities(ServiceCollection serviceCollection)

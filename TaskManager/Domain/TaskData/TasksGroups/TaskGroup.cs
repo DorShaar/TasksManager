@@ -14,7 +14,7 @@ namespace TaskData.TasksGroups
     {
         public readonly Dictionary<string, IWorkTask> TasksChildren = new Dictionary<string, IWorkTask>();
         public string ID { get; }
-        public string Name { get; }
+        public string Name { get; private set; }
 
         [JsonIgnore]
         public int Size => TasksChildren.Count;
@@ -89,6 +89,16 @@ namespace TaskData.TasksGroups
 
             TasksChildren[task.ID] = task;
             return new OperationResult(true, $"Task {task.ID}, {task.Description} updated in group {Name}. Update success");
+        }
+
+        public OperationResult SetGroupName(string newGroupName)
+        {
+            if (string.IsNullOrEmpty(newGroupName))
+                return new OperationResult(false, $"{nameof(newGroupName)} is null or empty. Set name not performed");
+
+            string oleName = string.Copy(Name);
+            Name = newGroupName;
+            return new OperationResult(true, $"Name changed from {oleName} to {Name}");
         }
     }
 }
