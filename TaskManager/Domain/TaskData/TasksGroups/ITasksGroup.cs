@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TaskData.OperationResults;
 using TaskData.WorkTasks;
 
 namespace TaskData.TasksGroups
@@ -11,11 +12,10 @@ namespace TaskData.TasksGroups
         bool IsFinished { get; }
 
         IEnumerable<IWorkTask> GetAllTasks();
-        IWorkTask GetTask(string id);
-        IWorkTask CreateTask(string description);
-        void AddTask(IWorkTask task);
-        void RemoveTask(string id);
-        void RemoveTask(params string[] ids);
-        void UpdateTask(IWorkTask task);
+        OperationResult<IWorkTask> GetTask(string id);
+        OperationResult<IWorkTask> CreateTask(string description);
+        OperationResult AddTask(IWorkTask task);
+        OperationResult RemoveTask(string id);
+        OperationResult UpdateTask(IWorkTask task);
     }
 }

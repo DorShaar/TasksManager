@@ -12,8 +12,8 @@ namespace TaskData.Tests
         public TaskGroupTests()
         {
             IDProducer idProducer = new IDProducer();
-            WorkTaskFactory workTaskFactory = new WorkTaskFactory(idProducer, NullLoggerFactory.Instance);
-            mTaskGroupFactory = new TaskGroupFactory(idProducer, workTaskFactory, NullLoggerFactory.Instance);
+            WorkTaskFactory workTaskFactory = new WorkTaskFactory(idProducer, NullLogger<WorkTaskFactory>.Instance);
+            mTaskGroupFactory = new TaskGroupFactory(idProducer, workTaskFactory, NullLogger< TaskGroupFactory>.Instance);
         }
 
         [Fact]
@@ -32,8 +32,8 @@ namespace TaskData.Tests
         {
             ITasksGroup taskGroup = mTaskGroupFactory.Create("TestGroup");
             taskGroup.CreateTask("1");
-            IWorkTask task2 = taskGroup.CreateTask("2");
-            IWorkTask task3 = taskGroup.CreateTask("3");
+            IWorkTask task2 = taskGroup.CreateTask("2").Value;
+            IWorkTask task3 = taskGroup.CreateTask("3").Value;
 
             task2.CloseTask(string.Empty);
             task3.CloseTask(string.Empty);
@@ -45,9 +45,9 @@ namespace TaskData.Tests
         public void IsFinished_HasNoOpenTasks_True()
         {
             ITasksGroup taskGroup = mTaskGroupFactory.Create("TestGroup");
-            IWorkTask task1 = taskGroup.CreateTask("1");
-            IWorkTask task2 = taskGroup.CreateTask("2");
-            IWorkTask task3 = taskGroup.CreateTask("3");
+            IWorkTask task1 = taskGroup.CreateTask("1").Value;
+            IWorkTask task2 = taskGroup.CreateTask("2").Value;
+            IWorkTask task3 = taskGroup.CreateTask("3").Value;
 
             task1.CloseTask(string.Empty);
             task2.CloseTask(string.Empty);

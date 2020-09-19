@@ -86,7 +86,7 @@ namespace UI.ConsolePrinter
                 .Append("Time created: ").Append(task.TaskStatusHistory.TimeCreated).AppendLine()
                 .Append("Last opened time: ").Append(task.TaskStatusHistory.TimeLastOpened).AppendLine()
                 .Append("Closed time: ").Append(task.TaskStatusHistory.TimeClosed).AppendLine()
-                .Append("Note: ").AppendLine(task.GetNote());
+                .Append("Note: ").AppendLine(task.GetNote().Value);
 
             Console.WriteLine(stringBuilder.ToString());
         }

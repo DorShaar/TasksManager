@@ -61,10 +61,10 @@ namespace Databases
             DefaultTasksGroup = mConfiguration.DefaultTasksGroup;
             DatabaseDirectoryPath = Path.Combine(mConfiguration.DatabaseDirectoryPath, DatabaseName);
             NextIdPath = Path.Combine(mConfiguration.DatabaseDirectoryPath, NextIdHolderName);
-            LoadInformation();
+            LoadData();
         }
 
-        private void LoadInformation()
+        private void LoadData()
         {
             try
             {

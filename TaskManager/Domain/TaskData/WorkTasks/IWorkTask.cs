@@ -1,4 +1,5 @@
-﻿using TaskData.TaskStatus;
+﻿using TaskData.OperationResults;
+using TaskData.TaskStatus;
 
 namespace TaskData.WorkTasks
 {
@@ -12,13 +13,13 @@ namespace TaskData.WorkTasks
 
         ITaskStatusHistory TaskStatusHistory { get; }
 
-        void CloseTask(string reason);
-        void ReOpenTask(string reason);
-        void MarkTaskOnWork(string reason);
+        OperationResult CloseTask(string reason);
+        OperationResult ReOpenTask(string reason);
+        OperationResult MarkTaskOnWork(string reason);
 
         // Private Notes.
-        string CreateNote(string noteDirectoryPath, string content);
-        void OpenNote();
-        string GetNote();
+        OperationResult CreateNote(string noteDirectoryPath, string content);
+        OperationResult OpenNote();
+        OperationResult<string> GetNote();
     }
 }

@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Runtime.CompilerServices;
 using TaskData.Notes;
+using TaskData.OperationResults;
 using TaskData.TaskStatus;
 
 [assembly: InternalsVisibleTo("ObjectSerializer.JsonService")]
@@ -11,9 +11,6 @@ namespace TaskData.WorkTasks
 {
     internal class WorkTask : IWorkTask
     {
-        [JsonIgnore]
-        private readonly ILogger<WorkTask> mLogger;
-
         [JsonProperty]
         private INote mNote;
 
@@ -32,103 +29,83 @@ namespace TaskData.WorkTasks
         [JsonProperty]
         public ITaskStatusHistory TaskStatusHistory { get; }
 
-        internal WorkTask(string id, string group, string description, ILogger<WorkTask> logger)
+        internal WorkTask(string id, string group, string description)
         {
-            mLogger = logger ?? throw new ArgumentNullException(nameof(logger));
             ID = id ?? throw new ArgumentNullException(nameof(id));
             GroupName = group ?? throw new ArgumentNullException(nameof(group));
             Description = description ?? throw new ArgumentNullException(nameof(description));
 
             TaskStatusHistory = new TaskStatusHistory();
             TaskStatusHistory.AddHistory(DateTime.Now, Status.Open, "Created");
-
-            mLogger.LogDebug($"New task id {ID} created with description: '{Description}'");
         }
 
         [JsonConstructor]
-        internal WorkTask(
-            string id, string group, string description, INote note, ITaskStatusHistory taskStatusHistory, ILogger<WorkTask> logger)
+        internal WorkTask(string id,
+            string group,
+            string description,
+            INote note,
+            ITaskStatusHistory taskStatusHistory)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
             GroupName = group ?? throw new ArgumentNullException(nameof(group));
             Description = description ?? throw new ArgumentNullException(nameof(description));
-            mNote = note ?? throw new ArgumentNullException(nameof(note));
+            mNote = note;
             TaskStatusHistory = taskStatusHistory ?? throw new ArgumentNullException(nameof(taskStatusHistory));
-            mLogger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-            mLogger.LogDebug($"Task id {ID} restored");
         }
 
-        public void CloseTask(string reason)
+        public OperationResult CloseTask(string reason)
         {
             if (Status == Status.Closed)
-            {
-                mLogger.LogWarning($"Task {ID}, '{Description}' is already closed");
-                return;
-            }
+                return new OperationResult(false, $"Task {ID}, '{Description}' is already closed");
 
             TaskStatusHistory.AddHistory(DateTime.Now, Status.Closed, reason);
-            mLogger.LogDebug($"Task {ID}, '{Description}' closed at {TaskStatusHistory.TimeClosed}");
+            return new OperationResult(true, $"Task {ID}, '{Description}' closed at {TaskStatusHistory.TimeClosed}");
         }
 
-        public void ReOpenTask(string reason)
+        public OperationResult ReOpenTask(string reason)
         {
             if (Status == Status.Open)
-            {
-                mLogger.LogWarning($"Task {ID}, '{Description}' is already open");
-                return;
-            }
+                return new OperationResult(false, $"Task {ID}, '{Description}' is already open");
 
             TaskStatusHistory.AddHistory(DateTime.Now, Status.Open, reason);
-            mLogger.LogDebug($"Task {ID}, '{Description}' re-opened at {TaskStatusHistory.TimeLastOpened}");
+            return new OperationResult(true, $"Task {ID}, '{Description}' re-opened at {TaskStatusHistory.TimeLastOpened}");
         }
 
-        public void MarkTaskOnWork(string reason)
+        public OperationResult MarkTaskOnWork(string reason)
         {
             if (Status == Status.OnWork)
-            {
-                mLogger.LogWarning($"Task {ID}, '{Description}' is already on work");
-                return;
-            }
+                return new OperationResult(false, $"Task {ID}, '{Description}' is already on work");
 
             TaskStatusHistory.AddHistory(DateTime.Now, Status.OnWork, reason);
-            mLogger.LogDebug($"Task {ID}, '{Description}' marked on work at {TaskStatusHistory.TimeLastOnWork}");
+            return new OperationResult(true, $"Task {ID}, '{Description}' marked on work at {TaskStatusHistory.TimeLastOnWork}");
         }
 
-        public string CreateNote(string noteDirectoryPath, string content)
+        public OperationResult CreateNote(string noteDirectoryPath, string content)
         {
-            string noteName = string.Empty;
             if (mNote != null)
             {
-                mLogger.LogWarning($"Cannot create note since note {mNote.NotePath} is already exist");
-                return noteName;
+                return new OperationResult(false, $"Cannot create note since note {mNote.NotePath} is already exist");
             }
 
             mNote = new Note(noteDirectoryPath, $"{ID}-{Description}", content);
-            OpenNote();
-            return mNote.NotePath;
+            return OpenNote();
         }
 
-        public void OpenNote()
+        public OperationResult OpenNote()
         {
             if (mNote == null)
-            {
-                mLogger.LogInformation($"Task id {ID}, '{Description}' has no note");
-                return;
-            }
+                new OperationResult(false, $"Task id {ID}, '{Description}' has no note");
 
             mNote.Open();
+            return new OperationResult(true);
         }
 
-        public string GetNote()
+        public OperationResult<string> GetNote()
         {
             if (mNote == null)
-            {
-                mLogger.LogInformation($"Task id {ID}, '{Description}' has no note");
-                return string.Empty;
-            }
+                return new OperationResult<string>(false, $"Task id {ID}, '{Description}' has no note");
 
-            return mNote.Text;
+            return new OperationResult<string>(true, mNote.Text);
         }
     }
 }

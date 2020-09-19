@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using TaskData.Notes;
+using TaskData.OperationResults;
 using TaskData.TasksGroups;
 using TaskData.WorkTasks;
 
@@ -107,9 +108,12 @@ namespace TaskManagers
                 return null;
             }
 
-            IWorkTask task = tasksGroup.CreateTask(description);
+            OperationResult<IWorkTask> workTaskResult = tasksGroup.CreateTask(description);
+            workTaskResult.Log(mLogger);
+
             mTasksDatabase.AddOrUpdate(tasksGroup);
-            return task;
+
+            return workTaskResult.Value;
         }
 
         /// <summary>
@@ -159,10 +163,12 @@ namespace TaskManagers
         {
             foreach (ITasksGroup group in mTasksDatabase.GetAll())
             {
-                IWorkTask task = group.GetTask(taskId);
+                IWorkTask task = group.GetTask(taskId).Value;
                 if (task != null)
                 {
-                    task.CloseTask(reason);
+                    OperationResult closeTaskResult = task.CloseTask(reason);
+                    closeTaskResult.Log(mLogger);
+
                     mTasksDatabase.Update(group);
                     return;
                 }
@@ -175,10 +181,12 @@ namespace TaskManagers
         {
             foreach (ITasksGroup group in mTasksDatabase.GetAll())
             {
-                IWorkTask task = group.GetTask(taskId);
+                IWorkTask task = group.GetTask(taskId).Value;
                 if (task != null)
                 {
-                    task.ReOpenTask(reason);
+                    OperationResult reopenResult = task.ReOpenTask(reason);
+                    reopenResult.Log(mLogger);
+
                     mTasksDatabase.Update(group);
                     return;
                 }
@@ -191,10 +199,12 @@ namespace TaskManagers
         {
             foreach (ITasksGroup group in mTasksDatabase.GetAll())
             {
-                IWorkTask task = group.GetTask(taskId);
+                IWorkTask task = group.GetTask(taskId).Value;
                 if (task != null)
                 {
-                    task.MarkTaskOnWork(reason);
+                    OperationResult markTaskResult = task.MarkTaskOnWork(reason);
+                    markTaskResult.Log(mLogger);
+
                     mTasksDatabase.Update(group);
                     return;
                 }
@@ -207,10 +217,12 @@ namespace TaskManagers
         {
             foreach (ITasksGroup group in mTasksDatabase.GetAll())
             {
-                IWorkTask task = group.GetTask(taskId);
+                IWorkTask task = group.GetTask(taskId).Value;
                 if (task != null)
                 {
-                    group.RemoveTask(taskId);
+                    OperationResult removeTaskResult = group.RemoveTask(taskId);
+                    removeTaskResult.Log(mLogger);
+
                     mTasksDatabase.Update(group);
                     return;
                 }
@@ -241,7 +253,7 @@ namespace TaskManagers
 
             foreach (ITasksGroup sourceGroup in mTasksDatabase.GetAll())
             {
-                IWorkTask task = sourceGroup.GetTask(taskId);
+                IWorkTask task = sourceGroup.GetTask(taskId).Value;
                 if (task != null)
                 {
                     ITasksGroup sourceTaskGroup = mTasksDatabase.GetEntity(task.GroupName);
@@ -254,10 +266,12 @@ namespace TaskManagers
 
                     if (sourceTaskGroup != destionationTaskGroup)
                     {
-                        destionationTaskGroup.AddTask(task);
+                        OperationResult addTaskResult = destionationTaskGroup.AddTask(task);
+                        addTaskResult.Log(mLogger);
                         mTasksDatabase.Update(destionationTaskGroup);
 
-                        sourceGroup.RemoveTask(taskId);
+                        OperationResult removeTaskResult = sourceGroup.RemoveTask(taskId);
+                        removeTaskResult.Log(mLogger);
                         mTasksDatabase.Update(sourceGroup);
                         return;
                     }
@@ -276,10 +290,12 @@ namespace TaskManagers
         {
             foreach (ITasksGroup taskGroup in mTasksDatabase.GetAll())
             {
-                IWorkTask task = taskGroup.GetTask(taskId);
+                IWorkTask task = taskGroup.GetTask(taskId).Value;
                 if (task != null)
                 {
-                    task.CreateNote(NotesTasksDatabase.NoteSubjectFullPath, content);
+                    OperationResult createNoteResult = task.CreateNote(NotesTasksDatabase.NoteSubjectFullPath, content);
+                    createNoteResult.Log(mLogger);
+
                     mTasksDatabase.Update(taskGroup);
                     return;
                 }

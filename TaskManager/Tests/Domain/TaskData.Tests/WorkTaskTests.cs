@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging.Abstractions;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using TaskData.WorkTasks;
@@ -17,14 +16,14 @@ namespace TaskData.Tests
         [Fact]
         public void CreateNewTask_TimeCreatedIsNow()
         {
-            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription, NullLogger<WorkTask>.Instance);
+            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription);
             Assert.True(IsTimesAlmostTheSame(task.TaskStatusHistory.TimeCreated, DateTime.Now));
         }
 
         [Fact]
         public void CloseTask_IsFinished_True()
         {
-            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription, NullLogger<WorkTask>.Instance);
+            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription);
             Assert.False(task.IsFinished);
             task.CloseTask(string.Empty);
             Assert.True(task.IsFinished);
@@ -33,7 +32,7 @@ namespace TaskData.Tests
         [Fact]
         public void CloseTask_TimeCloseIsNow()
         {
-            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription, NullLogger<WorkTask>.Instance);
+            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription);
             task.CloseTask(string.Empty);
             Assert.True(IsTimesAlmostTheSame(task.TaskStatusHistory.TimeClosed, DateTime.Now));
         }
@@ -41,7 +40,7 @@ namespace TaskData.Tests
         [Fact]
         public void CloseTask_ClosedTask_NoChange()
         {
-            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription, NullLogger<WorkTask>.Instance);
+            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription);
             task.CloseTask(string.Empty);
             DateTime closeTime = task.TaskStatusHistory.TimeClosed;
             task.CloseTask(string.Empty);
@@ -51,7 +50,7 @@ namespace TaskData.Tests
         [Fact]
         public async Task ReOpenTask_TimeLastOpenIsNow()
         {
-            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription, NullLogger<WorkTask>.Instance);
+            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription);
             task.CloseTask(string.Empty);
 
             await Task.Delay(SleepTimeInMs).ConfigureAwait(false);
@@ -63,7 +62,7 @@ namespace TaskData.Tests
         [Fact]
         public void ReOpenTask_TimCreated_NoChange()
         {
-            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription, NullLogger<WorkTask>.Instance);
+            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription);
             DateTime createdTime = task.TaskStatusHistory.TimeCreated;
             task.CloseTask(string.Empty);
             task.ReOpenTask(string.Empty);
@@ -73,7 +72,7 @@ namespace TaskData.Tests
         [Fact]
         public void ReOpenTask_IsFinished_False()
         {
-            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription, NullLogger<WorkTask>.Instance);
+            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription);
             task.CloseTask(string.Empty);
             task.ReOpenTask(string.Empty);
             Assert.False(task.IsFinished);
@@ -82,7 +81,7 @@ namespace TaskData.Tests
         [Fact]
         public void ReOpeneTask_OpenedTask_NoChange()
         {
-            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription, NullLogger<WorkTask>.Instance);
+            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription);
             DateTime createdTime = task.TaskStatusHistory.TimeLastOpened;
             task.ReOpenTask(string.Empty);
             Assert.Equal(task.TaskStatusHistory.TimeLastOpened, createdTime);
@@ -91,22 +90,11 @@ namespace TaskData.Tests
         [Fact]
         public void CreateNote_AlreadyCreated_NoCreation()
         {
-            const string excpectedText = "should not be deleted";
-            string notePath = null;
-            try
-            {
-                WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription, NullLogger<WorkTask>.Instance);
-                notePath = task.CreateNote(NotesDirectory, excpectedText);
+            WorkTask task = new WorkTask("1000", DummyGroupName, DummyDescription);
 
-                task.CreateNote(NotesDirectory, "another content");
+            Assert.True(task.CreateNote(NotesDirectory, "first text").Success);
 
-                Assert.Equal(excpectedText, File.ReadAllText(notePath));
-            }
-            finally
-            {
-                File.Delete(notePath);
-                Directory.Delete(NotesDirectory, recursive: true);
-            }
+            Assert.False(task.CreateNote(NotesDirectory, "another content").Success);
         }
 
         private bool IsTimesAlmostTheSame(DateTime time1, DateTime time2)

@@ -7,17 +7,21 @@ namespace TaskData.WorkTasks
     internal class WorkTaskFactory : IWorkTaskFactory
     {
         private readonly IIDProducer mIDProducer;
-        private readonly ILoggerFactory mLoggerFactory;
+        private readonly ILogger<WorkTaskFactory> mLogger;
 
-        public WorkTaskFactory(IIDProducer idProducer, ILoggerFactory loggerFactory)
+        public WorkTaskFactory(IIDProducer idProducer, ILogger<WorkTaskFactory> logger)
         {
             mIDProducer = idProducer ?? throw new ArgumentNullException(nameof(idProducer));
-            mLoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            mLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public IWorkTask Create(string groupName, string description)
         {
-            return new WorkTask(mIDProducer.ProduceID(), groupName, description, mLoggerFactory.CreateLogger<WorkTask>());
+            IWorkTask workTask = new WorkTask(mIDProducer.ProduceID(), groupName, description);
+            mLogger.LogDebug($"New task id {workTask.ID} created with description: {workTask.Description} created" +
+                $"for group {workTask.GroupName}");
+
+            return workTask;
         }
     }
 }

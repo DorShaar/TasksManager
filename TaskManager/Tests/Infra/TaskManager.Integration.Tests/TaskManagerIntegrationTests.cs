@@ -37,9 +37,9 @@ namespace TaskManager.Integration.Tests
 
             IDProducer idProducer = new IDProducer();
 
-            WorkTaskFactory workTaskFactory = new WorkTaskFactory(idProducer, NullLoggerFactory.Instance);
+            WorkTaskFactory workTaskFactory = new WorkTaskFactory(idProducer, NullLogger<WorkTaskFactory>.Instance);
 
-            mTaskGroupFactory = new TaskGroupFactory(idProducer, workTaskFactory, NullLoggerFactory.Instance);
+            mTaskGroupFactory = new TaskGroupFactory(idProducer, workTaskFactory, NullLogger<TaskGroupFactory>.Instance);
 
             mDatabase = new Databases.Database(
                 mFakeConfiguration, mSerializer, idProducer, NullLogger<Databases.Database>.Instance);
