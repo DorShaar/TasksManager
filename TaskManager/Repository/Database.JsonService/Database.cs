@@ -1,24 +1,30 @@
 ﻿using Database.Configuration;
-using Database.Contracts;
-using Logger.Contracts;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ObjectSerializer.Contracts;
+using ObjectSerializer.JsonService;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TaskData.Contracts;
+using System.Runtime.CompilerServices;
+using TaskData.IDsProducer;
+using TaskData.TasksGroups;
+using TaskData.WorkTasks;
 
-namespace Database
+[assembly: InternalsVisibleTo("Database.Tests")]
+[assembly: InternalsVisibleTo("Composition")]
+[assembly: InternalsVisibleTo("TaskManager.Integration.Tests")]
+namespace Databases
 {
-    public class Database : ILocalRepository<ITasksGroup>
+    internal class Database : ILocalRepository<ITasksGroup>
     {
         private const string DatabaseName = "tasks.db";
         private const string NextIdHolderName = "id_producer.db";
 
-        private readonly ILogger mLogger;
         private readonly IObjectSerializer mSerializer;
         private readonly DatabaseLocalConfigurtaion mConfiguration;
+        private readonly IIDProducer mIdProducer;
+        private readonly ILogger<Database> mLogger;
 
         private List<ITasksGroup> mEntities = new List<ITasksGroup>();
 
@@ -32,11 +38,19 @@ namespace Database
         public string NotesDirectoryPath { get => mConfiguration.NotesDirectoryPath; }
         public string NotesTasksDirectoryPath { get => mConfiguration.NotesTasksDirectoryPath; }
 
-        public Database(IOptions<DatabaseLocalConfigurtaion> configuration, IObjectSerializer serializer, ILogger logger)
+        public Database(IOptions<DatabaseLocalConfigurtaion> configuration,
+            IObjectSerializer serializer,
+            IIDProducer idProducer,
+            ILogger<Database> logger)
         {
-            mLogger = logger;
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+
             mConfiguration = configuration.Value;
-            mSerializer = serializer;
+
+            mSerializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+            mIdProducer = idProducer ?? throw new ArgumentNullException(nameof(idProducer));
+            mLogger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             if (!Directory.Exists(mConfiguration.DatabaseDirectoryPath))
             {
@@ -85,14 +99,12 @@ namespace Database
             }
 
             mLogger.LogInformation("Going to load next id");
-            IDProducer.IDProducer.SetNextID(mSerializer.Deserialize<int>(NextIdPath));
+            mIdProducer.SetNextID(mSerializer.Deserialize<int>(NextIdPath));
         }
 
         /// <summary>
         /// Get entity by id or by name. In case not found, returns default of <see cref="T"/>
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public ITasksGroup GetEntity(string entityToFind)
         {
             ITasksGroup entityFound =
@@ -136,11 +148,11 @@ namespace Database
 
             foreach (IWorkTask task in entity.GetAllTasks())
             {
-                mLogger.Log($"Removing inner task id {task.ID} description {task.Description}");
+                mLogger.LogDebug($"Removing inner task id {task.ID} description {task.Description}");
             }
 
             mEntities.Remove(entity);
-            mLogger.Log($"Task group id {entity.ID} group name {entity.Name} removed");
+            mLogger.LogDebug($"Task group id {entity.ID} group name {entity.Name} removed");
             SaveToFile();
         }
 
@@ -191,7 +203,7 @@ namespace Database
             try
             {
                 mSerializer.Serialize(mEntities, DatabaseDirectoryPath);
-                mSerializer.Serialize(IDProducer.IDProducer.PeekForNextId(), NextIdPath);
+                mSerializer.Serialize(mIdProducer.PeekForNextId(), NextIdPath);
             }
             catch (Exception ex)
             {

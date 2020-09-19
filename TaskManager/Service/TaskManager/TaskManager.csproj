@@ -5,9 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain\Logger.Contracts\Logger.Contracts.csproj" />
-    <ProjectReference Include="..\..\Repository\Database.Contracts\Database.Contracts.csproj" />
-    <ProjectReference Include="..\TaskManager.Contracts\TaskManager.Contracts.csproj" />
+    <ProjectReference Include="..\..\Domain\TaskData\TaskData.csproj" />
+    <ProjectReference Include="..\..\Repository\Database.JsonService\Database.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,27 +1,22 @@
-﻿using Logger.Contracts;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TaskData.Contracts;
+using TaskData.TasksGroups;
+using TaskData.TaskStatus;
+using TaskData.WorkTasks;
 
 namespace UI.ConsolePrinter
 {
     public class ConsolePrinter
     {
-        private readonly ILogger mLogger;
-
-        public ConsolePrinter(ILogger logger)
-        {
-            mLogger = logger;
-        }
-
         public void PrintTasksGroup(IEnumerable<ITasksGroup> groups, bool isDetailed)
         {
             TableDataStringBuilder tableDataStringBuilder;
             if (isDetailed)
-                tableDataStringBuilder = new TableDataStringBuilder(new string[] { "ID", "GROUP NAME", "SIZE" }, mLogger);
+                tableDataStringBuilder = new TableDataStringBuilder(new string[] { "ID", "GROUP NAME", "SIZE" });
             else
-                tableDataStringBuilder = new TableDataStringBuilder(new string[] { "ID", "GROUP NAME"}, mLogger);
+                tableDataStringBuilder = new TableDataStringBuilder(new string[] { "ID", "GROUP NAME"});
 
             foreach (ITasksGroup group in groups)
             {
@@ -31,7 +26,7 @@ namespace UI.ConsolePrinter
                     tableDataStringBuilder.AppandRow(group.ID, group.Name);
             }
 
-            mLogger.Log(tableDataStringBuilder.Build());
+            System.Console.WriteLine(tableDataStringBuilder.Build());
         }
 
         public void PrintTasks(IEnumerable<IWorkTask> tasks, bool isDetailed)
@@ -43,8 +38,7 @@ namespace UI.ConsolePrinter
                    new string[]
                    {
                         "ID", "Parent", "DESCRIPTION", "STATUS", "TIME CREATED", "LAST OPENED TIME", "LAST WORK START TIME", "CLOSED TIME"
-                   },
-                   mLogger);
+                   });
             }
             else
             {
@@ -52,8 +46,7 @@ namespace UI.ConsolePrinter
                    new string[]
                    {
                         "ID", "Parent", "DESCRIPTION", "STATUS"
-                   },
-                   mLogger);
+                   });
             }
 
             foreach (IWorkTask task in tasks)
@@ -80,7 +73,7 @@ namespace UI.ConsolePrinter
                 }
             }
 
-            mLogger.Log(tableDataStringBuilder.Build());
+            Console.WriteLine(tableDataStringBuilder.Build());
         }
 
         public void PrintTaskInformation(IWorkTask task)
@@ -95,7 +88,7 @@ namespace UI.ConsolePrinter
                 .Append("Closed time: ").Append(task.TaskStatusHistory.TimeClosed).AppendLine()
                 .Append("Note: ").AppendLine(task.GetNote());
 
-            mLogger.Log(stringBuilder.ToString());
+            Console.WriteLine(stringBuilder.ToString());
         }
 
         private static string GetStringStatus(Status status)
@@ -105,8 +98,8 @@ namespace UI.ConsolePrinter
 
         public void Print(string data, string header)
         {
-            mLogger.Log(header);
-            mLogger.Log(data);
+            Console.WriteLine(header);
+            Console.WriteLine(data);
         }
 
         public void Print(IEnumerable<string> data, string header)
@@ -114,10 +107,10 @@ namespace UI.ConsolePrinter
             if (!data.Any())
                 return;
 
-            mLogger.Log(header);
+            Console.WriteLine(header);
             foreach (string line in data)
             {
-                mLogger.Log("\t" + line);
+                Console.WriteLine("\t" + line);
             }
         }
     }

@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Database.Contracts\Database.Contracts.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="config\Config.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

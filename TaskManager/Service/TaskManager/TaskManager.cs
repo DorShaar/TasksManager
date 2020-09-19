@@ -1,23 +1,24 @@
-﻿using Database.Contracts;
-using Logger.Contracts;
+﻿using Databases;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using TaskData.Contracts;
-using TaskManager.Contracts;
+using TaskData.Notes;
+using TaskData.TasksGroups;
+using TaskData.WorkTasks;
 
 [assembly: InternalsVisibleTo("TaskManager.Integration.Tests")]
-namespace TaskManager
+[assembly: InternalsVisibleTo("Composition")]
+namespace TaskManagers
 {
-    public class TaskManager : ITaskManager
+    internal class TaskManager : ITaskManager
     {
-        private readonly ILogger mLogger;
+        private readonly ILogger<TaskManager> mLogger;
 
-        private readonly INoteBuilder mNoteBuilder;
-        private readonly INotesSubjectBuilder mNoteSubjectBuilder;
-        private readonly ITasksGroupBuilder mTaskGroupBuilder;
+        private readonly INoteFactory mNoteFactory;
+        private readonly ITasksGroupFactory mTaskGroupFactory;
 
         private readonly ILocalRepository<ITasksGroup> mTasksDatabase;
 
@@ -30,20 +31,17 @@ namespace TaskManager
 
         public TaskManager(
             ILocalRepository<ITasksGroup> tasksDatabase,
-            ITasksGroupBuilder taskGroupBuilder,
-            INoteBuilder noteBuilder,
-            INotesSubjectBuilder notesSubjectBuilder,
-            ILogger logger)
+            ITasksGroupFactory taskGroupFactory,
+            INoteFactory noteFactory,
+            ILogger<TaskManager> logger)
         {
-            mLogger = logger;
+            mTasksDatabase = tasksDatabase ?? throw new ArgumentNullException(nameof(tasksDatabase));
+            mTaskGroupFactory = taskGroupFactory ?? throw new ArgumentNullException(nameof(taskGroupFactory));
+            mNoteFactory = noteFactory ?? throw new ArgumentNullException(nameof(noteFactory));
+            mLogger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            mTaskGroupBuilder = taskGroupBuilder;
-            mNoteBuilder = noteBuilder;
-            mNoteSubjectBuilder = notesSubjectBuilder;
-
-            mTasksDatabase = tasksDatabase;
-            NotesRootDatabase = mNoteSubjectBuilder.Load(mTasksDatabase.NotesDirectoryPath);
-            NotesTasksDatabase = mNoteSubjectBuilder.Load(mTasksDatabase.NotesTasksDirectoryPath);
+            NotesRootDatabase = noteFactory.LoadNotesSubject(mTasksDatabase.NotesDirectoryPath);
+            NotesTasksDatabase = noteFactory.LoadNotesSubject(mTasksDatabase.NotesTasksDirectoryPath);
             DefaultTaskGroupName = mTasksDatabase.GetEntity(mTasksDatabase.DefaultTasksGroup);
 
             InitializeFreeTasksGroup();
@@ -55,17 +53,14 @@ namespace TaskManager
 
             if (FreeTasksGroup == null)
             {
-                FreeTasksGroup = mTaskGroupBuilder.Create(FreeTaskGroupName, mLogger);
+                FreeTasksGroup = mTaskGroupFactory.Create(FreeTaskGroupName);
                 mTasksDatabase.Insert(FreeTasksGroup);
             }
         }
 
-        /// <summary>
-        /// Create new task group.
-        /// </summary>
         public void CreateNewTaskGroup(string groupName)
         {
-            mTasksDatabase.Insert(mTaskGroupBuilder.Create(groupName, mLogger));
+            mTasksDatabase.Insert(mTaskGroupFactory.Create(groupName));
         }
 
         public void RemoveTaskGroup(string tasksGroup, bool shouldMoveInnerTasks)
@@ -295,8 +290,8 @@ namespace TaskManager
 
         public void CreateGeneralNote(string taskSubject, string content)
         {
-            mNoteBuilder.CreateNote(NotesRootDatabase.NoteSubjectFullPath, taskSubject, content);
-            mLogger.Log($"Note {taskSubject} created in {NotesRootDatabase.NoteSubjectFullPath}");
+            mNoteFactory.CreateNote(NotesRootDatabase.NoteSubjectFullPath, taskSubject, content);
+            mLogger.LogDebug($"Note {taskSubject} created in {NotesRootDatabase.NoteSubjectFullPath}");
         }
 
         public IEnumerable<INote> GetAllNotes()
@@ -304,7 +299,7 @@ namespace TaskManager
             foreach (string filePath in
                 Directory.EnumerateFiles(NotesRootDatabase.NoteSubjectFullPath, "*", SearchOption.AllDirectories))
             {
-                yield return mNoteBuilder.Load(filePath);
+                yield return mNoteFactory.LoadNote(filePath);
             }
         }
 

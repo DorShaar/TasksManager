@@ -1,31 +1,34 @@
 ﻿using CommandLine;
 using Composition;
 using ConsoleUI.Options;
-using Logger.Contracts;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using TaskData.Contracts;
-using TaskManager.Contracts;
+using TaskData.Notes;
+using TaskData.TasksGroups;
+using TaskData.WorkTasks;
+using TaskManagers;
 using UI.ConsolePrinter;
 
 namespace ConsoleUI
 {
-    public static class Program
+    public class Program
     {
         private const int DESCRIPTION_LENGTH_LIMIT = 70;
-        private static ILogger mLogger;
+        private static ILogger<Program> mLogger;
         private static ITaskManager mTaskManager;
         private static ConsolePrinter mConsolePrinter;
 
         public static void Main(string[] args)
         {
-            TaskManagerServiceProvider serviceProvider = new TaskManagerServiceProvider();
-            mLogger = serviceProvider.GetLoggerService();
-            mConsolePrinter = serviceProvider.GetConsolePrinterService();
-            mTaskManager = serviceProvider.GetTaskManagerService();
+            IServiceProvider serviceProvider = new TaskManagerServiceProvider();
+            mLogger = serviceProvider.GetRequiredService<ILogger<Program>>();
+            mConsolePrinter = serviceProvider.GetRequiredService<ConsolePrinter>();
+            mTaskManager = serviceProvider.GetRequiredService<ITaskManager>();
 
             int exitCode = 1;
             using (Parser parser = new Parser(config => config.HelpWriter = Console.Out))
@@ -201,7 +204,7 @@ namespace ConsoleUI
 
             INote note = GetNote(mTaskManager.NotesTasksDatabase, notePath);
             if (note != null)
-                mLogger.Log(note.Text);
+                mLogger.LogDebug(note.Text);
 
             return 0;
         }
@@ -210,7 +213,7 @@ namespace ConsoleUI
         {
             INote note = GetNote(mTaskManager.NotesRootDatabase, notePath);
             if (note != null)
-                mLogger.Log(note.Text);
+                mLogger.LogDebug(note.Text);
 
             return 0;
         }
@@ -400,11 +403,11 @@ namespace ConsoleUI
                 return 1;
             }
 
-            mLogger.Log("Are you sure you want to delete that group with all of its inner tasks? If so, press y");
+            mLogger.LogDebug("Are you sure you want to delete that group with all of its inner tasks? If so, press y");
             string userInput = Console.ReadLine();
             if (!string.Equals(userInput, "y", StringComparison.OrdinalIgnoreCase))
             {
-                mLogger.Log($"Group {taskGroup} was not deleted");
+                mLogger.LogDebug($"Group {taskGroup} was not deleted");
                 return 0;
             }
 

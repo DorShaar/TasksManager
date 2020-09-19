@@ -1,6 +1,4 @@
-﻿using Database.Contracts;
-
-namespace Database.Configuration
+﻿namespace Database.Configuration
 {
     public class DatabaseLocalConfigurtaion : IDatabaseLocalConfiguration
     {

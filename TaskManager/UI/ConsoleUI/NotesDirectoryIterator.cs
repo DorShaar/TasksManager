@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TaskData.Contracts;
+using TaskData.Notes;
 using UI.ConsolePrinter;
 
 namespace ConsoleUI

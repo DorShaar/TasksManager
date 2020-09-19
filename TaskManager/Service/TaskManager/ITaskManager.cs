@@ -4,7 +4,7 @@ using TaskData.Notes;
 using TaskData.TasksGroups;
 using TaskData.WorkTasks;
 
-namespace TaskManager
+namespace TaskManagers
 {
     public interface ITaskManager
     {

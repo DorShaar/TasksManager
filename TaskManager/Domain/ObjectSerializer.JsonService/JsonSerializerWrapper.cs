@@ -1,13 +1,12 @@
-﻿using Logger;
-using Logger.Contracts;
-using Newtonsoft.Json;
-using ObjectSerializer.Contracts;
+﻿using Newtonsoft.Json;
 using System;
 using System.IO;
-using TaskData;
-using TaskData.Contracts;
+using TaskData.Notes;
+using TaskData.TasksGroups;
+using TaskData.TaskStatus;
+using TaskData.WorkTasks;
 
-namespace Database.JsonService
+namespace ObjectSerializer.JsonService
 {
     public class JsonSerializerWrapper : IObjectSerializer
     {
@@ -22,7 +21,6 @@ namespace Database.JsonService
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.Converters.Add(new TaskGroupConverter());
             settings.Converters.Add(new TaskConverter());
-            settings.Converters.Add(new LoggerConverter());
             settings.Converters.Add(new NoteConverter());
             settings.Converters.Add(new TaskStatusHistoryConverter());
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(databasePath), settings);
@@ -64,23 +62,24 @@ namespace Database.JsonService
             }
         }
 
-        private class LoggerConverter : JsonConverter
-        {
-            public override bool CanConvert(Type objectType)
-            {
-                return objectType == typeof(ILogger);
-            }
+        //TODO
+        //private class LoggerConverter : JsonConverter
+        //{
+        //    public override bool CanConvert(Type objectType)
+        //    {
+        //        return objectType == typeof(ILogger);
+        //    }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-            {
-                return serializer.Deserialize(reader, typeof(ConsoleLogger));
-            }
+        //    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        //    {
+        //        return serializer.Deserialize(reader, typeof(Logger));
+        //    }
 
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-            {
-                serializer.Serialize(writer, value, typeof(ConsoleLogger));
-            }
-        }
+        //    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        //    {
+        //        serializer.Serialize(writer, value, typeof(ConsoleLogger));
+        //    }
+        //}
 
         private class NoteConverter : JsonConverter
         {

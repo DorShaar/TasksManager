@@ -1,21 +1,18 @@
-﻿using Logger.Contracts;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace UI.ConsolePrinter
 {
     internal class TableDataStringBuilder
     {
-        private readonly ILogger mLogger;
         private int[] mColumnsLengths;
         private readonly List<string> mDataToPrintCollector = new List<string>();
         public int SpacesBetweenColumns { get; set; } = 3;
         public int MinimalColumnLength { get; set; } = 3;
 
-        public TableDataStringBuilder(string[] headers, ILogger logger)
+        public TableDataStringBuilder(string[] headers)
         {
-            mLogger = logger;
             InitializeColumnsLength(headers.Length);
             InnerAppend(headers);
         }
@@ -33,7 +30,7 @@ namespace UI.ConsolePrinter
         {
             if(rowData.Length != mColumnsLengths.Length)
             {
-                mLogger.LogError(
+                Console.WriteLine(
                     $"Row columns number {rowData.Length} is not the same as headers columns number {mColumnsLengths.Length}");
                 return;
             }

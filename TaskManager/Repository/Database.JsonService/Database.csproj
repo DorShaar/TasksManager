@@ -9,11 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain\IDProducer\IDProducer.csproj" />
-    <ProjectReference Include="..\..\Domain\Logger.Contracts\Logger.Contracts.csproj" />
-    <ProjectReference Include="..\..\Domain\ObjectSerializer.Contracts\ObjectSerializer.Contracts.csproj" />
+    <ProjectReference Include="..\..\Domain\ObjectSerializer.JsonService\ObjectSerializer.JsonService.csproj" />
+    <ProjectReference Include="..\..\Domain\TaskData\TaskData.csproj" />
     <ProjectReference Include="..\Database.Configuration\Database.Configuration.csproj" />
-    <ProjectReference Include="..\Database.Contracts\Database.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

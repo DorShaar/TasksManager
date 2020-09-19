@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain\Logger.Contracts\Logger.Contracts.csproj" />
-    <ProjectReference Include="..\..\Domain\TaskData.Contracts\TaskData.Contracts.csproj" />
+    <ProjectReference Include="..\..\Domain\TaskData\TaskData.csproj" />
   </ItemGroup>
 
 </Project>

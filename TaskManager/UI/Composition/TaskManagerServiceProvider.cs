@@ -1,21 +1,20 @@
 ﻿using Database.Configuration;
-using Database.Contracts;
-using Database;
-using Logger;
-using Logger.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using TaskData;
-using TaskData.Contracts;
-using TaskManager.Contracts;
-using ObjectSerializer.Contracts;
-using Database.JsonService;
 using Microsoft.Extensions.Configuration;
 using UI.ConsolePrinter;
+using ObjectSerializer.JsonService;
+using TaskData.Notes;
+using TaskData.WorkTasks;
+using TaskData.TasksGroups;
+using Databases;
+using TaskManagers;
+using TaskData.IDsProducer;
+using TaskData.TaskStatus;
 
 namespace Composition
 {
-    public class TaskManagerServiceProvider
+    public class TaskManagerServiceProvider : IServiceProvider
     {
         private readonly IServiceProvider mServiceProvider;
 
@@ -28,33 +27,33 @@ namespace Composition
         {
             ServiceCollection serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddSingleton<ILogger, ConsoleLogger>();
-
             serviceCollection.AddSingleton<IObjectSerializer, JsonSerializerWrapper>();
+
+            serviceCollection.AddSingleton<ITaskManager, TaskManager>();
+
+            serviceCollection.AddSingleton(typeof(ConsolePrinter));
 
             RegisterTaskDataEntities(serviceCollection);
 
             RegisterDatabaseEntities(serviceCollection);
 
-            serviceCollection.AddSingleton<ITaskManager, TaskManager.TaskManager>();
-
-            serviceCollection.AddSingleton(typeof(ConsolePrinter));
+            RegisterLogger(serviceCollection);
 
             return serviceCollection.BuildServiceProvider();
         }
 
         private void RegisterTaskDataEntities(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<INoteBuilder, NoteBuilder>();
-            serviceCollection.AddSingleton<INotesSubjectBuilder, NotesSubjectBuilder>();
-            serviceCollection.AddSingleton<IWorkTask, WorkTask>();
-            serviceCollection.AddSingleton<ITasksGroup, TaskGroup>();
-            serviceCollection.AddSingleton<ITasksGroupBuilder, TaskGroupBuilder>();
+            serviceCollection.AddSingleton<IIDProducer, IDProducer>();
+            serviceCollection.AddSingleton<INoteFactory, NoteFactory>();
+            serviceCollection.AddSingleton<ITasksGroupFactory, TaskGroupFactory>();
+            serviceCollection.AddSingleton<IWorkTaskFactory, WorkTaskFactory>();
+            serviceCollection.AddSingleton<ITaskStatusHistory, TaskStatusHistory>();
         }
 
         private void RegisterDatabaseEntities(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<ILocalRepository<ITasksGroup>, Database.Database>();
+            serviceCollection.AddSingleton<ILocalRepository<ITasksGroup>, Databases.Database>();
 
             IConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
@@ -68,19 +67,14 @@ namespace Composition
             serviceCollection.AddOptions();
         }
 
-        public ITaskManager GetTaskManagerService()
+        private void RegisterLogger(ServiceCollection serviceCollection)
         {
-            return mServiceProvider.GetService<ITaskManager>();
+            serviceCollection.AddLogging();
         }
 
-        public ILogger GetLoggerService()
+        public object GetService(Type serviceType)
         {
-            return mServiceProvider.GetService<ILogger>();
-        }
-
-        public ConsolePrinter GetConsolePrinterService()
-        {
-            return mServiceProvider.GetService<ConsolePrinter>();
+            return mServiceProvider.GetRequiredService(serviceType);
         }
     }
 }
