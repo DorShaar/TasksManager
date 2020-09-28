@@ -4,30 +4,35 @@ using System.Runtime.CompilerServices;
 using TaskData.Notes;
 using TaskData.OperationResults;
 using TaskData.TaskStatus;
+using Triangle;
 
 [assembly: InternalsVisibleTo("ObjectSerializer.JsonService")]
 [assembly: InternalsVisibleTo("Composition")]
 namespace TaskData.WorkTasks
 {
+    [JsonObject(MemberSerialization.OptIn)]
     internal class WorkTask : IWorkTask
     {
         [JsonProperty]
         private INote mNote;
 
+        [JsonProperty]
         public string ID { get; }
 
+        [JsonProperty]
         public string GroupName { get; set; }
 
+        [JsonProperty]
         public string Description { get; set; } = string.Empty;
 
-        [JsonIgnore]
         public bool IsFinished { get => Status == Status.Closed; }
 
-        [JsonIgnore]
         public Status Status => TaskStatusHistory.CurrentStatus;
 
         [JsonProperty]
         public ITaskStatusHistory TaskStatusHistory { get; }
+
+        public TaskTriangle TaskMeasurement { get; private set; }
 
         internal WorkTask(string id, string groupName, string description)
         {
@@ -44,13 +49,15 @@ namespace TaskData.WorkTasks
             string groupName,
             string description,
             INote note,
-            ITaskStatusHistory taskStatusHistory)
+            ITaskStatusHistory taskStatusHistory,
+            TaskTriangle taskTriangle)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
             GroupName = groupName ?? throw new ArgumentNullException(nameof(groupName));
             Description = description ?? throw new ArgumentNullException(nameof(description));
             mNote = note;
             TaskStatusHistory = taskStatusHistory ?? throw new ArgumentNullException(nameof(taskStatusHistory));
+            TaskMeasurement = taskTriangle;
         }
 
         public OperationResult CloseTask(string reason)
@@ -106,6 +113,11 @@ namespace TaskData.WorkTasks
                 return new OperationResult<string>(false, $"Task id {ID}, '{Description}' has no note");
 
             return new OperationResult<string>(true, mNote.Text);
+        }
+
+        public void SetMeasurement(TaskTriangle measurement)
+        {
+            TaskMeasurement = measurement;
         }
     }
 }

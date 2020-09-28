@@ -1,9 +1,10 @@
-﻿using TaskData.OperationResults;
+﻿using TaskData.MeasurableTasks;
+using TaskData.OperationResults;
 using TaskData.TaskStatus;
 
 namespace TaskData.WorkTasks
 {
-    public interface IWorkTask
+    public interface IWorkTask : IMeasurableTask
     {
         string ID { get; }
         string GroupName { get; set; }

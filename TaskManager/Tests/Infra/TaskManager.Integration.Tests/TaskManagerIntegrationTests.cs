@@ -80,7 +80,8 @@ namespace TaskManager.Integration.Tests
         [Fact]
         public void Ctor_TasksManagerHasFreeTasksGroup()
         {
-            Assert.NotNull(mTaskManager.GetAllTasks(taskGrop => taskGrop.GroupName == TaskManagers.TaskManager.FreeTaskGroupName));
+            Assert.NotNull(mTaskManager.GetAllTasks(taskGrop => 
+            taskGrop.GroupName == TaskManagers.TaskManager.FreeTaskGroupName));
         }
 
         [Fact]

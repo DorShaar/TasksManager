@@ -7,6 +7,7 @@ using TaskData.WorkTasks;
 
 [assembly: InternalsVisibleTo("TaskData.Tests")]
 [assembly: InternalsVisibleTo("TaskManager.Integration.Tests")]
+[assembly: InternalsVisibleTo("ObjectSerializer.JsonService.Tests")]
 namespace TaskData.TasksGroups
 {
     internal class TaskGroupFactory : ITasksGroupFactory

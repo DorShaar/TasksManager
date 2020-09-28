@@ -87,7 +87,7 @@ namespace Databases
             }
 
             mLogger.LogTrace($"Going to load database from {DatabaseDirectoryPath}");
-            mEntities = mSerializer.Deserialize<List<ITasksGroup>>(DatabaseDirectoryPath);
+            mEntities = mSerializer.Deserialize<List<ITasksGroup>>(DatabaseDirectoryPath).Result;
         }
 
         private void LoadNextIdToProduce()
@@ -99,7 +99,7 @@ namespace Databases
             }
 
             mLogger.LogTrace("Going to load next id");
-            mIdProducer.SetNextID(mSerializer.Deserialize<int>(NextIdPath));
+            mIdProducer.SetNextID(mSerializer.Deserialize<int>(NextIdPath).Result);
         }
 
         /// <summary>

@@ -5,21 +5,26 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using TaskData.OperationResults;
 using TaskData.WorkTasks;
+using Triangle;
 
 [assembly: InternalsVisibleTo("ObjectSerializer.JsonService")]
 [assembly: InternalsVisibleTo("Composition")]
 namespace TaskData.TasksGroups
 {
+    [JsonObject(MemberSerialization.OptIn)]
     internal class TaskGroup : ITasksGroup
     {
+        [JsonProperty]
         public readonly Dictionary<string, IWorkTask> TasksChildren = new Dictionary<string, IWorkTask>();
+
+        [JsonProperty]
         public string ID { get; }
+
+        [JsonProperty]
         public string Name { get; private set; }
 
-        [JsonIgnore]
         public int Size => TasksChildren.Count;
 
-        [JsonIgnore]
         public bool IsFinished { get => TasksChildren.All(task => task.Value.IsFinished); }
 
         internal TaskGroup(string id, string groupName)
@@ -63,7 +68,8 @@ namespace TaskData.TasksGroups
         public OperationResult AddTask(IWorkTask task)
         {
             if (TasksChildren.ContainsKey(task.ID))
-                return new OperationResult(false, $"Task {task.ID}, '{task.Description}' is already found in group {Name}");
+                return new OperationResult(false, $"Task {task.ID}, " +
+                    $"'{task.Description}' is already found in group {Name}");
 
             task.GroupName = Name;
             TasksChildren.Add(task.ID, task);
@@ -99,6 +105,19 @@ namespace TaskData.TasksGroups
             string oleName = string.Copy(Name);
             Name = newGroupName;
             return new OperationResult(true, $"Name changed from {oleName} to {Name}");
+        }
+
+        public OperationResult SetMeasurement(string taskId, TaskTriangle taskTriangle)
+        {
+            OperationResult<IWorkTask> getResult = GetTask(taskId);
+
+            if (!getResult.Success)
+                return new OperationResult(false, $"{getResult.Reason}. Measurement not added");
+
+            IWorkTask workTask = getResult.Value;
+
+            workTask.SetMeasurement(taskTriangle);
+            return new OperationResult(true, $"Set new measurement");
         }
     }
 }

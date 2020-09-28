@@ -2,30 +2,34 @@
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using TaskData.Notes;
 using TaskData.TasksGroups;
 using TaskData.TaskStatus;
 using TaskData.WorkTasks;
 
 [assembly: InternalsVisibleTo("Composition")]
+[assembly: InternalsVisibleTo("ObjectSerializer.JsonService.Tests")]
 namespace ObjectSerializer.JsonService
 {
     internal class JsonSerializerWrapper : IObjectSerializer
     {
-        public void Serialize<T>(T objectToSerialize, string databasePath)
+        public async Task Serialize<T>(T objectToSerialize, string databasePath)
         {
             string jsonText = JsonConvert.SerializeObject(objectToSerialize, Formatting.Indented, new JsonSerializerSettings());
-            File.WriteAllText(databasePath, jsonText);
+            await File.WriteAllTextAsync(databasePath, jsonText).ConfigureAwait(false);
         }
 
-        public T Deserialize<T>(string databasePath)
+        public async Task<T> Deserialize<T>(string databasePath)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.Converters.Add(new TaskGroupConverter());
             settings.Converters.Add(new TaskConverter());
             settings.Converters.Add(new NoteConverter());
             settings.Converters.Add(new TaskStatusHistoryConverter());
-            return JsonConvert.DeserializeObject<T>(File.ReadAllText(databasePath), settings);
+
+            string databaseTaxt = await File.ReadAllTextAsync(databasePath).ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<T>(databaseTaxt, settings);
         }
 
         private class TaskConverter : JsonConverter

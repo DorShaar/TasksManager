@@ -8,24 +8,20 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Composition")]
 namespace TaskData.TaskStatus
 {
+    [JsonObject(MemberSerialization.OptIn)]
     internal class TaskStatusHistory : ITaskStatusHistory
     {
         [JsonProperty]
         private readonly List<StatusData> StatusHistory = new List<StatusData>();
 
-        [JsonIgnore]
         public DateTime TimeCreated => StatusHistory[0].DateTime;
 
-        [JsonIgnore]
         public DateTime TimeLastOpened => FindLastStatus(Status.Open);
 
-        [JsonIgnore]
         public DateTime TimeLastOnWork => FindLastStatus(Status.OnWork);
 
-        [JsonIgnore]
         public DateTime TimeClosed => FindLastStatus(Status.Closed);
 
-        [JsonIgnore]
         public Status CurrentStatus => StatusHistory.Last().Status;
 
         private DateTime FindLastStatus(Status status)

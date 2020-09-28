@@ -4,9 +4,11 @@ namespace ObjectSerializer.JsonService
 {
     public static class ObjectSerializerExtensions
     {
-        public static void UseJsonObjectSerializer(this IServiceCollection services)
+        public static IServiceCollection UseJsonObjectSerializer(this IServiceCollection services)
         {
             services.AddSingleton<IObjectSerializer, JsonSerializerWrapper>();
+
+            return services;
         }
     }
 }

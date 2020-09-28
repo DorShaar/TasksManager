@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using TaskData.MeasurableTasks;
 using TaskData.OperationResults;
 using TaskData.WorkTasks;
 
 namespace TaskData.TasksGroups
 {
-    public interface ITasksGroup
+    public interface ITasksGroup : IMeasurementAdder
     {
         string ID { get; }
         string Name { get; }

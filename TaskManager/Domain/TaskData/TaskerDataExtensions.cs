@@ -8,12 +8,14 @@ namespace TaskData
 {
     public static class TaskerDataExtensions
     {
-        public static void UseTaskerDataEntities(this IServiceCollection services)
+        public static IServiceCollection UseTaskerDataEntities(this IServiceCollection services)
         {
-            services.AddSingleton<IIDProducer, IDProducer>();
-            services.AddSingleton<INoteFactory, NoteFactory>();
-            services.AddSingleton<ITasksGroupFactory, TaskGroupFactory>();
-            services.AddSingleton<ITaskStatusHistory, TaskStatusHistory>();
+            services.AddSingleton<IIDProducer, IDProducer>()
+                    .AddSingleton<INoteFactory, NoteFactory>()
+                    .AddSingleton<ITasksGroupFactory, TaskGroupFactory>()
+                    .AddSingleton<ITaskStatusHistory, TaskStatusHistory>();
+
+            return services;
         }
     }
 }

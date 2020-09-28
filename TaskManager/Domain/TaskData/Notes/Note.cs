@@ -4,6 +4,7 @@ using System.IO;
 
 namespace TaskData.Notes
 {
+    [JsonObject(MemberSerialization.OptIn)]
     internal class Note : INote
     {
         [JsonProperty]
@@ -12,13 +13,10 @@ namespace TaskData.Notes
         [JsonProperty]
         private readonly string mNoteName;
 
-        [JsonIgnore]
         public string Extension { get; } = ".txt";
 
-        [JsonIgnore]
         public string NotePath => Path.Combine(mNoteDirecoryPath, mNoteName + Extension);
 
-        [JsonIgnore]
         public string Text => File.ReadAllText(NotePath);
 
         /// <summary>
