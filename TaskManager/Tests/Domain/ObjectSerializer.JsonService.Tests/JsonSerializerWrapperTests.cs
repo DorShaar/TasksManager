@@ -71,8 +71,9 @@ namespace ObjectSerializer.JsonService.Tests
                                .AddResource("one developer");
 
             tasksGroupA.SetMeasurement(taskId, taskTriangleBuilder.Build());
+            tasksGroupA.GetTask(taskId).Value.TaskMeasurement.Content.MarkContentDone("todo 2");
 
-            List<ITasksGroup> entities = new List<ITasksGroup>
+            List <ITasksGroup> entities = new List<ITasksGroup>
             {
                 tasksGroupA,
             };
@@ -84,30 +85,13 @@ namespace ObjectSerializer.JsonService.Tests
 
                 string text = await File.ReadAllTextAsync(tempSerializedFile).ConfigureAwait(false);
 
-          //      "TaskMeasurement": {
-          //          "Configuration": {
-          //              "PercentagesProgressToNotify": [
-          //                60
-          //            ]
-          //},
-          //"Time": {
-          //              "TimeMode": 0,
-          //  "StartTime": {
-          //                  "DateTime": "2020-10-18T00:00:00",
-          //    "DayPeriod": 0
-          //  },
-          //  "ExpectedDuration": {
-          //                  "Days": 3,
-          //    "Hours": 12
-          //  }
-          //          },
-          //"Content": { },
-          //"Resources": { }
-
-                    Assert.Contains("\"GroupName\": \"a group\"", text);
-                Assert.Contains("\"Description\": \"task 1\"", text);
-                Assert.Contains("\"GroupName\": \"b group\"", text);
-                Assert.Contains("\"Description\": \"task 3\"", text);
+                Assert.Contains("60", text);
+                Assert.Contains("\"DateTime\": \"2020-10-18T00:00:00\"", text);
+                Assert.Contains("\"Days\": 3", text);
+                Assert.Contains("\"Hours\": 12", text);
+                Assert.Contains("\"todo 1\": false", text);
+                Assert.Contains("\"todo 2\": true", text);
+                Assert.Contains("\"one developer\"", text);
             }
             finally
             {
@@ -124,7 +108,7 @@ namespace ObjectSerializer.JsonService.Tests
 
             JsonSerializerWrapper jsonSerializerWrapper = new JsonSerializerWrapper();
 
-            List<ITasksGroup> entities = 
+            List<ITasksGroup> entities =
                 await jsonSerializerWrapper.Deserialize<List<ITasksGroup>>(databasePath)
                 .ConfigureAwait(false);
 

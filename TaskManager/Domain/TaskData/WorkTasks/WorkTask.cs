@@ -32,6 +32,7 @@ namespace TaskData.WorkTasks
         [JsonProperty]
         public ITaskStatusHistory TaskStatusHistory { get; }
 
+        [JsonProperty]
         public TaskTriangle TaskMeasurement { get; private set; }
 
         internal WorkTask(string id, string groupName, string description)
