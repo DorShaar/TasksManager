@@ -101,7 +101,7 @@ namespace ObjectSerializer.JsonService.Tests
 
         [Theory]
         [InlineData(@"tasks.db", 2)]
-        //[InlineData(@"tasks_with_triangle.db")]
+        [InlineData(@"tasks_with_triangle.db", 1)]
         public async Task Deserialize_DatabaseFromFile_AsExpected(string databaseName, int groupsCount)
         {
             string databasePath = Path.Combine(TestFilesDirectory, databaseName);
