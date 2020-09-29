@@ -1,5 +1,4 @@
-﻿using Triangle.JsonSerialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -28,7 +27,6 @@ namespace ObjectSerializer.JsonService
             settings.Converters.Add(new TaskConverter());
             settings.Converters.Add(new NoteConverter());
             settings.Converters.Add(new TaskStatusHistoryConverter());
-            settings.AddTaskTriangleDateTimeConveter();
 
             string databaseTaxt = await File.ReadAllTextAsync(databasePath).ConfigureAwait(false);
             return JsonConvert.DeserializeObject<T>(databaseTaxt, settings);
