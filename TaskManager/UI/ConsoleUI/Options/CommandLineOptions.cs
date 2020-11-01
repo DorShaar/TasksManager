@@ -2,7 +2,7 @@
 
 namespace ConsoleUI.Options
 {
-    internal class CommandLineOptions
+    public class CommandLineOptions
     {
         [Verb("get", HelpText = "Get object (tasks, groups, notes)")]
         public class GetOptions

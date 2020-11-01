@@ -7,6 +7,7 @@ using UI.ConsolePrinter;
 
 namespace ConsoleUI
 {
+    // TODO consider delete.
     internal class NotesDirectoryIterator
     {
         private readonly ConsolePrinter mConsolePrinter;

@@ -4,31 +4,36 @@ using ConsoleUI.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Net.Http;
+using System.Threading.Tasks;
 using TaskData.Notes;
-using TaskData.TasksGroups;
 using TaskData.WorkTasks;
-using TaskManagers;
 using UI.ConsolePrinter;
 
 namespace ConsoleUI
 {
     public class Program
     {
-        private const int DESCRIPTION_LENGTH_LIMIT = 70;
         private static ILogger<Program> mLogger;
-        private static ITaskManager mTaskManager;
         private static ConsolePrinter mConsolePrinter;
+        private static TasksProvider mTasksProvider;
+        private static TasksCreator mTasksCreator;
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            // TODO while not exit.
+
             using ITaskManagerServiceProvider serviceProvider = new TaskManagerServiceProvider();
             mLogger = serviceProvider.GetRequiredService<ILogger<Program>>();
             mConsolePrinter = serviceProvider.GetRequiredService<ConsolePrinter>();
-            mTaskManager = serviceProvider.GetRequiredService<ITaskManager>();
+            HttpClient httpClient = new HttpClient();
+
+            mTasksProvider = new TasksProvider(
+                httpClient, mConsolePrinter, serviceProvider.GetRequiredService<ILogger<TasksProvider>>());
+
+            mTasksCreator = new TasksCreator(
+                httpClient, mConsolePrinter, serviceProvider.GetRequiredService<ILogger<TasksCreator>>());
 
             int exitCode = 1;
             using (Parser parser = new Parser(config => config.HelpWriter = Console.Out))
@@ -39,14 +44,16 @@ namespace ConsoleUI
                     return;
                 }
 
-                exitCode = ParseArgument(parser, args);
+                exitCode = await ParseArgument(parser, args).ConfigureAwait(false);
             }
 
             if (exitCode != 0)
                 mLogger.LogInformation($"Finished executing with exit code: {exitCode}");
+
+            mTasksProvider.Dispose();
         }
 
-        private static int ParseArgument(Parser parser, string[] args)
+        private static Task<int> ParseArgument(Parser parser, string[] args)
         {
             return parser.ParseArguments<
                 CommandLineOptions.GetOptions,
@@ -57,309 +64,30 @@ namespace ConsoleUI
                 CommandLineOptions.ReOpenTaskOptions,
                 CommandLineOptions.OnWorkTaskOptions,
                 CommandLineOptions.GetInformationTaskOptions,
-                CommandLineOptions.OpenNoteOptions>(args).MapResult(
-                    (CommandLineOptions.GetOptions options) => GetObject(options),
-                    (CommandLineOptions.CreateOptions options) => CreateObject(options),
-                    (CommandLineOptions.RemoveOptions options) => RemoveObject(options),
-                    (CommandLineOptions.CloseOptions options) => CloseTask(options),
-                    (CommandLineOptions.MoveTaskOptions options) => MoveTask(options),
-                    (CommandLineOptions.ReOpenTaskOptions options) => ReOpenTask(options),
-                    (CommandLineOptions.OnWorkTaskOptions options) => MarkTaskAsOnWork(options),
-                    (CommandLineOptions.GetInformationTaskOptions options) => GetTaskInformation(options),
-                    (CommandLineOptions.OpenNoteOptions options) => OpenNote(options),
-                    (parserErrors) => 1
-                );
+                CommandLineOptions.OpenNoteOptions>(args).MapResult<
+                    CommandLineOptions.GetOptions,
+                    CommandLineOptions.CreateOptions,
+                    CommandLineOptions.RemoveOptions,
+                    CommandLineOptions.CloseOptions,
+                    CommandLineOptions.MoveTaskOptions,
+                    CommandLineOptions.ReOpenTaskOptions,
+                    CommandLineOptions.OnWorkTaskOptions,
+                    CommandLineOptions.GetInformationTaskOptions,
+                    CommandLineOptions.OpenNoteOptions,
+                    Task<int>>(
+                    mTasksProvider.GetObject,
+                    mTasksCreator.CreateObject,
+                    RemoveObject,
+                    CloseTask,
+                    MoveTask,
+                    ReOpenTask,
+                    MarkTaskAsOnWork,
+                    GetTaskInformation,
+                    OpenNote,
+                    (parseError) => Task.FromResult(1));
         }
 
-        private static int GetObject(CommandLineOptions.GetOptions options)
-        {
-            if (options.ObjectType == null)
-            {
-                mLogger.LogError("No valid object type given (task, group, note, general, db, config)");
-                return 1;
-            }
-
-            switch (options.ObjectType.ToLower())
-            {
-                case "task":
-                case "tasks":
-                    return GetAllTasks(
-                        options.ObjectName,
-                        options.Status,
-                        options.ShouldPrintAll,
-                        options.ShouldPrintNotOnlyDefault,
-                        options.Days,
-                        options.IsDetailed);
-
-                case "group":
-                case "groups":
-                    return GatAllTaskGroup(options.ShouldPrintAll, options.IsDetailed);
-
-                case "note":
-                case "notes":
-                    return GetNoteContent(options.ObjectName, options.ShouldPrintAll);
-
-                case "general":
-                    return GetGeneralNoteContent(options.ObjectName);
-
-                case "db":
-                case "data-base":
-                case "database":
-                    return GetDatabasePath();
-
-                case "config":
-                case "configuration":
-                    return GetConfigruationPath();
-
-                default:
-                    mLogger.LogError("No valid object type given (task, group, note, general, db)");
-                    return 1;
-            }
-        }
-
-        /// <summary>
-        /// Get all un-closed tasks.
-        /// In case user choose to print all option, all tasks will be printed.
-        /// </summary>
-        private static int GetAllTasks(
-            string taskGroup, string status, bool shouldPrintAll, bool shouldPrintNotOnlyDefaultGroup, int days, bool isDetailed)
-        {
-            IEnumerable<IWorkTask> tasksToPrint = GetAllTasksOrTasksByGroupName(taskGroup);
-
-            if (tasksToPrint == null)
-            {
-                mLogger.LogError($"No task group {taskGroup} exist");
-                return 1;
-            }
-
-            if (!shouldPrintAll)
-                tasksToPrint = tasksToPrint.Where(task => !task.IsFinished);
-
-            if (!shouldPrintNotOnlyDefaultGroup && mTaskManager.DefaultTaskGroupName != null)
-            {
-                tasksToPrint = tasksToPrint.Where(task =>
-                    AreNamesEquals(task.GroupName, mTaskManager.DefaultTaskGroupName.Name));
-            }
-
-            if (!string.IsNullOrEmpty(status))
-                tasksToPrint = tasksToPrint.Where(task => AreNamesEquals(task.Status.ToString(), status));
-
-            if (days != 0)
-                tasksToPrint = tasksToPrint.Where(task => IsTaskUpdateSince(task, days));
-
-            mConsolePrinter.PrintTasks(tasksToPrint, isDetailed);
-            return 0;
-        }
-
-        private static bool AreNamesEquals(string groupName1, string groupName2)
-        {
-            if (string.IsNullOrEmpty(groupName1) || string.IsNullOrEmpty(groupName2))
-                return false;
-            else
-                return groupName1.Equals(groupName2, StringComparison.CurrentCultureIgnoreCase);
-        }
-
-        private static IEnumerable<IWorkTask> GetAllTasksOrTasksByGroupName(string taskGroup)
-        {
-            if (string.IsNullOrEmpty(taskGroup))
-                return mTaskManager.GetAllTasks();
-            else
-                return GetTasksByGroupName(taskGroup);
-        }
-
-        private static IEnumerable<IWorkTask> GetTasksByGroupName(string taskGroup)
-        {
-            if (string.IsNullOrEmpty(taskGroup))
-                return null;
-
-            IEnumerable<IWorkTask> tasks =
-                mTaskManager.GetAllTasks((ITasksGroup task) => task.ID == taskGroup) ??
-                mTaskManager.GetAllTasks((ITasksGroup task) => task.Name == taskGroup);
-
-            return tasks;
-        }
-
-        private static bool IsTaskUpdateSince(IWorkTask task, int days)
-        {
-            return task.TaskStatusHistory.TimeCreated.AddDays(days) >= DateTime.Now ||
-                    task.TaskStatusHistory.TimeClosed.AddDays(days) >= DateTime.Now ||
-                    task.TaskStatusHistory.TimeLastOnWork.AddDays(days) >= DateTime.Now ||
-                    task.TaskStatusHistory.TimeLastOpened.AddDays(days) >= DateTime.Now;
-        }
-
-        private static int GatAllTaskGroup(bool shouldPrintAll, bool isDetailed)
-        {
-            IEnumerable<ITasksGroup> groupsToPrint = mTaskManager.GetAllTasksGroups();
-            if (!shouldPrintAll)
-                groupsToPrint = groupsToPrint.Where((ITasksGroup group) => (!group.IsFinished));
-
-            mConsolePrinter.PrintTasksGroup(groupsToPrint, isDetailed);
-            return 0;
-        }
-
-        private static int GetNoteContent(string notePath, bool shouldPrintAll)
-        {
-            if (shouldPrintAll)
-                return GetAllNotesNames();
-
-            INote note = GetNote(mTaskManager.NotesTasksDatabase, notePath);
-            if (note != null)
-                mLogger.LogDebug(note.Text);
-
-            return 0;
-        }
-
-        private static int GetGeneralNoteContent(string notePath)
-        {
-            INote note = GetNote(mTaskManager.NotesRootDatabase, notePath);
-            if (note != null)
-                mLogger.LogDebug(note.Text);
-
-            return 0;
-        }
-
-        private static int GetAllNotesNames()
-        {
-            IEnumerable<INote> allNotes = mTaskManager.GetAllNotes();
-            IEnumerable<string> notesToPrint = allNotes
-                .Where(note => Path.GetExtension(note.NotePath).Equals(note.Extension))
-                .Select(note => Path.GetFileNameWithoutExtension(note.NotePath));
-
-            mConsolePrinter.Print(notesToPrint, "NOTES");
-            return 0;
-        }
-
-        private static int GetDatabasePath()
-        {
-            mConsolePrinter.Print(mTaskManager.GetDatabasePath(), "Database path");
-            return 0;
-        }
-
-        private static int GetConfigruationPath()
-        {
-            mConsolePrinter.Print(Path.Combine(GetAssemblyDirectory(), "config", "Config.yaml"), "Configuration path");
-            return 0;
-        }
-
-        private static string GetAssemblyDirectory()
-        {
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
-            return Path.GetDirectoryName(path);
-        }
-
-        private static int CreateObject(CommandLineOptions.CreateOptions options)
-        {
-            if (options.ObjectType == null)
-            {
-                mLogger.LogError("No valid object type given (task, group, note, general)");
-                return 1;
-            }
-
-            switch (options.ObjectType.ToLower())
-            {
-                case "task":
-                case "tasks":
-                    return CreateNewTask(options.ObjectName, options.Description);
-
-                case "group":
-                case "groups":
-                    return CreateNewTaskGroup(options.ObjectName);
-
-                case "note":
-                case "notes":
-                    return CreateNote(options.ObjectName, options.Description);
-
-                case "general note":
-                case "general":
-                    return CreateGeneralNote(options.ObjectName, options.Description);
-
-                default:
-                    mLogger.LogError("No valid object type given (task, group, note, general)");
-                    return 1;
-            }
-        }
-
-        private static int CreateNewTask(string taskGroupName, string description)
-        {
-            if (string.IsNullOrEmpty(description))
-            {
-                mLogger.LogError("Cannot create empty task. Use -d for adding a description");
-                return -1;
-            }
-
-            if (description.Length > 70)
-            {
-                mLogger.LogError($"Description too long. Description limitation is {DESCRIPTION_LENGTH_LIMIT} characters.");
-                return -1;
-            }
-
-            if (!string.IsNullOrEmpty(taskGroupName))
-            {
-                ITasksGroup taskGroup =
-                    mTaskManager.GetAllTasksGroups().FirstOrDefault(group => group.ID == taskGroupName) ??
-                    mTaskManager.GetAllTasksGroups().FirstOrDefault(group => group.Name == taskGroupName);
-
-                if (taskGroup == null)
-                {
-                    mLogger.LogError($"Task group {taskGroupName} does not exist");
-                    return 1;
-                }
-
-                mTaskManager.CreateNewTask(taskGroup, description);
-            }
-            else
-            {
-                mTaskManager.CreateNewTask(description);
-            }
-
-            return 0;
-        }
-
-        private static int CreateNewTaskGroup(string taskGroupName)
-        {
-            if (string.IsNullOrEmpty(taskGroupName))
-            {
-                mLogger.LogError($"{nameof(taskGroupName)} is null or empty");
-                return 1;
-            }
-
-            mTaskManager.CreateNewTaskGroup(taskGroupName);
-            return 0;
-        }
-
-        private static int CreateNote(string taskId, string textToWrite)
-        {
-            if (string.IsNullOrEmpty(taskId))
-            {
-                mLogger.LogError("No task id given to create note");
-                return 1;
-            }
-
-            if (textToWrite == null)
-                textToWrite = string.Empty;
-
-            mTaskManager.CreateTaskNote(taskId, textToWrite);
-            return 0;
-        }
-
-        private static int CreateGeneralNote(string noteSubject, string textToWrite)
-        {
-            if (string.IsNullOrEmpty(noteSubject))
-            {
-                mLogger.LogError("No task subject given to create note");
-                return 1;
-            }
-
-            if (textToWrite == null)
-                textToWrite = string.Empty;
-
-            mTaskManager.CreateGeneralNote(noteSubject, textToWrite);
-            return 0;
-        }
-
-        private static int RemoveObject(CommandLineOptions.RemoveOptions options)
+        private static async Task<int> RemoveObject(CommandLineOptions.RemoveOptions options)
         {
             if (options.ObjectType == null)
             {
@@ -383,7 +111,7 @@ namespace ConsoleUI
             }
         }
 
-        private static int RemoveTask(string taskId)
+        private static async Task<int> RemoveTask(string taskId)
         {
             if (string.IsNullOrEmpty(taskId))
             {
@@ -395,7 +123,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int RemoveTaskGroup(string taskGroup, bool shouldHardDelete)
+        private static async Task<int> RemoveTaskGroup(string taskGroup, bool shouldHardDelete)
         {
             if (string.IsNullOrEmpty(taskGroup))
             {
@@ -415,7 +143,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int CloseTask(CommandLineOptions.CloseOptions options)
+        private static async Task<int> CloseTask(CommandLineOptions.CloseOptions options)
         {
             if (options.ObjectType == null)
             {
@@ -435,7 +163,7 @@ namespace ConsoleUI
             }
         }
 
-        private static int CloseTask(string taskId, string reason)
+        private static async Task<int> CloseTask(string taskId, string reason)
         {
             if (string.IsNullOrEmpty(taskId))
             {
@@ -447,7 +175,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int OpenNote(CommandLineOptions.OpenNoteOptions options)
+        private static async Task<int> OpenNote(CommandLineOptions.OpenNoteOptions options)
         {
             if (options.ObjectType == null)
             {
@@ -470,7 +198,7 @@ namespace ConsoleUI
             }
         }
 
-        private static int OpenNote(string noteName)
+        private static async Task<int> OpenNote(string noteName)
         {
             INote note = GetNote(mTaskManager.NotesTasksDatabase, noteName);
             note?.Open();
@@ -478,7 +206,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int OpenGeneralNote(string noteName)
+        private static async Task<int> OpenGeneralNote(string noteName)
         {
             INote note = GetNote(mTaskManager.NotesRootDatabase, noteName);
             note?.Open();
@@ -486,13 +214,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static INote GetNote(INotesSubject notesSubject, string notePath)
-        {
-            NotesDirectoryIterator directoryIterator = new NotesDirectoryIterator(notesSubject, mConsolePrinter);
-            return directoryIterator.GetNote(notePath);
-        }
-
-        private static int MoveTask(CommandLineOptions.MoveTaskOptions options)
+        private static async Task<int> MoveTask(CommandLineOptions.MoveTaskOptions options)
         {
             if (options.ObjectType == null)
             {
@@ -511,7 +233,7 @@ namespace ConsoleUI
             }
         }
 
-        private static int MoveTask(string taskId, string taskGroup)
+        private static async Task<int> MoveTask(string taskId, string taskGroup)
         {
             if (string.IsNullOrEmpty(taskId))
             {
@@ -529,7 +251,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int ReOpenTask(CommandLineOptions.ReOpenTaskOptions options)
+        private static async Task<int> ReOpenTask(CommandLineOptions.ReOpenTaskOptions options)
         {
             if (options.ObjectType == null)
             {
@@ -548,7 +270,7 @@ namespace ConsoleUI
             }
         }
 
-        private static int ReOpenTask(string taskId, string reason)
+        private static async Task<int> ReOpenTask(string taskId, string reason)
         {
             if (string.IsNullOrEmpty(taskId))
             {
@@ -560,7 +282,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int MarkTaskAsOnWork(CommandLineOptions.OnWorkTaskOptions options)
+        private static async Task<int> MarkTaskAsOnWork(CommandLineOptions.OnWorkTaskOptions options)
         {
             if (options.ObjectType == null)
             {
@@ -579,7 +301,7 @@ namespace ConsoleUI
             }
         }
 
-        private static int MarkTaskAsOnWork(string taskId, string reason)
+        private static async Task<int> MarkTaskAsOnWork(string taskId, string reason)
         {
             if (string.IsNullOrEmpty(taskId))
             {
@@ -591,7 +313,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static int GetTaskInformation(CommandLineOptions.GetInformationTaskOptions options)
+        private static async Task<int> GetTaskInformation(CommandLineOptions.GetInformationTaskOptions options)
         {
             if (string.IsNullOrEmpty(options.TaskId))
             {
