@@ -12,16 +12,16 @@ using TaskData;
 
 namespace Composition
 {
-    public class TaskManagerServiceProvider : IServiceProvider
+    public class TaskManagerServiceProvider : ITaskManagerServiceProvider
     {
-        private readonly IServiceProvider mServiceProvider;
+        private readonly ServiceProvider mServiceProvider;
 
         public TaskManagerServiceProvider()
         {
             mServiceProvider = CreateServiceProvider();
         }
 
-        private IServiceProvider CreateServiceProvider()
+        private ServiceProvider CreateServiceProvider()
         {
             ServiceCollection serviceCollection = new ServiceCollection();
 
@@ -65,6 +65,11 @@ namespace Composition
         public object GetService(Type serviceType)
         {
             return mServiceProvider.GetRequiredService(serviceType);
+        }
+
+        public void Dispose()
+        {
+            mServiceProvider.Dispose();
         }
     }
 }

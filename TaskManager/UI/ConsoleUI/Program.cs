@@ -25,7 +25,7 @@ namespace ConsoleUI
 
         public static void Main(string[] args)
         {
-            IServiceProvider serviceProvider = new TaskManagerServiceProvider();
+            using ITaskManagerServiceProvider serviceProvider = new TaskManagerServiceProvider();
             mLogger = serviceProvider.GetRequiredService<ILogger<Program>>();
             mConsolePrinter = serviceProvider.GetRequiredService<ConsolePrinter>();
             mTaskManager = serviceProvider.GetRequiredService<ITaskManager>();
