@@ -104,7 +104,9 @@ namespace TaskData.WorkTasks
             if (mNote == null)
                 new OperationResult(false, $"Task id {ID}, '{Description}' has no note");
 
-            mNote.Open();
+            // TODO
+            //mNote.Open();
+
             return new OperationResult(true);
         }
 

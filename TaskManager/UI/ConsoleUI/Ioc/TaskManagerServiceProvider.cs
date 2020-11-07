@@ -22,8 +22,10 @@ namespace Composition
 
             serviceCollection.AddSingleton(typeof(ConsolePrinter));
 
+            // TODO consider remove
             serviceCollection.UseJsonObjectSerializer();
 
+            // TODO consider remove
             serviceCollection.UseTaskerDataEntities();
 
             RegisterLogger(serviceCollection);

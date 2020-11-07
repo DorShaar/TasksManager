@@ -1,4 +1,4 @@
-﻿using ConsoleUI.Options;
+﻿using Tasker.Options;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -13,12 +13,10 @@ using TaskData.TasksGroups;
 using TaskData.WorkTasks;
 using UI.ConsolePrinter;
 
-namespace ConsoleUI
+namespace Tasker
 {
-    public class TasksProvider : IDisposable // TODO Idisposable pattern.
+    public class TasksProvider
     {
-        private bool mDisposed;
-
         private readonly HttpClient mHttpClient;
         private readonly ConsolePrinter mConsolePrinter;
         private readonly ILogger<TasksProvider> mLogger;
@@ -77,6 +75,7 @@ namespace ConsoleUI
                         return 1;
                 }
             }
+            // TODO this in every TaskX + handle specific error for case where server is not available.
             catch (Exception ex)
             {
                 mLogger.LogError(ex, "Operation failed");
@@ -249,15 +248,6 @@ namespace ConsoleUI
             string responseStringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             return JsonConvert.DeserializeObject<T>(responseStringContent);
-        }
-
-        public void Dispose()
-        {
-            if (!mDisposed)
-            {
-                mHttpClient.Dispose();
-                mDisposed = true;
-            }
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleUI
+namespace Tasker
 {
     public static class TaskerUris
     {

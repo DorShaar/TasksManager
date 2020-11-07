@@ -5,7 +5,7 @@ using System.Linq;
 using TaskData.Notes;
 using UI.ConsolePrinter;
 
-namespace ConsoleUI
+namespace Tasker
 {
     // TODO consider delete.
     internal class NotesDirectoryIterator

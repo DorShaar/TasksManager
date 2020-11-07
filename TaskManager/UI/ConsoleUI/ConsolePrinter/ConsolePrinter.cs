@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TaskData.TasksGroups;
 using TaskData.TaskStatus;
 using TaskData.WorkTasks;
@@ -74,21 +73,6 @@ namespace UI.ConsolePrinter
             }
 
             Console.WriteLine(tableDataStringBuilder.Build());
-        }
-
-        public void PrintTaskInformation(IWorkTask task)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            stringBuilder.Append("Task ID: ").AppendLine(task.ID)
-                .Append("Description: ").AppendLine(task.Description)
-                .Append("Status: ").AppendLine(GetStringStatus(task.Status))
-                .Append("Time created: ").Append(task.TaskStatusHistory.TimeCreated).AppendLine()
-                .Append("Last opened time: ").Append(task.TaskStatusHistory.TimeLastOpened).AppendLine()
-                .Append("Closed time: ").Append(task.TaskStatusHistory.TimeClosed).AppendLine()
-                .Append("Note: ").AppendLine(task.GetNote().Value);
-
-            Console.WriteLine(stringBuilder.ToString());
         }
 
         private static string GetStringStatus(Status status)

@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Redundancy", "RCS1163:Unused parameter.", Justification = "<Pending>", Scope = "member", Target = "~M:ConsoleUI.Program.ParseArgument(CommandLine.Parser,System.String[])~System.Int32")]
+[assembly: SuppressMessage("Redundancy", "RCS1163:Unused parameter.", Justification = "<Pending>", Scope = "member", Target = "~M:Tasker.Program.ParseArgument(CommandLine.Parser,System.String[])~System.Int32")]

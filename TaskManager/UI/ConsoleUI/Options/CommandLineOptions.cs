@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace ConsoleUI.Options
+namespace Tasker.Options
 {
     public class CommandLineOptions
     {
@@ -38,7 +38,7 @@ namespace ConsoleUI.Options
             [Value(1, HelpText = "Object name or id")]
             public string ObjectName { get; set; }
 
-            [Option('d', "description", HelpText = "Description about the object")]
+            [Option('m', "message", HelpText = "Description message about the object")]
             public string Description { get; set; }
         }
 
@@ -51,8 +51,9 @@ namespace ConsoleUI.Options
             [Value(1, HelpText = "Object id to remove")]
             public string ObjectId { get; set; }
 
-            [Option('h', "hard", HelpText = "Remove task group with all inner tasks")]
-            public bool ShouldHardDelete { get; set; }
+            // TODO delete
+            //[Option('h', "hard", HelpText = "Remove task group with all inner tasks")]
+            //public bool ShouldHardDelete { get; set; }
         }
 
         [Verb("close", HelpText = "Close object (task - marks task status as closed)")]
@@ -64,7 +65,7 @@ namespace ConsoleUI.Options
             [Value(1, HelpText = "Id of task to close")]
             public string ObjectId { get; set; }
 
-            [Option('m', "reason", HelpText = "Reason for closing the object")]
+            [Option('m', "message", HelpText = "Reason message for closing the object")]
             public string Reason { get; set; }
         }
 
@@ -90,7 +91,7 @@ namespace ConsoleUI.Options
             [Value(1, HelpText = "Task id to open again")]
             public string TaskId { get; set; }
 
-            [Option('m', "reason", HelpText = "Reason for reopening the task")]
+            [Option('m', "message", HelpText = "Reason message for reopening the task")]
             public string Reason { get; set; }
         }
 
@@ -103,15 +104,8 @@ namespace ConsoleUI.Options
             [Value(1, HelpText = "Task id to mark as on work")]
             public string TaskId { get; set; }
 
-            [Option('m', "reason", HelpText = "Reason for working the task")]
+            [Option('m', "message", HelpText = "Reason message for working the task")]
             public string Reason { get; set; }
-        }
-
-        [Verb("info", HelpText = "Get task information")]
-        public class GetInformationTaskOptions
-        {
-            [Value(0, HelpText = "Task id to get information")]
-            public string TaskId { get; set; }
         }
 
         [Verb("open", HelpText = "Open note with the default text editor")]

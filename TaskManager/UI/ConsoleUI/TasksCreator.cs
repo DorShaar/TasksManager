@@ -1,29 +1,24 @@
-﻿using ConsoleUI.Options;
-using ConsoleUI.Resources;
+﻿using Tasker.Options;
+using Tasker.Resources;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using UI.ConsolePrinter;
 
-namespace ConsoleUI
+namespace Tasker
 {
-    public class TasksCreator : IDisposable // TODO Idisposable pattern.
+    public class TasksCreator
     {
         private const string PostMediaType = "application/json";
 
-        private bool mDisposed;
-
         private readonly HttpClient mHttpClient;
-        private readonly ConsolePrinter mConsolePrinter;
         private readonly ILogger<TasksCreator> mLogger;
 
-        public TasksCreator(HttpClient httpClient, ConsolePrinter consolePrinter, ILogger<TasksCreator> logger)
+        public TasksCreator(HttpClient httpClient, ILogger<TasksCreator> logger)
         {
             mHttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            mConsolePrinter = consolePrinter ?? throw new ArgumentNullException(nameof(consolePrinter));
             mLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -45,13 +40,14 @@ namespace ConsoleUI
                 case "groups":
                     return await CreateNewTaskGroup(options.ObjectName).ConfigureAwait(false);
 
-                case "note":
-                case "notes":
-                    return await CreateNote(options.ObjectName, options.Description).ConfigureAwait(false);
+                // TODO
+                //case "note":
+                //case "notes":
+                //    return await CreateNote(options.ObjectName, options.Description).ConfigureAwait(false);
 
-                case "general note":
-                case "general":
-                    return await CreateGeneralNote(options.ObjectName, options.Description).ConfigureAwait(false);
+                //case "general note":
+                //case "general":
+                //    return await CreateGeneralNote(options.ObjectName, options.Description).ConfigureAwait(false);
 
                 default:
                     mLogger.LogError("No valid object type given (task, group, note, general)");
@@ -69,7 +65,11 @@ namespace ConsoleUI
 
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, TaskerUris.WorkTasksUri);
 
-            WorkTaskResource workTaskResource = new WorkTaskResource(taskGroupName, description);
+            WorkTaskResource workTaskResource = new WorkTaskResource
+            {
+                TaskGroupName = taskGroupName,
+                Description = description
+            };
 
             // TODO send json content.
             using StringContent jsonContent =
@@ -80,7 +80,7 @@ namespace ConsoleUI
             return 0;
         }
 
-        private static async Task<int> CreateNewTaskGroup(string taskGroupName)
+        private async Task<int> CreateNewTaskGroup(string taskGroupName)
         {
             if (string.IsNullOrEmpty(taskGroupName))
             {
@@ -88,39 +88,48 @@ namespace ConsoleUI
                 return 1;
             }
 
-            mTaskManager.CreateNewTaskGroup(taskGroupName);
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, TaskerUris.TasksGroupUri);
+
+            TasksGroupResource tasksGroupResource = new TasksGroupResource(taskGroupName);
+
+            // TODO send json content.
+            using StringContent jsonContent =
+                new StringContent(JsonConvert.SerializeObject(tasksGroupResource), Encoding.UTF8, PostMediaType);
+
+            await SendHttpRequestMessage(httpRequestMessage).ConfigureAwait(false);
             return 0;
         }
 
-        private static async Task<int> CreateNote(string taskId, string textToWrite)
-        {
-            if (string.IsNullOrEmpty(taskId))
-            {
-                mLogger.LogError("No task id given to create note");
-                return 1;
-            }
+        // TODO
+        //private async Task<int> CreateNote(string taskId, string textToWrite)
+        //{
+        //    if (string.IsNullOrEmpty(taskId))
+        //    {
+        //        mLogger.LogError("No task id given to create note");
+        //        return 1;
+        //    }
 
-            if (textToWrite == null)
-                textToWrite = string.Empty;
+        //    if (textToWrite == null)
+        //        textToWrite = string.Empty;
 
-            mTaskManager.CreateTaskNote(taskId, textToWrite);
-            return 0;
-        }
+        //    mTaskManager.CreateTaskNote(taskId, textToWrite);
+        //    return 0;
+        //}
 
-        private static async Task<int> CreateGeneralNote(string noteSubject, string textToWrite)
-        {
-            if (string.IsNullOrEmpty(noteSubject))
-            {
-                mLogger.LogError("No task subject given to create note");
-                return 1;
-            }
+        //private static async Task<int> CreateGeneralNote(string noteSubject, string textToWrite)
+        //{
+        //    if (string.IsNullOrEmpty(noteSubject))
+        //    {
+        //        mLogger.LogError("No task subject given to create note");
+        //        return 1;
+        //    }
 
-            if (textToWrite == null)
-                textToWrite = string.Empty;
+        //    if (textToWrite == null)
+        //        textToWrite = string.Empty;
 
-            mTaskManager.CreateGeneralNote(noteSubject, textToWrite);
-            return 0;
-        }
+        //    mTaskManager.CreateGeneralNote(noteSubject, textToWrite);
+        //    return 0;
+        //}
 
         private async Task SendHttpRequestMessage(HttpRequestMessage httpRequestMessage)
         {
@@ -133,15 +142,6 @@ namespace ConsoleUI
                 throw new InvalidOperationException(
                     $"Could not perform {httpRequestMessage.Method.Method} operation, response status: {response.StatusCode}," +
                     $"response body {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
-            }
-        }
-
-        public void Dispose()
-        {
-            if (!mDisposed)
-            {
-                mHttpClient.Dispose();
-                mDisposed = true;
             }
         }
     }

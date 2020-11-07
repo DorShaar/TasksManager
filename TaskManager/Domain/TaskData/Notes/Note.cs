@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Diagnostics;
 using System.IO;
 
 namespace TaskData.Notes
@@ -44,15 +43,6 @@ namespace TaskData.Notes
             }
         }
 
-        public void Open()
-        {
-            ProcessStartInfo startInfo = new ProcessStartInfo(NotePath)
-            {
-                UseShellExecute = true
-            };
-
-            using Process process = new Process { StartInfo = startInfo };
-            process.Start();
-        }
+        public event OpenNoteHandler OpenRequested;
     }
 }

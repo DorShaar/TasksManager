@@ -1,13 +1,11 @@
-﻿namespace ConsoleUI.Resources
+﻿namespace Tasker.Resources
 {
     public class WorkTaskResource
     {
-        public string TaskGroupName { get; }
-        public string Description { get; }
-        public WorkTaskResource(string groupName, string description)
-        {
-            TaskGroupName = groupName;
-            Description = description;
-        }
+        public string TaskId { get; set; }
+        public string TaskGroupName { get; set; }
+        public string Description { get; set; }
+        public string Status { get; set; }
+        public string Reason { get; set; }
     }
 }
