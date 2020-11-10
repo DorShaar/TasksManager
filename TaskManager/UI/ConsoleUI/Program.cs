@@ -7,6 +7,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UI.ConsolePrinter;
+using Tasker.Extensions;
 
 namespace Tasker
 {
@@ -22,33 +23,18 @@ namespace Tasker
 
         public static async Task Main(string[] args)
         {
-            // TODO while not exit.
-
             using ITaskManagerServiceProvider serviceProvider = new TaskManagerServiceProvider();
 
             InitializeTasker(serviceProvider);
 
-            int exitCode = 1;
-            using (Parser parser = new Parser(config => config.HelpWriter = Console.Out))
-            {
-                if (args.Length == 0)
-                {
-                    parser.ParseArguments<CommandLineOptions>(new[] { "--help" });
-                    return;
-                }
-
-                exitCode = await ParseArgument(parser, args).ConfigureAwait(false);
-            }
-
-            if (exitCode != 0)
-                mLogger.LogInformation($"Finished executing with exit code: {exitCode}");
+            await RunTasker(args).ConfigureAwait(false);
         }
 
         private static void InitializeTasker(ITaskManagerServiceProvider serviceProvider)
         {
             mLogger = serviceProvider.GetRequiredService<ILogger<Program>>();
 
-                mConsolePrinter = serviceProvider.GetRequiredService<ConsolePrinter>();
+            mConsolePrinter = serviceProvider.GetRequiredService<ConsolePrinter>();
             HttpClient httpClient = new HttpClient
             {
                 BaseAddress = new Uri("http://localhost:5000"), // TODO from config.
@@ -68,6 +54,55 @@ namespace Tasker
 
             mNotesOpener = new NotesOpener(
                 httpClient, serviceProvider.GetRequiredService<ILogger<NotesOpener>>());
+        }
+
+        private static async Task RunTasker(string[] args)
+        {
+            using Parser parser = new Parser(config => config.HelpWriter = Console.Out);
+
+            if (args.Length == 0)
+                parser.ParseArguments<CommandLineOptions>(new[] { "--help" });
+
+            string userInput = string.Empty;
+
+            while (!ShouldEndApplication(args[0]))
+            {
+                int exitCode = await ParseArgument(parser, args).ConfigureAwait(false);
+
+                if (exitCode != 0)
+                {
+                    mLogger.LogInformation($"Finished executing with exit code: {exitCode}");
+                    break;
+                }
+
+                userInput = Console.ReadLine();
+                args = SplitUserInput(userInput);
+            }
+        }
+
+        private static bool ShouldEndApplication(string userInput)
+        {
+            bool shouldEndApplication =
+                userInput.Contains("x", StringComparison.InvariantCultureIgnoreCase) ||
+                userInput.Contains("q", StringComparison.InvariantCultureIgnoreCase) ||
+                userInput.Contains("exit", StringComparison.InvariantCultureIgnoreCase) ||
+                userInput.Contains("stop", StringComparison.InvariantCultureIgnoreCase) ||
+                userInput.Contains("bye", StringComparison.InvariantCultureIgnoreCase);
+
+            if (shouldEndApplication)
+                mLogger.LogInformation("Tasker application was terminated by the user");
+
+            return shouldEndApplication;
+        }
+
+        private static string[] SplitUserInput(string userInput)
+        {
+            string[] args = userInput.Split(" ");
+
+            if (args[0] != "tasker")
+                return args;
+
+            return args.Slice(1, args.Length);
         }
 
         private static Task<int> ParseArgument(Parser parser, string[] args)

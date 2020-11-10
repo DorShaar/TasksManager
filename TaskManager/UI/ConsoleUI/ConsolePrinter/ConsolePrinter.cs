@@ -42,7 +42,7 @@ namespace UI.ConsolePrinter
                 tableDataStringBuilder = new TableDataStringBuilder(
                    new string[]
                    {
-                        "ID", "Parent", "DESCRIPTION", "STATUS"
+                        "ID", "Parent", "DESCRIPTION", "STATUS", string.Empty, string.Empty, string.Empty, string.Empty
                    });
             }
 
@@ -52,7 +52,11 @@ namespace UI.ConsolePrinter
                                     task.TaskId,
                                     task.GroupName,
                                     task.Description,
-                                    task.Status);
+                                    task.Status,
+                                    string.Empty,
+                                    string.Empty,
+                                    string.Empty,
+                                    string.Empty);
             }
 
             Console.WriteLine(tableDataStringBuilder.Build());

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tasker
+namespace Tasker.TaskerVariables
 {
     public static class TaskerUris
     {

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using UI.ConsolePrinter;
 using Tasker.Resources;
 using Newtonsoft.Json;
+using Tasker.Extensions;
+using Tasker.TaskerVariables;
 
 namespace Tasker
 {
@@ -99,14 +101,20 @@ namespace Tasker
                 return 1;
             }
 
-            if (!shouldPrintAll)
-                tasksToPrint = tasksToPrint.Where(task => task.Status.Equals("closed", StringComparison.OrdinalIgnoreCase));
-
-            if (!string.IsNullOrEmpty(status))
-                tasksToPrint = tasksToPrint.Where(task => task.Status == status);
+            tasksToPrint = GetTasksToPrint(tasksToPrint, status, shouldPrintAll);
 
             mConsolePrinter.PrintTasks(tasksToPrint, isDetailed);
             return 0;
+        }
+
+        private IEnumerable<WorkTaskResource> GetTasksToPrint(IEnumerable<WorkTaskResource> tasksToPrint, string status, bool shouldPrintAll)
+        {
+            if (!string.IsNullOrEmpty(status))
+                return tasksToPrint.Where(task => task.Status.Equals(status, StringComparison.InvariantCultureIgnoreCase));
+            else if (!shouldPrintAll)
+                return tasksToPrint.Where(task => !task.Status.Equals(TaskerConsts.ClosedTaskStatus, StringComparison.InvariantCultureIgnoreCase));
+
+            return tasksToPrint;
         }
 
         private async Task<IEnumerable<WorkTaskResource>> GetAllTasksOrTasksByGroupName(string taskGroup)
@@ -129,8 +137,7 @@ namespace Tasker
             if (string.IsNullOrEmpty(taskGroup))
                 throw new ArgumentException($"{nameof(taskGroup)} is null or empty");
 
-            if (!Uri.TryCreate(TaskerUris.WorkTasksUri, taskGroup, out Uri tasksByGroupUri))
-                throw new ArgumentException($"Could not create uri from {TaskerUris.WorkTasksUri} and {taskGroup}");
+            Uri tasksByGroupUri = TaskerUris.WorkTasksUri.CombineRelative(taskGroup);
 
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, tasksByGroupUri);
 

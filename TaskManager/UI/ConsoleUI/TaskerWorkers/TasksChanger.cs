@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
 using Newtonsoft.Json;
+using Tasker.TaskerVariables;
 
 namespace Tasker
 {
