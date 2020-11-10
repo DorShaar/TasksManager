@@ -1,6 +1,5 @@
 ﻿using Tasker.Options;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,10 +7,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using TaskData.Notes;
-using TaskData.TasksGroups;
-using TaskData.WorkTasks;
 using UI.ConsolePrinter;
+using Tasker.Resources;
+using Newtonsoft.Json;
 
 namespace Tasker
 {
@@ -21,7 +19,8 @@ namespace Tasker
         private readonly ConsolePrinter mConsolePrinter;
         private readonly ILogger<TasksProvider> mLogger;
 
-        public TasksProvider(HttpClient httpClient, ConsolePrinter consolePrinter, ILogger<TasksProvider> logger)
+        public TasksProvider(HttpClient httpClient, ConsolePrinter consolePrinter,
+            ILogger<TasksProvider> logger)
         {
             mHttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             mConsolePrinter = consolePrinter ?? throw new ArgumentNullException(nameof(consolePrinter));
@@ -32,7 +31,7 @@ namespace Tasker
         {
             if (options.ObjectType == null)
             {
-                mLogger.LogError("No valid object type given (task, group, note, general, db, config)");
+                mLogger.LogError("No valid object type given (task, group, note, general, config)");
                 return 1;
             }
 
@@ -46,8 +45,6 @@ namespace Tasker
                             options.ObjectName,
                             options.Status,
                             options.ShouldPrintAll,
-                            options.ShouldPrintNotOnlyDefault,
-                            options.Days,
                             options.IsDetailed).ConfigureAwait(false);
 
                     case "group":
@@ -71,11 +68,16 @@ namespace Tasker
                         return await GetConfigruationPath().ConfigureAwait(false);
 
                     default:
-                        mLogger.LogError("No valid object type given (task, group, note, general, db)");
+                        mLogger.LogError("No valid object type given (task, group, note, general, config)");
                         return 1;
                 }
             }
-            // TODO this in every TaskX + handle specific error for case where server is not available.
+            // TODO this in every TasksX + handle specific error for case where server is not available.
+            catch (HttpRequestException ex)
+            {
+                mLogger.LogError(ex, $"Could not connect to server at {mHttpClient.BaseAddress}, please check server is up");
+                return 1;
+            }
             catch (Exception ex)
             {
                 mLogger.LogError(ex, "Operation failed");
@@ -87,10 +89,9 @@ namespace Tasker
         /// Get all un-closed tasks.
         /// In case user choose to print all option, all tasks will be printed.
         /// </summary>
-        private async Task<int> GetAllTasks(
-            string taskGroup, string status, bool shouldPrintAll, bool shouldPrintNotOnlyDefaultGroup, int days, bool isDetailed)
+        private async Task<int> GetAllTasks(string taskGroup, string status, bool shouldPrintAll, bool isDetailed)
         {
-            IEnumerable<IWorkTask> tasksToPrint = await GetAllTasksOrTasksByGroupName(taskGroup).ConfigureAwait(false);
+            IEnumerable<WorkTaskResource> tasksToPrint = await GetAllTasksOrTasksByGroupName(taskGroup).ConfigureAwait(false);
 
             if (tasksToPrint == null)
             {
@@ -99,34 +100,16 @@ namespace Tasker
             }
 
             if (!shouldPrintAll)
-                tasksToPrint = tasksToPrint.Where(task => !task.IsFinished);
-
-            // TODO
-            //if (!shouldPrintNotOnlyDefaultGroup && mTaskManager.DefaultTaskGroupName != null)
-            //{
-            //    tasksToPrint = tasksToPrint.Where(task =>
-            //        AreNamesEquals(task.GroupName, mTaskManager.DefaultTaskGroupName.Name));
-            //}
+                tasksToPrint = tasksToPrint.Where(task => task.Status.Equals("closed", StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrEmpty(status))
-                tasksToPrint = tasksToPrint.Where(task => AreStringsValidAndEqual(task.Status.ToString(), status));
-
-            if (days != 0)
-                tasksToPrint = tasksToPrint.Where(task => IsTaskUpdateSince(task, days));
+                tasksToPrint = tasksToPrint.Where(task => task.Status == status);
 
             mConsolePrinter.PrintTasks(tasksToPrint, isDetailed);
             return 0;
         }
 
-        private static bool AreStringsValidAndEqual(string groupName1, string groupName2)
-        {
-            if (string.IsNullOrEmpty(groupName1) || string.IsNullOrEmpty(groupName2))
-                return false;
-            else
-                return groupName1.Equals(groupName2, StringComparison.CurrentCultureIgnoreCase);
-        }
-
-        private async Task<IEnumerable<IWorkTask>> GetAllTasksOrTasksByGroupName(string taskGroup)
+        private async Task<IEnumerable<WorkTaskResource>> GetAllTasksOrTasksByGroupName(string taskGroup)
         {
             if (string.IsNullOrEmpty(taskGroup))
                 return await GetAllTasks().ConfigureAwait(false);
@@ -134,14 +117,14 @@ namespace Tasker
                 return await GetTasksByGroup(taskGroup).ConfigureAwait(false);
         }
 
-        private async Task<IEnumerable<IWorkTask>> GetAllTasks()
+        private async Task<IEnumerable<WorkTaskResource>> GetAllTasks()
         {
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, TaskerUris.WorkTasksUri);
 
-            return await SendHttpRequestMessage<IEnumerable<IWorkTask>>(httpRequestMessage).ConfigureAwait(false);
+            return await SendHttpRequestMessage<IEnumerable<WorkTaskResource>>(httpRequestMessage).ConfigureAwait(false);
         }
 
-        private async Task<IEnumerable<IWorkTask>> GetTasksByGroup(string taskGroup)
+        private async Task<IEnumerable<WorkTaskResource>> GetTasksByGroup(string taskGroup)
         {
             if (string.IsNullOrEmpty(taskGroup))
                 throw new ArgumentException($"{nameof(taskGroup)} is null or empty");
@@ -151,26 +134,18 @@ namespace Tasker
 
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, tasksByGroupUri);
 
-            return await SendHttpRequestMessage<IEnumerable<IWorkTask>>(httpRequestMessage).ConfigureAwait(false);
-        }
-
-        private static bool IsTaskUpdateSince(IWorkTask task, int days)
-        {
-            return task.TaskStatusHistory.TimeCreated.AddDays(days) >= DateTime.Now ||
-                    task.TaskStatusHistory.TimeClosed.AddDays(days) >= DateTime.Now ||
-                    task.TaskStatusHistory.TimeLastOnWork.AddDays(days) >= DateTime.Now ||
-                    task.TaskStatusHistory.TimeLastOpened.AddDays(days) >= DateTime.Now;
+            return await SendHttpRequestMessage<IEnumerable<WorkTaskResource>>(httpRequestMessage).ConfigureAwait(false);
         }
 
         private async Task<int> GatAllTaskGroup(bool shouldPrintAll, bool isDetailed)
         {
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, TaskerUris.TasksGroupUri);
 
-            IEnumerable<ITasksGroup> groupsToPrint =
-                await SendHttpRequestMessage<IEnumerable<ITasksGroup>>(httpRequestMessage).ConfigureAwait(false);
+            IEnumerable<TasksGroupResource> groupsToPrint =
+                await SendHttpRequestMessage<IEnumerable<TasksGroupResource>>(httpRequestMessage).ConfigureAwait(false);
 
             if (!shouldPrintAll)
-                groupsToPrint = groupsToPrint.Where((ITasksGroup group) => (!group.IsFinished));
+                groupsToPrint = groupsToPrint.Where((TasksGroupResource group) => group.Status.Equals("open", StringComparison.OrdinalIgnoreCase));
 
             mConsolePrinter.PrintTasksGroup(groupsToPrint, isDetailed);
             return 0;
@@ -209,8 +184,8 @@ namespace Tasker
         {
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, TaskerUris.NotesUri);
 
-            IEnumerable<INote> allNotes =
-                await SendHttpRequestMessage<IEnumerable<INote>>(httpRequestMessage).ConfigureAwait(false);
+            IEnumerable<NoteResource> allNotes =
+                await SendHttpRequestMessage<IEnumerable<NoteResource>>(httpRequestMessage).ConfigureAwait(false);
 
             IEnumerable<string> notesToPrint = allNotes
                 .Where(note => Path.GetExtension(note.NotePath).Equals(note.Extension))

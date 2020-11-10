@@ -67,7 +67,7 @@ namespace Tasker
 
             WorkTaskResource workTaskResource = new WorkTaskResource
             {
-                TaskGroupName = taskGroupName,
+                GroupName = taskGroupName,
                 Description = description
             };
 
@@ -90,7 +90,10 @@ namespace Tasker
 
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, TaskerUris.TasksGroupUri);
 
-            TasksGroupResource tasksGroupResource = new TasksGroupResource(taskGroupName);
+            TasksGroupResource tasksGroupResource = new TasksGroupResource
+            {
+                GroupName = taskGroupName
+            };
 
             // TODO send json content.
             using StringContent jsonContent =

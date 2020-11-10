@@ -3,8 +3,8 @@ using System;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
-using TaskData.Notes;
 using Tasker.Options;
+using Tasker.Resources;
 
 namespace Tasker
 {
@@ -62,7 +62,7 @@ namespace Tasker
         //    return 0;
         //}
 
-        private static void Note_OpenRequested(INote note)
+        private static void Note_OpenRequested(NoteResource note)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo(note.NotePath)
             {

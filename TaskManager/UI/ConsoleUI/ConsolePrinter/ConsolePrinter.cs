@@ -1,34 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TaskData.TasksGroups;
-using TaskData.TaskStatus;
-using TaskData.WorkTasks;
+using Tasker.Resources;
 
 namespace UI.ConsolePrinter
 {
     public class ConsolePrinter
     {
-        public void PrintTasksGroup(IEnumerable<ITasksGroup> groups, bool isDetailed)
+        public void PrintTasksGroup(IEnumerable<TasksGroupResource> groups, bool isDetailed)
         {
             TableDataStringBuilder tableDataStringBuilder;
             if (isDetailed)
                 tableDataStringBuilder = new TableDataStringBuilder(new string[] { "ID", "GROUP NAME", "SIZE" });
             else
-                tableDataStringBuilder = new TableDataStringBuilder(new string[] { "ID", "GROUP NAME"});
+                tableDataStringBuilder = new TableDataStringBuilder(new string[] { "ID", "GROUP NAME" });
 
-            foreach (ITasksGroup group in groups)
+            foreach (TasksGroupResource group in groups)
             {
                 if (isDetailed)
-                    tableDataStringBuilder.AppandRow(group.ID, group.Name, group.Size.ToString());
+                    tableDataStringBuilder.AppandRow(group.GroupId, group.GroupName, group.Size.ToString());
                 else
-                    tableDataStringBuilder.AppandRow(group.ID, group.Name);
+                    tableDataStringBuilder.AppandRow(group.GroupId, group.GroupName);
             }
 
             Console.WriteLine(tableDataStringBuilder.Build());
         }
 
-        public void PrintTasks(IEnumerable<IWorkTask> tasks, bool isDetailed)
+        public void PrintTasks(IEnumerable<WorkTaskResource> tasks, bool isDetailed)
         {
             TableDataStringBuilder tableDataStringBuilder;
             if (isDetailed)
@@ -48,36 +46,16 @@ namespace UI.ConsolePrinter
                    });
             }
 
-            foreach (IWorkTask task in tasks)
+            foreach (WorkTaskResource task in tasks)
             {
-                if (isDetailed)
-                {
-                    tableDataStringBuilder.AppandRow(
-                                        task.ID,
-                                        task.GroupName,
-                                        task.Description,
-                                        GetStringStatus(task.Status),
-                                        task.TaskStatusHistory.TimeCreated.ToString(),
-                                        task.TaskStatusHistory.TimeLastOpened.ToString(),
-                                        task.TaskStatusHistory.TimeLastOnWork.ToString(),
-                                        task.TaskStatusHistory.TimeClosed.ToString());
-                }
-                else
-                {
-                    tableDataStringBuilder.AppandRow(
-                                        task.ID,
-                                        task.GroupName,
-                                        task.Description,
-                                        GetStringStatus(task.Status));
-                }
+                tableDataStringBuilder.AppandRow(
+                                    task.TaskId,
+                                    task.GroupName,
+                                    task.Description,
+                                    task.Status);
             }
 
             Console.WriteLine(tableDataStringBuilder.Build());
-        }
-
-        private static string GetStringStatus(Status status)
-        {
-            return status == Status.OnWork ? "On-Work" : status.ToString();
         }
 
         public void Print(string data, string header)

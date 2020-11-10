@@ -47,8 +47,12 @@ namespace Tasker
         private static void InitializeTasker(ITaskManagerServiceProvider serviceProvider)
         {
             mLogger = serviceProvider.GetRequiredService<ILogger<Program>>();
-            mConsolePrinter = serviceProvider.GetRequiredService<ConsolePrinter>();
-            HttpClient httpClient = new HttpClient(); // tODO use best prtactice + dispose in the main level.
+
+                mConsolePrinter = serviceProvider.GetRequiredService<ConsolePrinter>();
+            HttpClient httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("http://localhost:5000"), // TODO from config.
+            }; // tODO use best prtactice + dispose in the main level.
 
             mTasksProvider = new TasksProvider(
                 httpClient, mConsolePrinter, serviceProvider.GetRequiredService<ILogger<TasksProvider>>());

@@ -104,7 +104,7 @@ namespace Tasker
             WorkTaskResource workTaskResource = new WorkTaskResource
             {
                 TaskId = taskId,
-                TaskGroupName = taskGroup
+                GroupName = taskGroup
             };
 
             // TODO send json content.

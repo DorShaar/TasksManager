@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Logging;
 using System;
 using UI.ConsolePrinter;
-using ObjectSerializer.JsonService;
-using TaskData;
 
 namespace Composition
 {
@@ -21,12 +19,6 @@ namespace Composition
             ServiceCollection serviceCollection = new ServiceCollection();
 
             serviceCollection.AddSingleton(typeof(ConsolePrinter));
-
-            // TODO consider remove
-            serviceCollection.UseJsonObjectSerializer();
-
-            // TODO consider remove
-            serviceCollection.UseTaskerDataEntities();
 
             RegisterLogger(serviceCollection);
 
