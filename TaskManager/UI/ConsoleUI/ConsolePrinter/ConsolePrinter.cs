@@ -71,7 +71,10 @@ namespace UI.ConsolePrinter
         public void Print(IEnumerable<string> data, string header)
         {
             if (!data.Any())
+            {
+                Console.WriteLine("No results");
                 return;
+            }
 
             Console.WriteLine(header);
             foreach (string line in data)

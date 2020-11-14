@@ -97,6 +97,9 @@ namespace Tasker
 
         private static string[] SplitUserInput(string userInput)
         {
+            // TODO handle request like: get general C:\Users\Dor.Shaar.CORP\OneDrive - Votiro\Dor\Notes\database backup\tasks - Copy.db
+            // maybe with usage of Uri.UnescapeDataString(uri.Path) for spaces problem.
+
             string[] args = userInput.Split(" ");
 
             if (args[0] != "tasker")

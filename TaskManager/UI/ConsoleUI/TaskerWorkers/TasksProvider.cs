@@ -152,7 +152,10 @@ namespace Tasker
                 await SendHttpRequestMessage<IEnumerable<TasksGroupResource>>(httpRequestMessage).ConfigureAwait(false);
 
             if (!shouldPrintAll)
-                groupsToPrint = groupsToPrint.Where((TasksGroupResource group) => group.Status.Equals("open", StringComparison.OrdinalIgnoreCase));
+            {
+                groupsToPrint = groupsToPrint
+                    .Where((TasksGroupResource group) => !group.Status.Equals(TaskerConsts.ClosedTaskStatus, StringComparison.InvariantCultureIgnoreCase));
+            }
 
             mConsolePrinter.PrintTasksGroup(groupsToPrint, isDetailed);
             return 0;
@@ -161,59 +164,70 @@ namespace Tasker
         private async Task<int> GetNoteContent(string notePath, bool shouldPrintAll)
         {
             if (shouldPrintAll)
-                return await GetAllNotesNames().ConfigureAwait(false);
+            {
+                NoteNodeResource noteNodeResource = await GetAllNotesNames().ConfigureAwait(false);
+                PrintAllNotesNames(noteNodeResource);
+                return 0;
+            }
 
-            string noteText = await GetNoteText(notePath, isPrivateNote: true).ConfigureAwait(false);
-            mConsolePrinter.Print(noteText, notePath);
+            await PrintNoteText(notePath, isPrivateNote: true).ConfigureAwait(false);
             return 0;
         }
 
-        private async Task<int> GetGeneralNoteContent(string notePath)
+        private void PrintAllNotesNames(NoteNodeResource noteNodeResource)
         {
-            string noteText = await GetNoteText(notePath, isPrivateNote: false).ConfigureAwait(false);
-            mConsolePrinter.Print(noteText, notePath);
-            return 0;
-        }
-
-        private async Task<string> GetNoteText(string notePath, bool isPrivateNote)
-        {
-            string relativeNoteUri = isPrivateNote ? $"note/{notePath}" : notePath;
-
-            if (!Uri.TryCreate(TaskerUris.NotesUri, relativeNoteUri, out Uri tasksByGroupUri))
-                throw new ArgumentException($"Could not create uri from {TaskerUris.NotesUri} and {relativeNoteUri}");
-
-            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, tasksByGroupUri);
-
-            return await SendHttpRequestMessage<string>(httpRequestMessage).ConfigureAwait(false);
-        }
-
-        private async Task<int> GetAllNotesNames()
-        {
-            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, TaskerUris.NotesUri);
-
-            IEnumerable<NoteResource> allNotes =
-                await SendHttpRequestMessage<IEnumerable<NoteResource>>(httpRequestMessage).ConfigureAwait(false);
-
-            IEnumerable<string> notesToPrint = allNotes
-                .Where(note => Path.GetExtension(note.NotePath).Equals(note.Extension))
-                .Select(note => Path.GetFileNameWithoutExtension(note.NotePath));
+            IEnumerable<string> notesToPrint = noteNodeResource.Children.Keys
+                .Where(noteName => Path.GetExtension(noteName).Equals(TaskerConsts.NoteExtension))
+                .Select(noteName => Path.GetFileNameWithoutExtension(noteName));
 
             mConsolePrinter.Print(notesToPrint, header: "NOTES");
+        }
+
+        private async Task<int> GetGeneralNoteContent(string noteName)
+        {
+            await PrintNoteText(noteName, isPrivateNote: false).ConfigureAwait(false);
             return 0;
+        }
+
+        private async Task PrintNoteText(string noteName, bool isPrivateNote)
+        {
+            string relativeNoteUri = isPrivateNote ? $"note/{noteName}" : noteName;
+
+            Uri noteUri = TaskerUris.NotesUri.CombineRelative(relativeNoteUri);
+
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, noteUri);
+
+            NoteResource noteResource = await SendHttpRequestMessage<NoteResource>(httpRequestMessage).ConfigureAwait(false);
+
+            if (noteResource == null)
+            {
+                mLogger.LogDebug($"Could not find note {noteName}");
+                return;
+            }
+
+            if (noteResource.IsMoreThanOneNoteFound)
+            {
+                mConsolePrinter.Print(noteResource.PossibleNotes, "Found the next possible notes");
+                return;
+            }
+
+            mConsolePrinter.Print(noteResource.Text, noteResource.NotePath);
+        }
+
+        private async Task<NoteNodeResource> GetAllNotesNames()
+        {
+            Uri privateNotesUri = TaskerUris.NotesUri.CombineRelative("private");
+
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, privateNotesUri);
+
+            return await SendHttpRequestMessage<NoteNodeResource>(httpRequestMessage).ConfigureAwait(false);
         }
 
         private Task<int> GetConfigruationPath()
         {
-            mConsolePrinter.Print(Path.Combine(GetAssemblyDirectory(), "config", "Config.yaml"), header: "Configuration path");
+            // TODO
+            mConsolePrinter.Print(Path.Combine("config", "Config.yaml"), header: "Configuration path");
             return Task.FromResult(0);
-        }
-
-        private static string GetAssemblyDirectory()
-        {
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
-            return Path.GetDirectoryName(path);
         }
 
         private async Task<T> SendHttpRequestMessage<T>(HttpRequestMessage httpRequestMessage)
@@ -223,8 +237,13 @@ namespace Tasker
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new InvalidOperationException(
-                    $"Could not perform {httpRequestMessage.Method.Method} operation, response status: {response.StatusCode}");
+                if (response.StatusCode != System.Net.HttpStatusCode.NotFound)
+                {
+                    throw new InvalidOperationException(
+                        $"Could not perform {httpRequestMessage.Method.Method} operation, response status: {response.StatusCode}");
+                }
+
+                return default;
             }
 
             string responseStringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
