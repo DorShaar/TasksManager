@@ -7,6 +7,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UI.ConsolePrinter;
+using Tasker.UserInputs;
 using Tasker.Extensions;
 
 namespace Tasker
@@ -58,30 +59,39 @@ namespace Tasker
 
         private static async Task RunTasker(string[] args)
         {
+            UserInput userInput = new UserInput();
             using Parser parser = new Parser(config => config.HelpWriter = Console.Out);
 
             if (args.Length == 0)
                 parser.ParseArguments<CommandLineOptions>(new[] { "--help" });
-
-            string userInput = string.Empty;
 
             while (!ShouldEndApplication(args[0]))
             {
                 int exitCode = await ParseArgument(parser, args).ConfigureAwait(false);
 
                 if (exitCode != 0)
-                {
-                    mLogger.LogInformation($"Finished executing with exit code: {exitCode}");
-                    break;
-                }
+                    mLogger.LogInformation($"Problem accured, exit code: {exitCode}");
 
-                userInput = Console.ReadLine();
-                args = SplitUserInput(userInput);
+                args = GetUserInputArguments(userInput);
             }
+        }
+
+        private static string[] GetUserInputArguments(UserInput userInput)
+        {
+            userInput.GetUserInput();
+            string[] args = userInput.GetArguments();
+
+            if (args[0].Equals("tasker", StringComparison.InvariantCultureIgnoreCase))
+                return args.Slice(1, args.Length);
+
+            return args;
         }
 
         private static bool ShouldEndApplication(string userInput)
         {
+            if (string.IsNullOrWhiteSpace(userInput))
+                return false;
+
             bool shouldEndApplication =
                 userInput.Contains("x", StringComparison.InvariantCultureIgnoreCase) ||
                 userInput.Contains("q", StringComparison.InvariantCultureIgnoreCase) ||
@@ -93,19 +103,6 @@ namespace Tasker
                 mLogger.LogInformation("Tasker application was terminated by the user");
 
             return shouldEndApplication;
-        }
-
-        private static string[] SplitUserInput(string userInput)
-        {
-            // TODO handle request like: get general C:\Users\Dor.Shaar.CORP\OneDrive - Votiro\Dor\Notes\database backup\tasks - Copy.db
-            // maybe with usage of Uri.UnescapeDataString(uri.Path) for spaces problem.
-
-            string[] args = userInput.Split(" ");
-
-            if (args[0] != "tasker")
-                return args;
-
-            return args.Slice(1, args.Length);
         }
 
         private static Task<int> ParseArgument(Parser parser, string[] args)

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 using UI.ConsolePrinter;
 using Tasker.Resources;
@@ -33,7 +32,7 @@ namespace Tasker
         {
             if (options.ObjectType == null)
             {
-                mLogger.LogError("No valid object type given (task, group, note, general, config)");
+                mLogger.LogError("No valid object type given (task, group, note, general)");
                 return 1;
             }
 
@@ -65,12 +64,8 @@ namespace Tasker
                         return await GetGeneralNoteContent(
                             options.ObjectName).ConfigureAwait(false);
 
-                    case "config":
-                    case "configuration":
-                        return await GetConfigruationPath().ConfigureAwait(false);
-
                     default:
-                        mLogger.LogError("No valid object type given (task, group, note, general, config)");
+                        mLogger.LogError("No valid object type given (task, group, note, general)");
                         return 1;
                 }
             }
@@ -191,7 +186,9 @@ namespace Tasker
 
         private async Task PrintNoteText(string noteName, bool isPrivateNote)
         {
-            string relativeNoteUri = isPrivateNote ? $"note/{noteName}" : noteName;
+            string escapedNoteName = Uri.EscapeDataString(noteName);
+
+            string relativeNoteUri = isPrivateNote ? $"note/{escapedNoteName}" : escapedNoteName;
 
             Uri noteUri = TaskerUris.NotesUri.CombineRelative(relativeNoteUri);
 
@@ -211,7 +208,7 @@ namespace Tasker
                 return;
             }
 
-            mConsolePrinter.Print(noteResource.Text, noteResource.NotePath);
+            mConsolePrinter.Print(noteResource.Text, $"NotePath: {Environment.NewLine}{noteResource.NotePath}{Environment.NewLine}");
         }
 
         private async Task<NoteNodeResource> GetAllNotesNames()
@@ -221,13 +218,6 @@ namespace Tasker
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, privateNotesUri);
 
             return await SendHttpRequestMessage<NoteNodeResource>(httpRequestMessage).ConfigureAwait(false);
-        }
-
-        private Task<int> GetConfigruationPath()
-        {
-            // TODO
-            mConsolePrinter.Print(Path.Combine("config", "Config.yaml"), header: "Configuration path");
-            return Task.FromResult(0);
         }
 
         private async Task<T> SendHttpRequestMessage<T>(HttpRequestMessage httpRequestMessage)
@@ -243,6 +233,7 @@ namespace Tasker
                         $"Could not perform {httpRequestMessage.Method.Method} operation, response status: {response.StatusCode}");
                 }
 
+                mLogger.LogDebug($"Resource not found, {response.StatusCode}");
                 return default;
             }
 

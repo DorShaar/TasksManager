@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 
 namespace TaskData.Notes
@@ -16,7 +17,7 @@ namespace TaskData.Notes
 
         public string NotePath => Path.Combine(mNoteDirecoryPath, mNoteName + Extension);
 
-        public string Text => File.ReadAllText(NotePath);
+        public string Text => ReadText();
 
         /// <summary>
         /// For creating Note object from existing file.
@@ -44,5 +45,17 @@ namespace TaskData.Notes
         }
 
         public event OpenNoteHandler OpenRequested;
+
+        private string ReadText()
+        {
+            try
+            {
+                return File.ReadAllText(NotePath);
+            }
+            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException)
+            {
+                return string.Empty;
+            }
+        }
     }
 }
