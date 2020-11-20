@@ -26,19 +26,33 @@ namespace Tasker
                 return 1;
             }
 
-            switch (options.ObjectType.ToLower())
+            try
             {
-                case "task":
-                case "tasks":
-                    return await RemoveTask(options.ObjectId).ConfigureAwait(false);
+                switch (options.ObjectType.ToLower())
+                {
+                    case "task":
+                    case "tasks":
+                        return await RemoveTask(options.ObjectId).ConfigureAwait(false);
 
-                case "group":
-                case "groups":
-                    return await RemoveTaskGroup(options.ObjectId).ConfigureAwait(false);
+                    case "group":
+                    case "groups":
+                        return await RemoveTaskGroup(options.ObjectId).ConfigureAwait(false);
 
-                default:
-                    mLogger.LogError("No valid object type given (task, group)");
-                    return 1;
+                    default:
+                        mLogger.LogError("No valid object type given (task, group)");
+                        return 1;
+                }
+            }
+            // TODO this in every TasksX + handle specific error for case where server is not available.
+            catch (HttpRequestException ex)
+            {
+                mLogger.LogError(ex, $"Could not connect to server at {mHttpClient.BaseAddress}, please check server is up");
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                mLogger.LogError(ex, "Operation failed");
+                return 1;
             }
         }
 

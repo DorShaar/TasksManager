@@ -31,37 +31,45 @@ namespace Tasker
                 return 1;
             }
 
-            switch (options.ObjectType.ToLower())
+            try
             {
-                case "task":
-                case "tasks":
-                    return await CreateNewTask(options.ObjectName, options.Description).ConfigureAwait(false);
+                switch (options.ObjectType.ToLower())
+                {
+                    case "task":
+                    case "tasks":
+                        return await CreateNewTask(options.ObjectName, options.Description).ConfigureAwait(false);
 
-                case "group":
-                case "groups":
-                    return await CreateNewTaskGroup(options.ObjectName).ConfigureAwait(false);
+                    case "group":
+                    case "groups":
+                        return await CreateNewTaskGroup(options.ObjectName).ConfigureAwait(false);
 
-                // TODO
-                //case "note":
-                //case "notes":
-                //    return await CreateNote(options.ObjectName, options.Description).ConfigureAwait(false);
+                    case "note":
+                    case "notes":
+                        return await CreateNote(options.ObjectName, options.Description).ConfigureAwait(false);
 
-                //case "general note":
-                //case "general":
-                //    return await CreateGeneralNote(options.ObjectName, options.Description).ConfigureAwait(false);
-
-                default:
-                    mLogger.LogError("No valid object type given (task, group, note, general)");
-                    return 1;
+                    default:
+                        mLogger.LogError("No valid object type given (task, group, note, general)");
+                        return 1;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                mLogger.LogError(ex, $"Could not connect to server at {mHttpClient.BaseAddress}, please check server is up");
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                mLogger.LogError(ex, "Operation failed");
+                return 1;
             }
         }
 
         private async Task<int> CreateNewTask(string taskGroupName, string description)
         {
-            if (string.IsNullOrEmpty(description))
+            if (string.IsNullOrWhiteSpace(description))
             {
-                mLogger.LogError("Cannot create empty task. Use -d for adding a description");
-                return -1;
+                mLogger.LogError($"{nameof(description)} is null or empty");
+                return 1;
             }
 
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, TaskerUris.WorkTasksUri);
@@ -72,18 +80,19 @@ namespace Tasker
                 Description = description
             };
 
-            // TODO send json content.
-            using StringContent jsonContent =
-                new StringContent(JsonConvert.SerializeObject(workTaskResource), Encoding.UTF8, PostMediaType);
+            httpRequestMessage.Content = new StringContent(JsonConvert.SerializeObject(workTaskResource), Encoding.UTF8, PostMediaType);
 
-            await SendHttpRequestMessage(httpRequestMessage).ConfigureAwait(false);
+            WorkTaskResource workTaskResponse = await SendHttpRequestMessage<WorkTaskResource>(httpRequestMessage).ConfigureAwait(false);
+
+            if (workTaskResponse != null)
+                mLogger.LogDebug($"Created new task id {workTaskResponse.TaskId} '{workTaskResponse.Description}' at group {workTaskResponse.GroupName}");
 
             return 0;
         }
 
         private async Task<int> CreateNewTaskGroup(string taskGroupName)
         {
-            if (string.IsNullOrEmpty(taskGroupName))
+            if (string.IsNullOrWhiteSpace(taskGroupName))
             {
                 mLogger.LogError($"{nameof(taskGroupName)} is null or empty");
                 return 1;
@@ -96,57 +105,68 @@ namespace Tasker
                 GroupName = taskGroupName
             };
 
-            // TODO send json content.
-            using StringContent jsonContent =
-                new StringContent(JsonConvert.SerializeObject(tasksGroupResource), Encoding.UTF8, PostMediaType);
+            httpRequestMessage.Content = new StringContent(JsonConvert.SerializeObject(tasksGroupResource), Encoding.UTF8, PostMediaType);
 
-            await SendHttpRequestMessage(httpRequestMessage).ConfigureAwait(false);
+            TasksGroupResource tasksGroupResponse = await SendHttpRequestMessage<TasksGroupResource>(httpRequestMessage).ConfigureAwait(false);
+
+            if(tasksGroupResponse != null)
+                mLogger.LogDebug($"Created new group id {tasksGroupResponse.GroupId} '{tasksGroupResponse.GroupName}'");
+
             return 0;
         }
 
-        // TODO
-        //private async Task<int> CreateNote(string taskId, string textToWrite)
-        //{
-        //    if (string.IsNullOrEmpty(taskId))
-        //    {
-        //        mLogger.LogError("No task id given to create note");
-        //        return 1;
-        //    }
+        private async Task<int> CreateNote(string noteId, string textToWrite)
+        {
+            if (string.IsNullOrWhiteSpace(noteId))
+            {
+                mLogger.LogError("No task id given to create note");
+                return 1;
+            }
 
-        //    if (textToWrite == null)
-        //        textToWrite = string.Empty;
+            if (textToWrite == null)
+                textToWrite = string.Empty;
 
-        //    mTaskManager.CreateTaskNote(taskId, textToWrite);
-        //    return 0;
-        //}
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, TaskerUris.NotesUri);
 
-        //private static async Task<int> CreateGeneralNote(string noteSubject, string textToWrite)
-        //{
-        //    if (string.IsNullOrEmpty(noteSubject))
-        //    {
-        //        mLogger.LogError("No task subject given to create note");
-        //        return 1;
-        //    }
+            NoteResource noteResource = new NoteResource
+            {
+                NotePath = noteId,
+                Text = textToWrite,
+                PossibleNotes = null
+            };
 
-        //    if (textToWrite == null)
-        //        textToWrite = string.Empty;
+            httpRequestMessage.Content = new StringContent(JsonConvert.SerializeObject(noteResource), Encoding.UTF8, PostMediaType);
 
-        //    mTaskManager.CreateGeneralNote(noteSubject, textToWrite);
-        //    return 0;
-        //}
+            NoteResource noteResourceResponse = await SendHttpRequestMessage<NoteResource>(httpRequestMessage).ConfigureAwait(false);
 
-        private async Task SendHttpRequestMessage(HttpRequestMessage httpRequestMessage)
+            if (noteResourceResponse != null)
+                mLogger.LogDebug($"Created new note {noteResourceResponse.NotePath}");
+
+            return 0;
+        }
+
+        private async Task<T> SendHttpRequestMessage<T>(HttpRequestMessage httpRequestMessage)
         {
             using HttpResponseMessage response =
                 await mHttpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
 
+            mLogger.LogTrace($"Operation {httpRequestMessage.Method.Method} ends with response status: {response.StatusCode}");
+
+            string responseStringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
             if (!response.IsSuccessStatusCode)
             {
-                // TODO make more safe with getting string.
-                throw new InvalidOperationException(
-                    $"Could not perform {httpRequestMessage.Method.Method} operation, response status: {response.StatusCode}," +
-                    $"response body {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+                if (response.StatusCode != System.Net.HttpStatusCode.MethodNotAllowed)
+                {
+                    throw new InvalidOperationException(
+                        $"Could not perform {httpRequestMessage.Method.Method} operation, response status: {response.StatusCode}");
+                }
+
+                mLogger.LogDebug($"Could not perform operation, result message: {responseStringContent}");
+                return default;
             }
+
+            return JsonConvert.DeserializeObject<T>(responseStringContent);
         }
     }
 }

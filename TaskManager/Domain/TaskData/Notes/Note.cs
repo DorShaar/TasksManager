@@ -44,8 +44,6 @@ namespace TaskData.Notes
             }
         }
 
-        public event OpenNoteHandler OpenRequested;
-
         private string ReadText()
         {
             try

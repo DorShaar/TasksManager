@@ -69,7 +69,6 @@ namespace Tasker
                         return 1;
                 }
             }
-            // TODO this in every TasksX + handle specific error for case where server is not available.
             catch (HttpRequestException ex)
             {
                 mLogger.LogError(ex, $"Could not connect to server at {mHttpClient.BaseAddress}, please check server is up");
@@ -202,7 +201,7 @@ namespace Tasker
                 return;
             }
 
-            if (noteResource.IsMoreThanOneNoteFound)
+            if (noteResource.IsMoreThanOneNoteFound())
             {
                 mConsolePrinter.Print(noteResource.PossibleNotes, "Found the next possible notes");
                 return;
@@ -224,6 +223,8 @@ namespace Tasker
         {
             using HttpResponseMessage response =
                 await mHttpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+
+            mLogger.LogTrace($"Operation {httpRequestMessage.Method.Method} ends with response status: {response.StatusCode}");
 
             if (!response.IsSuccessStatusCode)
             {
