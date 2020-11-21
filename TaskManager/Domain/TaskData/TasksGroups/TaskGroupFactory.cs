@@ -24,7 +24,7 @@ namespace TaskData.TasksGroups
         public ITasksGroup CreateGroup(string groupName)
         {
             TaskGroup taskGroup = new TaskGroup(mIDProducer.ProduceID(), groupName);
-            mLogger.LogDebug($"New group id {taskGroup.ID} created with name: {taskGroup.Name}");
+            mLogger.LogInformation($"New group id {taskGroup.ID} created with name: {taskGroup.Name}");
 
             return taskGroup;
         }

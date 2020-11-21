@@ -30,7 +30,7 @@ namespace TaskData.OperationResults
             }
 
             if (!string.IsNullOrEmpty(Reason))
-                logger.LogDebug(Reason);
+                logger.LogInformation(Reason);
         }
     }
 
@@ -64,7 +64,7 @@ namespace TaskData.OperationResults
             }
 
             if (!string.IsNullOrEmpty(Reason))
-                logger.LogDebug(Reason);
+                logger.LogInformation(Reason);
         }
     }
 }

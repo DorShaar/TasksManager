@@ -50,10 +50,6 @@ namespace Tasker.Options
 
             [Value(1, HelpText = "Object id to remove")]
             public string ObjectId { get; set; }
-
-            // TODO delete
-            //[Option('h', "hard", HelpText = "Remove task group with all inner tasks")]
-            //public bool ShouldHardDelete { get; set; }
         }
 
         [Verb("close", HelpText = "Close object (task - marks task status as closed)")]
@@ -76,7 +72,7 @@ namespace Tasker.Options
             public string ObjectType { get; set; }
 
             [Value(1, HelpText = "Task id to move")]
-            public string TaskId { get; set; }
+            public string ObjectId { get; set; }
 
             [Value(1, HelpText = "Task group to move the task to")]
             public string TaskGroup { get; set; }
@@ -89,7 +85,7 @@ namespace Tasker.Options
             public string ObjectType { get; set; }
 
             [Value(1, HelpText = "Task id to open again")]
-            public string TaskId { get; set; }
+            public string ObjectId { get; set; }
 
             [Option('m', "message", HelpText = "Reason message for reopening the task")]
             public string Reason { get; set; }
@@ -102,7 +98,7 @@ namespace Tasker.Options
             public string ObjectType { get; set; }
 
             [Value(1, HelpText = "Task id to mark as on work")]
-            public string TaskId { get; set; }
+            public string ObjectId { get; set; }
 
             [Option('m', "message", HelpText = "Reason message for working the task")]
             public string Reason { get; set; }

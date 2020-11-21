@@ -20,7 +20,6 @@ namespace TaskData.WorkTasks
 
         // Private Notes.
         OperationResult CreateNote(string noteDirectoryPath, string content);
-        OperationResult OpenNote();
         OperationResult<string> GetNote();
     }
 }

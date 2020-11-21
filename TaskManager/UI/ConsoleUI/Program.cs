@@ -4,18 +4,16 @@ using Tasker.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
-using UI.ConsolePrinter;
 using Tasker.UserInputs;
 using Tasker.Extensions;
+using Tasker.TaskerWorkers;
 
 namespace Tasker
 {
     public class Program
     {
         private static ILogger<Program> mLogger;
-        private static ConsolePrinter mConsolePrinter;
         private static TasksProvider mTasksProvider;
         private static TasksCreator mTasksCreator;
         private static TasksRemover mTasksRemover;
@@ -34,27 +32,11 @@ namespace Tasker
         private static void InitializeTasker(ITaskManagerServiceProvider serviceProvider)
         {
             mLogger = serviceProvider.GetRequiredService<ILogger<Program>>();
-
-            mConsolePrinter = serviceProvider.GetRequiredService<ConsolePrinter>();
-            HttpClient httpClient = new HttpClient
-            {
-                BaseAddress = new Uri("http://localhost:5000"), // TODO from config.
-            }; // tODO use best prtactice + dispose in the main level.
-
-            mTasksProvider = new TasksProvider(
-                httpClient, mConsolePrinter, serviceProvider.GetRequiredService<ILogger<TasksProvider>>());
-
-            mTasksCreator = new TasksCreator(
-                httpClient, serviceProvider.GetRequiredService<ILogger<TasksCreator>>());
-
-            mTasksRemover = new TasksRemover(
-                httpClient, serviceProvider.GetRequiredService<ILogger<TasksRemover>>());
-
-            mTasksChanger = new TasksChanger(
-                httpClient, serviceProvider.GetRequiredService<ILogger<TasksChanger>>());
-
-            mNotesOpener = new NotesOpener(
-                httpClient, serviceProvider.GetRequiredService<ILogger<NotesOpener>>());
+            mTasksProvider = serviceProvider.GetRequiredService<TasksProvider>();
+            mTasksCreator = serviceProvider.GetRequiredService<TasksCreator>();
+            mTasksRemover = serviceProvider.GetRequiredService<TasksRemover>();
+            mTasksChanger = serviceProvider.GetRequiredService<TasksChanger>();
+            mNotesOpener = serviceProvider.GetRequiredService<NotesOpener>();
         }
 
         private static async Task RunTasker(string[] args)
@@ -62,10 +44,7 @@ namespace Tasker
             UserInput userInput = new UserInput();
             using Parser parser = new Parser(config => config.HelpWriter = Console.Out);
 
-            if (args.Length == 0)
-                parser.ParseArguments<CommandLineOptions>(new[] { "--help" });
-
-            while (!ShouldEndApplication(args[0]))
+            while (!ShouldEndApplication(args))
             {
                 int exitCode = await ParseArgument(parser, args).ConfigureAwait(false);
 
@@ -87,8 +66,13 @@ namespace Tasker
             return args;
         }
 
-        private static bool ShouldEndApplication(string userInput)
+        private static bool ShouldEndApplication(string[] userInputArguemnts)
         {
+            if (userInputArguemnts.Length == 0)
+                return false;
+
+            string userInput = userInputArguemnts[0];
+
             if (string.IsNullOrWhiteSpace(userInput))
                 return false;
 

@@ -96,17 +96,6 @@ namespace TaskData.WorkTasks
             }
 
             mNote = new Note(noteDirectoryPath, $"{ID}-{Description}", content);
-            return OpenNote();
-        }
-
-        public OperationResult OpenNote()
-        {
-            if (mNote == null)
-                new OperationResult(false, $"Task id {ID}, '{Description}' has no note");
-
-            // TODO
-            //mNote.Open();
-
             return new OperationResult(true);
         }
 

@@ -8,11 +8,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using UI.ConsolePrinter;
 using Tasker.Resources;
-using Newtonsoft.Json;
 using Tasker.Extensions;
 using Tasker.TaskerVariables;
+using Tasker.Communication;
 
-namespace Tasker
+namespace Tasker.TaskerWorkers
 {
     public class TasksProvider
     {
@@ -20,10 +20,14 @@ namespace Tasker
         private readonly ConsolePrinter mConsolePrinter;
         private readonly ILogger<TasksProvider> mLogger;
 
-        public TasksProvider(HttpClient httpClient, ConsolePrinter consolePrinter,
+        public TasksProvider(IHttpClientFactory httpClientFactory, ConsolePrinter consolePrinter,
             ILogger<TasksProvider> logger)
         {
-            mHttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            if (httpClientFactory == null)
+                throw new ArgumentNullException(nameof(httpClientFactory));
+
+            mHttpClient = httpClientFactory.CreateClient(TaskerConsts.HttpClientName);
+
             mConsolePrinter = consolePrinter ?? throw new ArgumentNullException(nameof(consolePrinter));
             mLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -123,7 +127,8 @@ namespace Tasker
         {
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, TaskerUris.WorkTasksUri);
 
-            return await SendHttpRequestMessage<IEnumerable<WorkTaskResource>>(httpRequestMessage).ConfigureAwait(false);
+            return await HttpMessageRequester.SendHttpRequestMessage<IEnumerable<WorkTaskResource>>(
+                mHttpClient, httpRequestMessage, mLogger).ConfigureAwait(false);
         }
 
         private async Task<IEnumerable<WorkTaskResource>> GetTasksByGroup(string taskGroup)
@@ -135,7 +140,8 @@ namespace Tasker
 
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, tasksByGroupUri);
 
-            return await SendHttpRequestMessage<IEnumerable<WorkTaskResource>>(httpRequestMessage).ConfigureAwait(false);
+            return await HttpMessageRequester.SendHttpRequestMessage<IEnumerable<WorkTaskResource>>(
+                mHttpClient, httpRequestMessage, mLogger).ConfigureAwait(false);
         }
 
         private async Task<int> GatAllTaskGroup(bool shouldPrintAll, bool isDetailed)
@@ -143,7 +149,8 @@ namespace Tasker
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, TaskerUris.TasksGroupUri);
 
             IEnumerable<TasksGroupResource> groupsToPrint =
-                await SendHttpRequestMessage<IEnumerable<TasksGroupResource>>(httpRequestMessage).ConfigureAwait(false);
+                await HttpMessageRequester.SendHttpRequestMessage<IEnumerable<TasksGroupResource>>(
+                mHttpClient, httpRequestMessage, mLogger).ConfigureAwait(false);
 
             if (!shouldPrintAll)
             {
@@ -162,6 +169,12 @@ namespace Tasker
                 NoteNodeResource noteNodeResource = await GetAllNotesNames().ConfigureAwait(false);
                 PrintAllNotesNames(noteNodeResource);
                 return 0;
+            }
+
+            if (string.IsNullOrWhiteSpace(notePath))
+            {
+                mLogger.LogError($"{nameof(notePath)} is null or empty");
+                return 1;
             }
 
             await PrintNoteText(notePath, isPrivateNote: true).ConfigureAwait(false);
@@ -185,19 +198,12 @@ namespace Tasker
 
         private async Task PrintNoteText(string noteName, bool isPrivateNote)
         {
-            string escapedNoteName = Uri.EscapeDataString(noteName);
-
-            string relativeNoteUri = isPrivateNote ? $"note/{escapedNoteName}" : escapedNoteName;
-
-            Uri noteUri = TaskerUris.NotesUri.CombineRelative(relativeNoteUri);
-
-            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, noteUri);
-
-            NoteResource noteResource = await SendHttpRequestMessage<NoteResource>(httpRequestMessage).ConfigureAwait(false);
+            NoteResource noteResource = await NotesProvider.GetNoteResource(mHttpClient, noteName, isPrivateNote, mLogger)
+                .ConfigureAwait(false);
 
             if (noteResource == null)
             {
-                mLogger.LogDebug($"Could not find note {noteName}");
+                mLogger.LogError($"Could not find note {noteName}");
                 return;
             }
 
@@ -216,31 +222,8 @@ namespace Tasker
 
             using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, privateNotesUri);
 
-            return await SendHttpRequestMessage<NoteNodeResource>(httpRequestMessage).ConfigureAwait(false);
-        }
-
-        private async Task<T> SendHttpRequestMessage<T>(HttpRequestMessage httpRequestMessage)
-        {
-            using HttpResponseMessage response =
-                await mHttpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
-
-            mLogger.LogTrace($"Operation {httpRequestMessage.Method.Method} ends with response status: {response.StatusCode}");
-
-            if (!response.IsSuccessStatusCode)
-            {
-                if (response.StatusCode != System.Net.HttpStatusCode.NotFound)
-                {
-                    throw new InvalidOperationException(
-                        $"Could not perform {httpRequestMessage.Method.Method} operation, response status: {response.StatusCode}");
-                }
-
-                mLogger.LogDebug($"Resource not found, {response.StatusCode}");
-                return default;
-            }
-
-            string responseStringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            return JsonConvert.DeserializeObject<T>(responseStringContent);
+            return await HttpMessageRequester.SendHttpRequestMessage<NoteNodeResource>(
+                mHttpClient, httpRequestMessage, mLogger).ConfigureAwait(false);
         }
     }
 }

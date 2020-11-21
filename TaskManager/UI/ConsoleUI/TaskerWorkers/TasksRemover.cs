@@ -4,17 +4,23 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Tasker.TaskerVariables;
+using Tasker.Resources;
+using Tasker.Communication;
+using Tasker.Extensions;
 
-namespace Tasker
+namespace Tasker.TaskerWorkers
 {
     public class TasksRemover
     {
         private readonly HttpClient mHttpClient;
         private readonly ILogger<TasksRemover> mLogger;
 
-        public TasksRemover(HttpClient httpClient, ILogger<TasksRemover> logger)
+        public TasksRemover(IHttpClientFactory httpClientFactory, ILogger<TasksRemover> logger)
         {
-            mHttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            if (httpClientFactory == null)
+                throw new ArgumentNullException(nameof(httpClientFactory));
+
+            mHttpClient = httpClientFactory.CreateClient(TaskerConsts.HttpClientName);
             mLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -43,15 +49,14 @@ namespace Tasker
                         return 1;
                 }
             }
-            // TODO this in every TasksX + handle specific error for case where server is not available.
             catch (HttpRequestException ex)
             {
-                mLogger.LogError(ex, $"Could not connect to server at {mHttpClient.BaseAddress}, please check server is up");
+                mLogger.LogCritical(ex, $"Could not connect to server at {mHttpClient.BaseAddress}, please check server is up");
                 return 1;
             }
             catch (Exception ex)
             {
-                mLogger.LogError(ex, "Operation failed");
+                mLogger.LogCritical(ex, "Operation failed");
                 return 1;
             }
         }
@@ -64,9 +69,15 @@ namespace Tasker
                 return 1;
             }
 
-            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, TaskerUris.WorkTasksUri);
+            Uri taskUri = TaskerUris.WorkTasksUri.CombineRelative(taskId);
 
-            await SendHttpRequestMessage(httpRequestMessage).ConfigureAwait(false);
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, taskUri);
+
+            WorkTaskResource workTaskResource = await HttpMessageRequester.SendHttpRequestMessage<WorkTaskResource>(
+                mHttpClient, httpRequestMessage, mLogger).ConfigureAwait(false);
+
+            if (workTaskResource != null)
+                mLogger.LogInformation($"Delete task id {workTaskResource.TaskId}. Description: {workTaskResource.Description}");
 
             return 0;
         }
@@ -79,35 +90,17 @@ namespace Tasker
                 return 1;
             }
 
-            // TODO check if group is not empty - what happens in server?
+            Uri groupUri = TaskerUris.TasksGroupUri.CombineRelative(taskGroup);
 
-            //mLogger.LogDebug("Are you sure you want to delete that group with all of its inner tasks? If so, press y");
-            //string userInput = Console.ReadLine();
-            //if (!string.Equals(userInput, "y", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    mLogger.LogDebug($"Group {taskGroup} was not deleted");
-            //    return 0;
-            //}
+            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, groupUri);
 
-            using HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, TaskerUris.TasksGroupUri);
+            TasksGroupResource tasksGroupResource = await HttpMessageRequester.SendHttpRequestMessage<TasksGroupResource>(
+                mHttpClient, httpRequestMessage, mLogger).ConfigureAwait(false);
 
-            await SendHttpRequestMessage(httpRequestMessage).ConfigureAwait(false);
+            if (tasksGroupResource != null)
+                mLogger.LogInformation($"Deleted group id {tasksGroupResource.GroupId} {tasksGroupResource.GroupName}");
 
             return 0;
-        }
-
-        private async Task SendHttpRequestMessage(HttpRequestMessage httpRequestMessage)
-        {
-            using HttpResponseMessage response =
-                await mHttpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                // TODO make more safe with getting string.
-                throw new InvalidOperationException(
-                    $"Could not perform {httpRequestMessage.Method.Method} operation, response status: {response.StatusCode}," +
-                    $"response body {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
-            }
         }
     }
 }
