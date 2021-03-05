@@ -31,18 +31,19 @@ namespace TaskData.WorkTasks
         [JsonProperty]
         public TaskTriangle TaskMeasurement { get; private set; }
 
-        internal WorkTask(string id, string groupName, string description)
+        // Use the IWorkTaskProducer instead.
+        public WorkTask(string id, string description)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
-            GroupName = groupName ?? throw new ArgumentNullException(nameof(groupName));
             Description = description ?? throw new ArgumentNullException(nameof(description));
 
             TaskStatusHistory = new TaskStatusHistory();
-            TaskStatusHistory.AddHistory(DateTime.Now, Status.Open, "Created");
+            TaskStatusHistory?.AddHistory(DateTime.Now, Status.Open, "Created");
         }
 
+        // Use the IWorkTaskProducer instead. For Json construction only.
         [JsonConstructor]
-        internal WorkTask(string id,
+        public WorkTask(string id,
             string groupName,
             string description,
             ITaskStatusHistory taskStatusHistory,

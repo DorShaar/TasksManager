@@ -2,6 +2,6 @@
 {
     public interface IWorkTaskProducer
     {
-        IWorkTask ProduceTask(string id, string name, string description);
+        IWorkTask ProduceTask(string id, string description);
     }
 }

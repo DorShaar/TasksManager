@@ -11,7 +11,7 @@ namespace TaskData.WorkTasks
         [JsonProperty]
         private INote mNote;
 
-        internal NotableWorkTask(string id, string groupName, string description) : base(id, groupName, description)
+        internal NotableWorkTask(string id, string description) : base(id, description)
         {
         }
 

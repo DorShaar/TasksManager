@@ -33,7 +33,7 @@ namespace TaskData.TasksGroups
 
         public OperationResult<IWorkTask> CreateTask(ITasksGroup tasksGroup, string description)
         {
-            IWorkTask createdTask = mWorkTaskProducer.ProduceTask(mIDProducer.ProduceID(), tasksGroup.Name, description);
+            IWorkTask createdTask = mWorkTaskProducer.ProduceTask(mIDProducer.ProduceID(), description);
 
             OperationResult addTaskResult = tasksGroup.AddTask(createdTask);
             addTaskResult.Log(mLogger);

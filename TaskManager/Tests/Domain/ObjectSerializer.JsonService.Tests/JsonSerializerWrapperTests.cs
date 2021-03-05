@@ -1,5 +1,6 @@
 using FakeItEasy;
 using Microsoft.Extensions.Logging.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -66,10 +67,9 @@ namespace ObjectSerializer.JsonService.Tests
             string taskId = (tasksGroupFactory.CreateTask(tasksGroupA.Value, "task 1")).Value.ID;
 
             TaskTriangleBuilder taskTriangleBuilder = new TaskTriangleBuilder();
-            taskTriangleBuilder.SetTime("18/10/2020", DayPeriod.Morning, 3, halfWorkDay: true)
+            taskTriangleBuilder.SetTime("18/10/2020".ToDateTime(), TimeSpan.FromDays(3.5))
                                .AddContent("todo 1")
                                .AddContent("todo 2")
-                               .AddPercentageProgressToNotify(60)
                                .AddResource("one developer");
 
             tasksGroupA.Value.SetMeasurement(taskId, taskTriangleBuilder.Build());
@@ -87,10 +87,8 @@ namespace ObjectSerializer.JsonService.Tests
 
                 string text = await File.ReadAllTextAsync(tempSerializedFile).ConfigureAwait(false);
 
-                Assert.Contains("60", text);
-                Assert.Contains("\"DateTime\": \"2020-10-18T00:00:00\"", text);
-                Assert.Contains("\"Days\": 3", text);
-                Assert.Contains("\"Hours\": 12", text);
+                Assert.Contains("\"StartTime\": \"2020-10-18T00:00:00\"", text);
+                Assert.Contains("\"ExpectedDuration\": \"3.12:00:00\"", text);
                 Assert.Contains("\"todo 1\": false", text);
                 Assert.Contains("\"todo 2\": true", text);
                 Assert.Contains("\"one developer\"", text);

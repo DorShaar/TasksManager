@@ -2,9 +2,9 @@
 {
     internal class WorkTaskProducer : IWorkTaskProducer
     {
-        public IWorkTask ProduceTask(string id, string name, string description)
+        public IWorkTask ProduceTask(string id, string description)
         {
-            return new WorkTask(id, name, description);
+            return new WorkTask(id, description);
         }
     }
 }
