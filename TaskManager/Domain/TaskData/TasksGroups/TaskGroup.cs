@@ -46,17 +46,6 @@ namespace TaskData.TasksGroups
             return TasksChildren.Values.AsEnumerable();
         }
 
-        public OperationResult<IWorkTask> CreateTask(string id, string description)
-        {
-            IWorkTask createdTask = new WorkTask(id, Name, description);
-
-            OperationResult addTaskResult = AddTask(createdTask);
-            if (!addTaskResult.Success)
-                return new OperationResult<IWorkTask>(false, addTaskResult.Reason, createdTask);
-
-            return new OperationResult<IWorkTask>(true, addTaskResult.Reason, createdTask);
-        }
-
         public OperationResult<IWorkTask> GetTask(string id)
         {
             if (!TasksChildren.TryGetValue(id, out IWorkTask task))
@@ -68,8 +57,10 @@ namespace TaskData.TasksGroups
         public OperationResult AddTask(IWorkTask task)
         {
             if (TasksChildren.ContainsKey(task.ID))
+            {
                 return new OperationResult(false, $"Task {task.ID}, " +
                     $"'{task.Description}' is already found in group {Name}");
+            }
 
             task.GroupName = Name;
             TasksChildren.Add(task.ID, task);
@@ -117,7 +108,7 @@ namespace TaskData.TasksGroups
             IWorkTask workTask = getResult.Value;
 
             workTask.SetMeasurement(taskTriangle);
-            return new OperationResult(true, $"Set new measurement");
+            return new OperationResult(true, "Set new measurement");
         }
     }
 }

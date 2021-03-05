@@ -14,7 +14,6 @@ namespace TaskData.TasksGroups
 
         IEnumerable<IWorkTask> GetAllTasks();
         OperationResult<IWorkTask> GetTask(string id);
-        OperationResult<IWorkTask> CreateTask(string id, string description);
         OperationResult AddTask(IWorkTask task);
         OperationResult RemoveTask(string id);
         OperationResult UpdateTask(IWorkTask task);

@@ -17,9 +17,5 @@ namespace TaskData.WorkTasks
         OperationResult CloseTask(string reason);
         OperationResult ReOpenTask(string reason);
         OperationResult MarkTaskOnWork(string reason);
-
-        // Private Notes.
-        OperationResult CreateNote(string noteDirectoryPath, string content);
-        OperationResult<string> GetNote();
     }
 }

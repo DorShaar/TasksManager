@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using TaskData.IDsProducer;
+using TaskData.OperationResults;
 using TaskData.TasksGroups;
+using TaskData.WorkTasks;
 using Triangle;
 using Triangle.Time;
 using Xunit;
@@ -21,17 +23,17 @@ namespace ObjectSerializer.JsonService.Tests
             JsonSerializerWrapper jsonSerializerWrapper = new JsonSerializerWrapper();
 
             TaskGroupFactory tasksGroupFactory = new TaskGroupFactory(
-                A.Fake<IIDProducer>(), NullLogger<TaskGroupFactory>.Instance);
+                A.Fake<IIDProducer>(), new WorkTaskProducer(), NullLogger<TaskGroupFactory>.Instance);
 
-            ITasksGroup tasksGroupA = tasksGroupFactory.CreateGroup("a group");
-            tasksGroupFactory.CreateTask(tasksGroupA, "task 1");
+            OperationResult<ITasksGroup> tasksGroupA = tasksGroupFactory.CreateGroup("a group");
+            tasksGroupFactory.CreateTask(tasksGroupA.Value, "task 1");
 
-            ITasksGroup tasksGroupB = tasksGroupFactory.CreateGroup("b group");
-            tasksGroupFactory.CreateTask(tasksGroupB, "task 3");
+            OperationResult<ITasksGroup> tasksGroupB = tasksGroupFactory.CreateGroup("b group");
+            tasksGroupFactory.CreateTask(tasksGroupB.Value, "task 3");
 
             List<ITasksGroup> entities = new List<ITasksGroup>
             {
-                tasksGroupA, tasksGroupB
+                tasksGroupA.Value, tasksGroupB.Value
             };
 
             string tempSerializedFile = Path.GetRandomFileName();
@@ -58,10 +60,10 @@ namespace ObjectSerializer.JsonService.Tests
             JsonSerializerWrapper jsonSerializerWrapper = new JsonSerializerWrapper();
 
             TaskGroupFactory tasksGroupFactory = new TaskGroupFactory(
-                A.Fake<IIDProducer>(), NullLogger<TaskGroupFactory>.Instance);
+                A.Fake<IIDProducer>(), new WorkTaskProducer(), NullLogger<TaskGroupFactory>.Instance);
 
-            ITasksGroup tasksGroupA = tasksGroupFactory.CreateGroup("a group");
-            string taskId = tasksGroupFactory.CreateTask(tasksGroupA, "task 1").ID;
+            OperationResult<ITasksGroup> tasksGroupA = tasksGroupFactory.CreateGroup("a group");
+            string taskId = (tasksGroupFactory.CreateTask(tasksGroupA.Value, "task 1")).Value.ID;
 
             TaskTriangleBuilder taskTriangleBuilder = new TaskTriangleBuilder();
             taskTriangleBuilder.SetTime("18/10/2020", DayPeriod.Morning, 3, halfWorkDay: true)
@@ -70,12 +72,12 @@ namespace ObjectSerializer.JsonService.Tests
                                .AddPercentageProgressToNotify(60)
                                .AddResource("one developer");
 
-            tasksGroupA.SetMeasurement(taskId, taskTriangleBuilder.Build());
-            tasksGroupA.GetTask(taskId).Value.TaskMeasurement.Content.MarkContentDone("todo 2");
+            tasksGroupA.Value.SetMeasurement(taskId, taskTriangleBuilder.Build());
+            tasksGroupA.Value.GetTask(taskId).Value.TaskMeasurement.Content.MarkContentDone("todo 2");
 
-            List <ITasksGroup> entities = new List<ITasksGroup>
+            List<ITasksGroup> entities = new List<ITasksGroup>
             {
-                tasksGroupA,
+                tasksGroupA.Value,
             };
 
             string tempSerializedFile = Path.GetRandomFileName();

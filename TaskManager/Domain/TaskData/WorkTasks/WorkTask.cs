@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Runtime.CompilerServices;
-using TaskData.Notes;
 using TaskData.OperationResults;
 using TaskData.TaskStatus;
 using Triangle;
@@ -11,11 +10,8 @@ using Triangle;
 namespace TaskData.WorkTasks
 {
     [JsonObject(MemberSerialization.OptIn)]
-    internal class WorkTask : IWorkTask
+    public class WorkTask : IWorkTask
     {
-        [JsonProperty]
-        private INote mNote;
-
         [JsonProperty]
         public string ID { get; }
 
@@ -49,14 +45,12 @@ namespace TaskData.WorkTasks
         internal WorkTask(string id,
             string groupName,
             string description,
-            INote note,
             ITaskStatusHistory taskStatusHistory,
             TaskTriangle taskTriangle)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
             GroupName = groupName ?? throw new ArgumentNullException(nameof(groupName));
             Description = description ?? throw new ArgumentNullException(nameof(description));
-            mNote = note;
             TaskStatusHistory = taskStatusHistory ?? throw new ArgumentNullException(nameof(taskStatusHistory));
             TaskMeasurement = taskTriangle;
         }
@@ -86,25 +80,6 @@ namespace TaskData.WorkTasks
 
             TaskStatusHistory.AddHistory(DateTime.Now, Status.OnWork, reason);
             return new OperationResult(true, $"Task {ID}, '{Description}' marked on work at {TaskStatusHistory.TimeLastOnWork}");
-        }
-
-        public OperationResult CreateNote(string noteDirectoryPath, string content)
-        {
-            if (mNote != null)
-            {
-                return new OperationResult(false, $"Cannot create note since note {mNote.NotePath} is already exist");
-            }
-
-            mNote = new Note(noteDirectoryPath, $"{ID}-{Description}", content);
-            return new OperationResult(true);
-        }
-
-        public OperationResult<string> GetNote()
-        {
-            if (mNote == null)
-                return new OperationResult<string>(false, $"Task id {ID}, '{Description}' has no note");
-
-            return new OperationResult<string>(true, mNote.Text);
         }
 
         public void SetMeasurement(TaskTriangle measurement)

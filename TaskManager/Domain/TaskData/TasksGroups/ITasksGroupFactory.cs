@@ -1,10 +1,11 @@
-﻿using TaskData.WorkTasks;
+﻿using TaskData.OperationResults;
+using TaskData.WorkTasks;
 
 namespace TaskData.TasksGroups
 {
      public interface ITasksGroupFactory
      {
-          ITasksGroup CreateGroup(string groupName);
-          IWorkTask CreateTask(ITasksGroup tasksGroup, string description);
+        OperationResult<ITasksGroup> CreateGroup(string groupName);
+        OperationResult<IWorkTask> CreateTask(ITasksGroup tasksGroup, string description);
      }
 }
