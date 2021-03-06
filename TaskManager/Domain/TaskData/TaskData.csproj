@@ -7,7 +7,6 @@
     <Company>DorShaar</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/dorshaar/tasksmanager</RepositoryUrl>
-    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
