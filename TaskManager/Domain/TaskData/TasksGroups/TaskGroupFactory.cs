@@ -13,13 +13,11 @@ namespace TaskData.TasksGroups
     internal class TaskGroupFactory : ITasksGroupFactory
     {
         private readonly IIDProducer mIDProducer;
-        private readonly IWorkTaskProducer mWorkTaskProducer;
         private readonly ILogger<TaskGroupFactory> mLogger;
 
-        public TaskGroupFactory(IIDProducer idProducer, IWorkTaskProducer workTaskProducer, ILogger<TaskGroupFactory> logger)
+        public TaskGroupFactory(IIDProducer idProducer, ILogger<TaskGroupFactory> logger)
         {
             mIDProducer = idProducer ?? throw new ArgumentNullException(nameof(idProducer));
-            mWorkTaskProducer = workTaskProducer ?? throw new ArgumentNullException(nameof(workTaskProducer));
             mLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -31,9 +29,12 @@ namespace TaskData.TasksGroups
             return new OperationResult<ITasksGroup>(true, taskGroup);
         }
 
-        public OperationResult<IWorkTask> CreateTask(ITasksGroup tasksGroup, string description)
+        public OperationResult<IWorkTask> CreateTask(ITasksGroup tasksGroup, string description, IWorkTaskProducer workTaskProducer)
         {
-            IWorkTask createdTask = mWorkTaskProducer.ProduceTask(mIDProducer.ProduceID(), description);
+            if (workTaskProducer == null)
+                throw new ArgumentNullException(nameof(workTaskProducer));
+
+            IWorkTask createdTask = workTaskProducer.ProduceTask(mIDProducer.ProduceID(), description);
 
             OperationResult addTaskResult = tasksGroup.AddTask(createdTask);
             addTaskResult.Log(mLogger);

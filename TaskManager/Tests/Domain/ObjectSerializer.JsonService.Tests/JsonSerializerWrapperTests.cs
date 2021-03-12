@@ -17,6 +17,7 @@ namespace ObjectSerializer.JsonService.Tests
     public class JsonSerializerWrapperTests
     {
         private const string TestFilesDirectory = "TestFiles";
+        private readonly WorkTaskProducer mWorkTaskProducer = new WorkTaskProducer();
 
         [Fact]
         public async Task Serialize_AsExpected()
@@ -24,13 +25,13 @@ namespace ObjectSerializer.JsonService.Tests
             JsonSerializerWrapper jsonSerializerWrapper = new JsonSerializerWrapper();
 
             TaskGroupFactory tasksGroupFactory = new TaskGroupFactory(
-                A.Fake<IIDProducer>(), new WorkTaskProducer(), NullLogger<TaskGroupFactory>.Instance);
+                A.Fake<IIDProducer>(), NullLogger<TaskGroupFactory>.Instance);
 
             OperationResult<ITasksGroup> tasksGroupA = tasksGroupFactory.CreateGroup("a group");
-            tasksGroupFactory.CreateTask(tasksGroupA.Value, "task 1");
+            tasksGroupFactory.CreateTask(tasksGroupA.Value, "task 1", mWorkTaskProducer);
 
             OperationResult<ITasksGroup> tasksGroupB = tasksGroupFactory.CreateGroup("b group");
-            tasksGroupFactory.CreateTask(tasksGroupB.Value, "task 3");
+            tasksGroupFactory.CreateTask(tasksGroupB.Value, "task 3", mWorkTaskProducer);
 
             List<ITasksGroup> entities = new List<ITasksGroup>
             {
@@ -61,10 +62,10 @@ namespace ObjectSerializer.JsonService.Tests
             JsonSerializerWrapper jsonSerializerWrapper = new JsonSerializerWrapper();
 
             TaskGroupFactory tasksGroupFactory = new TaskGroupFactory(
-                A.Fake<IIDProducer>(), new WorkTaskProducer(), NullLogger<TaskGroupFactory>.Instance);
+                A.Fake<IIDProducer>(), NullLogger<TaskGroupFactory>.Instance);
 
             OperationResult<ITasksGroup> tasksGroupA = tasksGroupFactory.CreateGroup("a group");
-            string taskId = (tasksGroupFactory.CreateTask(tasksGroupA.Value, "task 1")).Value.ID;
+            string taskId = tasksGroupFactory.CreateTask(tasksGroupA.Value, "task 1", mWorkTaskProducer).Value.ID;
 
             TaskTriangleBuilder taskTriangleBuilder = new TaskTriangleBuilder();
             taskTriangleBuilder.SetTime("18/10/2020".ToDateTime(), TimeSpan.FromDays(3.5))

@@ -6,6 +6,6 @@ namespace TaskData.TasksGroups
      public interface ITasksGroupFactory
      {
         OperationResult<ITasksGroup> CreateGroup(string groupName);
-        OperationResult<IWorkTask> CreateTask(ITasksGroup tasksGroup, string description);
+        OperationResult<IWorkTask> CreateTask(ITasksGroup tasksGroup, string description, IWorkTaskProducer workTaskProducer);
      }
 }
