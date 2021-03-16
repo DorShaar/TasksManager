@@ -5,7 +5,6 @@
     <PackageId>Tasker.TaskData</PackageId>
     <Authors>DorShaar</Authors>
     <Company>DorShaar</Company>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/dorshaar/tasksmanager</RepositoryUrl>
   </PropertyGroup>
 

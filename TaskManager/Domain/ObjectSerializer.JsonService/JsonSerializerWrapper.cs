@@ -14,6 +14,16 @@ namespace ObjectSerializer.JsonService
 {
     internal class JsonSerializerWrapper : IObjectSerializer
     {
+        private readonly JsonSerializerSettings mDeserializtionSettings = new JsonSerializerSettings();
+
+        public JsonSerializerWrapper()
+        {
+            mDeserializtionSettings.Converters.Add(new TaskGroupConverter());
+            mDeserializtionSettings.Converters.Add(new TaskConverter());
+            mDeserializtionSettings.Converters.Add(new NoteConverter());
+            mDeserializtionSettings.Converters.Add(new TaskStatusHistoryConverter());
+        }
+
         public async Task Serialize<T>(T objectToSerialize, string databasePath)
         {
             string jsonText = JsonConvert.SerializeObject(objectToSerialize, Formatting.Indented, new JsonSerializerSettings());
@@ -22,14 +32,13 @@ namespace ObjectSerializer.JsonService
 
         public async Task<T> Deserialize<T>(string databasePath)
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.Converters.Add(new TaskGroupConverter());
-            settings.Converters.Add(new TaskConverter());
-            settings.Converters.Add(new NoteConverter());
-            settings.Converters.Add(new TaskStatusHistoryConverter());
-
             string databaseTaxt = await File.ReadAllTextAsync(databasePath).ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<T>(databaseTaxt, settings);
+            return JsonConvert.DeserializeObject<T>(databaseTaxt, mDeserializtionSettings);
+        }
+
+        public void RegisterConverters(JsonConverter converter)
+        {
+            mDeserializtionSettings.Converters.Add(converter);
         }
 
         private class TaskConverter : JsonConverter
