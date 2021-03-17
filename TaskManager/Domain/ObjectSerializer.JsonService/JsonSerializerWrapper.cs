@@ -12,17 +12,9 @@ using TaskData.WorkTasks;
 [assembly: InternalsVisibleTo("ObjectSerializer.JsonService.Tests")]
 namespace ObjectSerializer.JsonService
 {
-    internal class JsonSerializerWrapper : IObjectSerializer
+    public class JsonSerializerWrapper : IObjectSerializer
     {
         private readonly JsonSerializerSettings mDeserializtionSettings = new JsonSerializerSettings();
-
-        public JsonSerializerWrapper()
-        {
-            mDeserializtionSettings.Converters.Add(new TaskGroupConverter());
-            mDeserializtionSettings.Converters.Add(new TaskConverter());
-            mDeserializtionSettings.Converters.Add(new NoteConverter());
-            mDeserializtionSettings.Converters.Add(new TaskStatusHistoryConverter());
-        }
 
         public async Task Serialize<T>(T objectToSerialize, string databasePath)
         {
@@ -41,7 +33,7 @@ namespace ObjectSerializer.JsonService
             mDeserializtionSettings.Converters.Add(converter);
         }
 
-        private class TaskConverter : JsonConverter
+        public class TaskConverter : JsonConverter
         {
             public override bool CanConvert(Type objectType)
             {
@@ -59,7 +51,7 @@ namespace ObjectSerializer.JsonService
             }
         }
 
-        private class TaskGroupConverter : JsonConverter
+        public class TaskGroupConverter : JsonConverter
         {
             public override bool CanConvert(Type objectType)
             {
@@ -77,7 +69,7 @@ namespace ObjectSerializer.JsonService
             }
         }
 
-        private class NoteConverter : JsonConverter
+        public class NoteConverter : JsonConverter
         {
             public override bool CanConvert(Type objectType)
             {
@@ -95,7 +87,7 @@ namespace ObjectSerializer.JsonService
             }
         }
 
-        private class TaskStatusHistoryConverter : JsonConverter
+        public class TaskStatusHistoryConverter : JsonConverter
         {
             public override bool CanConvert(Type objectType)
             {
