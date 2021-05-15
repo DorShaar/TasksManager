@@ -8,7 +8,7 @@ using TaskData.IDsProducer;
 using TaskData.ObjectSerializer.JsonService;
 using TaskData.OperationResults;
 using TaskData.TasksGroups;
-using TaskData.WorkTasks;
+using TaskData.WorkTasks.Producers;
 using Triangle;
 using Triangle.Time;
 using Xunit;
@@ -20,6 +20,7 @@ namespace ObjectSerializer.JsonService.Tests
     {
         private const string TestFilesDirectory = "TestFiles";
         private readonly WorkTaskProducer mWorkTaskProducer = new WorkTaskProducer();
+        private readonly TasksGroupProducer mTasksGroupProducer = new TasksGroupProducer();
 
         [Fact]
         public async Task Serialize_AsExpected()
@@ -29,10 +30,10 @@ namespace ObjectSerializer.JsonService.Tests
             TaskGroupFactory tasksGroupFactory = new TaskGroupFactory(
                 A.Fake<IIDProducer>(), NullLogger<TaskGroupFactory>.Instance);
 
-            OperationResult<ITasksGroup> tasksGroupA = tasksGroupFactory.CreateGroup("a group");
+            OperationResult<ITasksGroup> tasksGroupA = tasksGroupFactory.CreateGroup("a group", mTasksGroupProducer);
             tasksGroupFactory.CreateTask(tasksGroupA.Value, "task 1", mWorkTaskProducer);
 
-            OperationResult<ITasksGroup> tasksGroupB = tasksGroupFactory.CreateGroup("b group");
+            OperationResult<ITasksGroup> tasksGroupB = tasksGroupFactory.CreateGroup("b group", mTasksGroupProducer);
             tasksGroupFactory.CreateTask(tasksGroupB.Value, "task 3", mWorkTaskProducer);
 
             List<ITasksGroup> entities = new List<ITasksGroup>
@@ -66,7 +67,7 @@ namespace ObjectSerializer.JsonService.Tests
             TaskGroupFactory tasksGroupFactory = new TaskGroupFactory(
                 A.Fake<IIDProducer>(), NullLogger<TaskGroupFactory>.Instance);
 
-            OperationResult<ITasksGroup> tasksGroupA = tasksGroupFactory.CreateGroup("a group");
+            OperationResult<ITasksGroup> tasksGroupA = tasksGroupFactory.CreateGroup("a group", mTasksGroupProducer);
             string taskId = tasksGroupFactory.CreateTask(tasksGroupA.Value, "task 1", mWorkTaskProducer).Value.ID;
 
             TaskTriangleBuilder taskTriangleBuilder = new TaskTriangleBuilder();

@@ -1,4 +1,4 @@
-﻿namespace TaskData.WorkTasks
+﻿namespace TaskData.WorkTasks.Producers
 {
     public interface IWorkTaskProducer
     {

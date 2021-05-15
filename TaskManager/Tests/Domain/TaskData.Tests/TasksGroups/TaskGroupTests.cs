@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using TaskData.IDsProducer;
 using TaskData.TasksGroups;
 using TaskData.WorkTasks;
+using TaskData.WorkTasks.Producers;
 using Xunit;
 
 namespace TaskData.Tests.TasksGroups
@@ -10,6 +11,7 @@ namespace TaskData.Tests.TasksGroups
     {
         private readonly TaskGroupFactory mTaskGroupFactory;
         private readonly WorkTaskProducer mWorkTaskProducer = new WorkTaskProducer();
+        private readonly TasksGroupProducer mTasksGroupProducer = new TasksGroupProducer();
 
         public TaskGroupTests()
         {
@@ -20,7 +22,7 @@ namespace TaskData.Tests.TasksGroups
         [Fact]
         public void Size_NumberOfTasks3()
         {
-            ITasksGroup taskGroup = mTaskGroupFactory.CreateGroup("TestGroup").Value;
+            ITasksGroup taskGroup = mTaskGroupFactory.CreateGroup("TestGroup", mTasksGroupProducer).Value;
             mTaskGroupFactory.CreateTask(taskGroup, "task1", mWorkTaskProducer);
             mTaskGroupFactory.CreateTask(taskGroup, "task2", mWorkTaskProducer);
             mTaskGroupFactory.CreateTask(taskGroup, "task3", mWorkTaskProducer);
@@ -31,7 +33,7 @@ namespace TaskData.Tests.TasksGroups
         [Fact]
         public void IsFinished_HasOpenTasks_False()
         {
-            ITasksGroup taskGroup = mTaskGroupFactory.CreateGroup("TestGroup").Value;
+            ITasksGroup taskGroup = mTaskGroupFactory.CreateGroup("TestGroup", mTasksGroupProducer).Value;
 
             mTaskGroupFactory.CreateTask(taskGroup, "task1", mWorkTaskProducer);
             IWorkTask task2 = mTaskGroupFactory.CreateTask(taskGroup, "task2", mWorkTaskProducer).Value;
@@ -46,7 +48,7 @@ namespace TaskData.Tests.TasksGroups
         [Fact]
         public void IsFinished_HasNoOpenTasks_True()
         {
-            ITasksGroup taskGroup = mTaskGroupFactory.CreateGroup("TestGroup").Value;
+            ITasksGroup taskGroup = mTaskGroupFactory.CreateGroup("TestGroup", mTasksGroupProducer).Value;
 
             IWorkTask task1 = mTaskGroupFactory.CreateTask(taskGroup, "task1", mWorkTaskProducer).Value;
             IWorkTask task2 = mTaskGroupFactory.CreateTask(taskGroup, "task2", mWorkTaskProducer).Value;

@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using TaskData.IDsProducer;
 using TaskData.OperationResults;
 using TaskData.WorkTasks;
+using TaskData.WorkTasks.Producers;
 
 [assembly: InternalsVisibleTo("TaskData.Tests")]
 [assembly: InternalsVisibleTo("TaskManager.Integration.Tests")]
@@ -21,9 +22,9 @@ namespace TaskData.TasksGroups
             mLogger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public OperationResult<ITasksGroup> CreateGroup(string groupName)
+        public OperationResult<ITasksGroup> CreateGroup(string groupName, ITasksGroupProducer tasksGroupProducer)
         {
-            TasksGroup taskGroup = new TasksGroup(mIDProducer.ProduceID(), groupName);
+            ITasksGroup taskGroup = tasksGroupProducer.CreateGroup(mIDProducer.ProduceID(), groupName);
             mLogger.LogInformation($"New group id {taskGroup.ID} created with name: {taskGroup.Name}");
 
             return new OperationResult<ITasksGroup>(true, taskGroup);
