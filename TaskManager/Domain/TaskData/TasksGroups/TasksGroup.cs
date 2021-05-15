@@ -27,14 +27,20 @@ namespace TaskData.TasksGroups
 
         public bool IsFinished { get => TasksChildren.All(task => task.Value.IsFinished); }
 
-        internal TasksGroup(string id, string groupName)
+        /// <summary>
+        /// Use the IWorkTaskProducer instead.
+        /// </summary>
+        public TasksGroup(string id, string groupName)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
             Name = groupName ?? throw new ArgumentNullException(nameof(groupName));
         }
 
+        /// <summary>
+        /// Use the IWorkTaskProducer instead. For Json construction only.
+        /// </summary>
         [JsonConstructor]
-        internal TasksGroup(string id, string name, Dictionary<string, IWorkTask> tasksChildren)
+        public TasksGroup(string id, string name, Dictionary<string, IWorkTask> tasksChildren)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
             Name = name ?? throw new ArgumentNullException(nameof(name));
