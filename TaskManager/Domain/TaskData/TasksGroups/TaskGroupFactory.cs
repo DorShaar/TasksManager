@@ -23,7 +23,7 @@ namespace TaskData.TasksGroups
 
         public OperationResult<ITasksGroup> CreateGroup(string groupName)
         {
-            TaskGroup taskGroup = new TaskGroup(mIDProducer.ProduceID(), groupName);
+            TasksGroup taskGroup = new TasksGroup(mIDProducer.ProduceID(), groupName);
             mLogger.LogInformation($"New group id {taskGroup.ID} created with name: {taskGroup.Name}");
 
             return new OperationResult<ITasksGroup>(true, taskGroup);

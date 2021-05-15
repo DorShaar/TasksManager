@@ -12,7 +12,6 @@ namespace TaskData
         public static IServiceCollection UseTaskerDataEntities(this IServiceCollection services)
         {
             services.AddSingleton<IIDProducer, IDProducer>()
-                    .AddSingleton<INoteFactory, NoteFactory>()
                     .AddSingleton<ITasksGroupFactory, TaskGroupFactory>()
                     .AddSingleton<ITaskStatusHistory, TaskStatusHistory>();
 

@@ -2,8 +2,8 @@
 {
     public interface INote
     {
+        string Subject { get; }
         string Extension { get; }
-        string NotePath { get; }
         string Text { get; }
     }
 }

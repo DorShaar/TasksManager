@@ -4,7 +4,7 @@ namespace TaskData.Notes
 {
     public interface INotable
     {
-        OperationResult CreateNote(string noteDirectoryPath, string content);
-        OperationResult<string> GetNote();
+        OperationResult CreateNote(string subject, string content);
+        OperationResult<INote> GetNote();
     }
 }

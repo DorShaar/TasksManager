@@ -1,58 +1,38 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.IO;
 
 namespace TaskData.Notes
 {
     [JsonObject(MemberSerialization.OptIn)]
-    internal class Note : INote
+    public class Note : INote
     {
         [JsonProperty]
-        private readonly string mNoteDirecoryPath;
-
-        [JsonProperty]
-        private readonly string mNoteName;
+        public string Subject { get; }
 
         public string Extension { get; } = ".txt";
 
-        public string NotePath => Path.Combine(mNoteDirecoryPath, mNoteName + Extension);
-
-        public string Text => ReadText();
+        [JsonProperty]
+        public string Text { get; set; }
 
         /// <summary>
         /// For creating Note object from existing file.
         /// </summary>
         [JsonConstructor]
-        internal Note(string directoryPath, string noteName)
+        internal Note(string subject)
         {
-            mNoteDirecoryPath = directoryPath;
-            mNoteName = noteName;
+            Subject = subject;
         }
 
         /// <summary>
         /// For creating new Note object (<paramref name="directoryPath"/>\<paramref name="noteName"/> not exists).
         /// </summary>
-        internal Note(string directoryPath, string noteName, string content)
+        internal Note(string subject, string content)
         {
-            mNoteDirecoryPath = directoryPath;
-            mNoteName = noteName;
+            Subject = subject;
+            Text = content;
 
-            if (!string.IsNullOrEmpty(directoryPath) && !string.IsNullOrEmpty(noteName))
+            if (string.IsNullOrEmpty(content))
             {
-                Directory.CreateDirectory(directoryPath);
-                File.WriteAllText(NotePath, content);
-            }
-        }
-
-        private string ReadText()
-        {
-            try
-            {
-                return File.ReadAllText(NotePath);
-            }
-            catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException)
-            {
-                return string.Empty;
+                Text = string.Empty;
             }
         }
     }

@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using TaskData.IDsProducer;
+using TaskData.ObjectSerializer.JsonService;
 using TaskData.OperationResults;
 using TaskData.TasksGroups;
 using TaskData.WorkTasks;
 using Triangle;
 using Triangle.Time;
 using Xunit;
+using static TaskData.ObjectSerializer.JsonService.JsonSerializerWrapper;
 
 namespace ObjectSerializer.JsonService.Tests
 {
@@ -108,6 +110,9 @@ namespace ObjectSerializer.JsonService.Tests
             string databasePath = Path.Combine(TestFilesDirectory, databaseName);
 
             JsonSerializerWrapper jsonSerializerWrapper = new JsonSerializerWrapper();
+            jsonSerializerWrapper.RegisterConverters(new TaskConverter());
+            jsonSerializerWrapper.RegisterConverters(new TaskGroupConverter());
+            jsonSerializerWrapper.RegisterConverters(new TaskStatusHistoryConverter());
 
             List<ITasksGroup> entities =
                 await jsonSerializerWrapper.Deserialize<List<ITasksGroup>>(databasePath)
