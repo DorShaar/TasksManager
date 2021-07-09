@@ -7,10 +7,8 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 dotnet test --no-build TaskManager/Tests/Domain/TaskData.Tests/TaskData.Tests.csproj
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-echo Packing TaskData
+echo Pack TaskData
 set /p packageVersion="Enter package version: "
-dotnet pack --no-build -p:PackageVersion=%packageVersion% TaskManager/Domain/TaskData/TaskData.csproj
 
-echo Pushing package to github
-echo Pushing TaskManager/Domain/TaskData/bin/Debug/TaskData.%packageVersion%.nupkg
+echo Pushing package TaskManager/Domain/TaskData/bin/Debug/TaskData.%packageVersion%.nupkg to github
 dotnet nuget push TaskManager/Domain/TaskData/bin/Debug/Tasker.TaskData.%packageVersion%.nupkg --source "github"
