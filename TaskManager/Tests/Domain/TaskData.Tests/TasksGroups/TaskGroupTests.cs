@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using TaskData.IDsProducer;
 using TaskData.TasksGroups;
+using TaskData.TasksGroups.Producers;
 using TaskData.WorkTasks;
 using TaskData.WorkTasks.Producers;
 using Xunit;

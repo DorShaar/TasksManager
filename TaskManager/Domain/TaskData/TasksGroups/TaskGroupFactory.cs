@@ -3,6 +3,7 @@ using System;
 using System.Runtime.CompilerServices;
 using TaskData.IDsProducer;
 using TaskData.OperationResults;
+using TaskData.TasksGroups.Producers;
 using TaskData.WorkTasks;
 using TaskData.WorkTasks.Producers;
 

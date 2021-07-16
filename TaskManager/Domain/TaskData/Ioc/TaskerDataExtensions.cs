@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TaskData.IDsProducer;
-using TaskData.Notes;
 using TaskData.TasksGroups;
+using TaskData.TasksGroups.Producers;
 using TaskData.TaskStatus;
 using TaskData.WorkTasks.Producers;
 

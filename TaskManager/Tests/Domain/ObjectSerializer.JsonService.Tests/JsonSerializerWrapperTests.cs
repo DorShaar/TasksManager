@@ -8,6 +8,7 @@ using TaskData.IDsProducer;
 using TaskData.ObjectSerializer.JsonService;
 using TaskData.OperationResults;
 using TaskData.TasksGroups;
+using TaskData.TasksGroups.Producers;
 using TaskData.WorkTasks.Producers;
 using Triangle;
 using Triangle.Time;

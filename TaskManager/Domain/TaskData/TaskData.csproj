@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>2.0.12</Version>
+    <Version>2.0.13</Version>
     <PackageId>Tasker.TaskData</PackageId>
     <Authors>DorShaar</Authors>
     <Company>DorShaar</Company>

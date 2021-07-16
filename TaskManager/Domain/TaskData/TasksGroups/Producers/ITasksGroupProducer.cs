@@ -1,6 +1,6 @@
 ﻿using TaskData.TasksGroups;
 
-namespace TaskData.WorkTasks.Producers
+namespace TaskData.TasksGroups.Producers
 {
     public interface ITasksGroupProducer
     {
