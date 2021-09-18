@@ -18,7 +18,9 @@ c. Resources (Who work on that task).
 Group's status is dependent in all of the tasks statuses it conatins.\
 
 ## Usage
+![alt text][logo]
 
+[logo]: https://github.com/DorShaar/TasksManager/blob/master/images/get_tasks.png "tasker get tasks"
 
 ## Development patterns and information I used and learn in that project
 
