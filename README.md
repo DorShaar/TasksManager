@@ -1,20 +1,29 @@
 # TasksManager
 
-Task Manager is a console application that help you manage your tasks according to groups.
-Each task has status of "Open", "Closed" or "On-Work".
-Group's status is dependent in all of the tasks' stauts it conatins.
+## About that project
+TasksManager is a console application that sends CRUD (Create, Read, Update, Delete) http/s operations and help you manage your tasks seperated by groups.
 
+From TasksManager Version 1.1 I decided to seperate it into different projects, this one and [TasksManager-WebService Project](https://github.com/DorShaar/TasksManager-WebService "TasksManager-WebService"). This project is the client side which is responsible for sending requests to the server and update the database accordingly.
+
+## What Tasks and Groups are consisted of
+Each task has status of "Open", "Closed" or "On-Work".\
 Each task can have:
-1. Note.
-2. Task Triangle. Gives the ability to control your tasks in three dimensions:
-  a. Time (What is the dead-line).
-  b. Quality (What is the contnet of the task).
-  c. Resources (Who work on that task). 
 
-**In that project I used:**
+* Note.
+* Task Triangle - Gives the ability to control your tasks in three dimensions:\
+a. Time (What is the dead-line).\
+b. Quality (What is the contnet of the task).\
+c. Resources (Who work on that task).
 
-IOC,
-Console logger with Microsoft.ILogger,
-Console with command line parser,
-Usage of HttpClientFactory,
+Group's status is dependent in all of the tasks statuses it conatins.\
 
+## Usage
+
+
+## Development patterns and information I used and learn in that project
+
+IOC (Invertion of control),\
+Console logger with Microsoft.ILogger,\
+Console with command line parser,\
+Usage of HttpClientFactory,\
+Use Github-NuGet's service,\
